@@ -28,15 +28,36 @@ check_interface <- function(value, interface) {
     if (!is.list(value)) {
         return(FALSE)
     }
-
     return(
         all(names(interface$properties) %in% names(value)) &&
         all(mapply(check_type, value[names(interface$properties)], interface$properties))
     )
 }
 
+# Validation function
+validate_object <- function(obj, interface) {
+    print("Validating object")
+    for (prop in names(interface$properties)) {
+        expected_type <- interface$properties[[prop]]
+        actual_value <- obj[[prop]]
+        
+        if (!check_type(actual_value, expected_type)) {
+            stop(sprintf("Property '%s' does not match the expected type specification", prop))
+        }
+    }
+    return(TRUE)
+}
+
+# Custom accessor function
+custom_accessor <- function(x, i) {
+    if (isTRUE(attr(x, "validate_on_access"))) {
+        return(validate_object(x, attr(x, "interface")))
+    }
+    return(x[[i]])
+}
+
 # Function to create an object that implements an interface
-implement <- function(interface, ...) {
+implement <- function(interface, ..., validate_on_access = FALSE) {
     obj <- list(...)
 
     # Check if all required properties are present
@@ -45,27 +66,20 @@ implement <- function(interface, ...) {
         stop(paste("Missing properties:", paste(missing_props, collapse = ", ")))
     }
     
-    # Check types of properties
-    type_errors <- character()
-    for (prop in names(interface$properties)) {
-        expected_type <- interface$properties[[prop]]
-        actual_value <- obj[[prop]]
-        
-        if (!check_type(actual_value, expected_type)) {
-            type_errors <- c(
-                type_errors,
-                sprintf("Property '%s' does not match the expected type specification", prop)
-            )
-        }
-    }
+    # Initial validation
+    validate_object(obj, interface)
 
-    if (length(type_errors) > 0) {
-        stop(paste("Type mismatch errors:", paste(type_errors, collapse = "\n"), sep = "\n"))
-    }
-
-    # Return the object as a simple list
-    return(structure(obj, class = c(paste0(interface$interface_name, "Implementation"), "list")))
+    # Return the object as a simple list with custom class and attributes
+    return(structure(
+        obj,
+        class = c(paste0(interface$interface_name, "Implementation"), "validated_list", "list"),
+        interface = interface,
+        validate_on_access = validate_on_access
+    ))
 }
+
+# Define custom `$` method for our objects
+`$.validated_list` <- custom_accessor
 
 # Example usage
 # Define interfaces
@@ -88,7 +102,8 @@ Employee <- interface("Employee",
 john <- implement(Person,
     name = "John Doe",
     age = 30,
-    email = "john@example.com"
+    email = "john@example.com",
+    validate_on_access = TRUE
 )
 
 jane <- implement(Employee,
@@ -96,39 +111,28 @@ jane <- implement(Employee,
     job_title = "Manager",
     salary = 50000,
     tasks = list("Task 1", "Task 2"),
-    additional_info = data.frame(skill = c("Leadership", "Communication"), level = c(9, 8))
+    additional_info = data.frame(skill = c("Leadership", "Communication"), level = c(9, 8)),
+    validate_on_access = TRUE
 )
 
-class(jane)
-is.list(jane)
+# Accessing properties (this will trigger validation)
+print(john$name)  # Should print "John Doe"
+print(jane$person$name)  # Should print "John Doe"
 
-# Example with custom validation function
-positiveNumber <- function(x) {
-    return(is.numeric(x) && x > 0)
-}
+# Try to modify the object in a way that violates the interface
+john$age <- "thirty"  # This should not cause an immediate error
 
-Account <- interface("Account",
-    id = "character",
-    balance = positiveNumber,
-    metadata = "ANY"  # This can be any type
-)
+# But when we try to access any property, it will trigger validation and raise an error
+try(print(john$name))
 
+# Create an object without validation on access
 my_account <- implement(Account,
     id = "ACC123",
     balance = 1000,
-    metadata = list(created_at = Sys.time(), last_transaction = "2023-07-01")
+    metadata = list(created_at = Sys.time(), last_transaction = "2023-07-01"),
+    validate_on_access = FALSE
 )
 
-# Accessing properties
-print(john$name)  # Should print "John Doe"
-print(jane$person$name)  # Should print "John Doe"
-print(jane$additional_info)  # Should print the data frame
-print(my_account$balance)  # Should print 1000
-print(my_account$metadata)  # Should print the list
-
-# This would raise an error with type mismatches
-try(implement(Person,
-    name = 123,  # Should be character
-    age = "thirty",  # Should be numeric
-    email = TRUE  # Should be character
-))
+# This won't trigger validation
+my_account$balance <- "Invalid"
+print(my_account$balance)  # This will print "Invalid" without raising an error
