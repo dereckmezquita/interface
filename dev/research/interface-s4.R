@@ -24,7 +24,7 @@ check_type <- function(value, type_spec) {
         }
         return(
             all(names(type_spec@properties) %in% slotNames(value)) &&
-            all(mapply(check_type, sapply(names(type_spec@properties), slot, object = value), type_spec@properties))
+                all(mapply(check_type, sapply(names(type_spec@properties), slot, object = value), type_spec@properties))
         )
     } else if (is.character(type_spec)) {
         # Handle base R types and S3/S4/R6 classes
@@ -46,13 +46,13 @@ implement <- function(interface, ...) {
     if (length(missing_props) > 0) {
         stop(paste("Missing properties:", paste(missing_props, collapse = ", ")))
     }
-    
+
     # Check types of properties
     type_errors <- character()
     for (prop in names(interface@properties)) {
         expected_type <- interface@properties[[prop]]
         actual_value <- obj[[prop]]
-        
+
         if (!check_type(actual_value, expected_type)) {
             type_errors <- c(
                 type_errors,
@@ -68,7 +68,7 @@ implement <- function(interface, ...) {
     # Create an S4 class dynamically
     class_name <- paste0(interface@interface_name, "Implementation")
     slot_def <- sapply(interface@properties, function(x) {
-        return(if(identical(x, "ANY") || is(x, "Interface")) "ANY" else x)
+        return(if (identical(x, "ANY") || is(x, "Interface")) "ANY" else x)
     })
     if (!isClass(class_name)) {
         setClass(class_name, slots = slot_def)
@@ -92,7 +92,7 @@ Employee <- interface("Employee",
     job_title = "character",
     salary = "numeric",
     tasks = "list",
-    additional_info = "ANY"  # This can be any type
+    additional_info = "ANY" # This can be any type
 )
 
 # Create objects implementing the interfaces
@@ -118,7 +118,7 @@ positiveNumber <- function(x) {
 Account <- interface("Account",
     id = "character",
     balance = positiveNumber,
-    metadata = "ANY"  # This can be any type
+    metadata = "ANY" # This can be any type
 )
 
 my_account <- implement(Account,
@@ -128,15 +128,15 @@ my_account <- implement(Account,
 )
 
 # Accessing properties
-print(john@name)  # Should print "John Doe"
-print(jane@person@name)  # Should print "John Doe"
-print(jane@additional_info)  # Should print the data frame
-print(my_account@balance)  # Should print 1000
-print(my_account@metadata)  # Should print the list
+print(john@name) # Should print "John Doe"
+print(jane@person@name) # Should print "John Doe"
+print(jane@additional_info) # Should print the data frame
+print(my_account@balance) # Should print 1000
+print(my_account@metadata) # Should print the list
 
 # This would raise an error with type mismatches
 try(implement(Person,
-    name = 123,  # Should be character
-    age = "thirty",  # Should be numeric
-    email = TRUE  # Should be character
+    name = 123, # Should be character
+    age = "thirty", # Should be numeric
+    email = TRUE # Should be character
 ))

@@ -6,7 +6,7 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     if (length(missing_props) > 0) {
         stop(paste("Missing properties:", paste(missing_props, collapse = ", ")))
     }
-    
+
     # Initial validation
     validate_object(obj, interface)
 
@@ -29,8 +29,8 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     # Return the object as a simple list with appropriate class and attributes
     return(structure(
         obj,
-        class = classes, 
+        class = classes,
         interface = interface,
-        validate_on_access = if(validate_on_access) TRUE else NULL
+        validate_on_access = if (validate_on_access) TRUE else NULL
     ))
 }

@@ -35,7 +35,7 @@ check_interface <- function(value, interface) {
     }
     return(
         all(names(interface$properties) %in% names(value)) &&
-        all(mapply(check_type, value[names(interface$properties)], interface$properties))
+            all(mapply(check_type, value[names(interface$properties)], interface$properties))
     )
 }
 
@@ -45,7 +45,7 @@ validate_object <- function(obj, interface) {
     for (prop in names(interface$properties)) {
         expected_type <- interface$properties[[prop]]
         actual_value <- obj[[prop]]
-        
+
         if (!check_type(actual_value, expected_type)) {
             stop(sprintf("Property '%s' does not match the expected type specification", prop))
         }
@@ -73,9 +73,11 @@ print.InterfaceImplementation <- function(x, ...) {
             cat("<", class(x[[prop]])[1], ">\n", sep = "")
         }
     }
-    cat("Validation on access:", 
-        if(isTRUE(attr(x, "validate_on_access"))) "Enabled" else "Disabled", 
-        "\n")
+    cat(
+        "Validation on access:",
+        if (isTRUE(attr(x, "validate_on_access"))) "Enabled" else "Disabled",
+        "\n"
+    )
     invisible(x)
 }
 
@@ -88,7 +90,7 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     if (length(missing_props) > 0) {
         stop(paste("Missing properties:", paste(missing_props, collapse = ", ")))
     }
-    
+
     # Initial validation
     validate_object(obj, interface)
 
@@ -100,7 +102,7 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     # Prepare class and attributes
     class_name <- paste0(interface$interface_name, "Implementation")
     classes <- c(class_name, "InterfaceImplementation", "list")
-    
+
     # Only add validated_list if required
     if (validate_on_access) {
         classes <- c("validated_list", classes)
@@ -109,9 +111,9 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     # Return the object as a simple list with appropriate class and attributes
     return(structure(
         obj,
-        class = classes, 
+        class = classes,
         interface = interface,
-        validate_on_access = if(validate_on_access) TRUE else NULL
+        validate_on_access = if (validate_on_access) TRUE else NULL
     ))
 }
 
@@ -132,7 +134,7 @@ print.Interface <- function(x, ...) {
             cat(sprintf("  %s: %s\n", prop, prop_type))
         }
     }
-    cat("Default validation on access:", if(x$validate_on_access) "Enabled" else "Disabled", "\n")
+    cat("Default validation on access:", if (x$validate_on_access) "Enabled" else "Disabled", "\n")
     invisible(x)
 }
 
@@ -140,7 +142,7 @@ print.Interface <- function(x, ...) {
 summary.Interface <- function(object, ...) {
     cat("Interface:", object$interface_name, "\n")
     cat("Number of properties:", length(object$properties), "\n")
-    cat("Default validation on access:", if(object$validate_on_access) "Enabled" else "Disabled", "\n")
+    cat("Default validation on access:", if (object$validate_on_access) "Enabled" else "Disabled", "\n")
     invisible(object)
 }
 
@@ -150,7 +152,7 @@ Person <- interface("Person",
     name = "character",
     age = "numeric",
     email = "character",
-    validate_on_access = TRUE  # Set default validation for Person
+    validate_on_access = TRUE # Set default validation for Person
 )
 
 # Define an interface that uses another interface and includes an "any" type
@@ -160,7 +162,7 @@ Employee <- interface("Employee",
     salary = "numeric",
     tasks = "list",
     additional_info = "ANY",
-    validate_on_access = FALSE  # Set default validation for Employee
+    validate_on_access = FALSE # Set default validation for Employee
 )
 
 # Create objects implementing the interfaces
@@ -182,11 +184,11 @@ jane <- implement(Employee,
 )
 
 # Accessing properties
-print(john$name)  # Should print "John Doe" and trigger validation
-print(jane$job_title)  # Should print "Manager" without validation
+print(john$name) # Should print "John Doe" and trigger validation
+print(jane$job_title) # Should print "Manager" without validation
 
 # Modify the object in a way that violates the interface
-john$age <- "thirty"  # This should not cause an immediate error
+john$age <- "thirty" # This should not cause an immediate error
 
 # This will trigger validation and raise an error
 try(print(john$name))
@@ -201,4 +203,4 @@ no_validate_person <- implement(Person,
 
 # This won't trigger validation
 no_validate_person$age <- "twenty-five"
-print(no_validate_person$age)  # This will print "twenty-five" without raising an error
+print(no_validate_person$age) # This will print "twenty-five" without raising an error

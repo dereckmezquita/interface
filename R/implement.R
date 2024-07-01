@@ -14,7 +14,7 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     if (length(missing_props) > 0) {
         stop(paste("Missing properties:", paste(missing_props, collapse = ", ")))
     }
-    
+
     # Initial validation
     validate_object(obj, interface)
 
@@ -26,7 +26,7 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     # Prepare class and attributes
     class_name <- paste0(interface$interface_name, "Implementation")
     classes <- c(class_name, "InterfaceImplementation", "list")
-    
+
     # Only add validated_list if required
     if (validate_on_access) {
         classes <- c("validated_list", classes)
@@ -35,9 +35,9 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     # Return the object as a simple list with appropriate class and attributes
     structure(
         obj,
-        class = classes, 
+        class = classes,
         interface = interface,
-        validate_on_access = if(validate_on_access) TRUE else NULL
+        validate_on_access = if (validate_on_access) TRUE else NULL
     )
 }
 

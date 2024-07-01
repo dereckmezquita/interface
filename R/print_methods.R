@@ -12,9 +12,11 @@ print.InterfaceImplementation <- function(x, ...) {
             cat("<", class(x[[prop]])[1], ">\n", sep = "")
         }
     }
-    cat("Validation on access:", 
-        if(isTRUE(attr(x, "validate_on_access"))) "Enabled" else "Disabled", 
-        "\n")
+    cat(
+        "Validation on access:",
+        if (isTRUE(attr(x, "validate_on_access"))) "Enabled" else "Disabled",
+        "\n"
+    )
     invisible(x)
 }
 
@@ -32,7 +34,7 @@ print.Interface <- function(x, ...) {
             cat(sprintf("  %s: %s\n", prop, prop_type))
         }
     }
-    cat("Default validation on access:", if(x$validate_on_access) "Enabled" else "Disabled", "\n")
+    cat("Default validation on access:", if (x$validate_on_access) "Enabled" else "Disabled", "\n")
     invisible(x)
 }
 
@@ -40,6 +42,6 @@ print.Interface <- function(x, ...) {
 summary.Interface <- function(object, ...) {
     cat("Interface:", object$interface_name, "\n")
     cat("Number of properties:", length(object$properties), "\n")
-    cat("Default validation on access:", if(object$validate_on_access) "Enabled" else "Disabled", "\n")
+    cat("Default validation on access:", if (object$validate_on_access) "Enabled" else "Disabled", "\n")
     invisible(object)
 }

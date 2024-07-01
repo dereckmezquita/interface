@@ -1,4 +1,4 @@
-library('interface')
+library("interface")
 
 Person <- interface("Person",
     name = "character",

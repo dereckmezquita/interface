@@ -19,7 +19,7 @@ check_interface <- function(value, interface) {
         return(FALSE)
     }
     all(names(interface$properties) %in% names(value)) &&
-    all(mapply(check_type, value[names(interface$properties)], interface$properties))
+        all(mapply(check_type, value[names(interface$properties)], interface$properties))
 }
 
 # Validation function
@@ -27,7 +27,7 @@ validate_object <- function(obj, interface) {
     for (prop in names(interface$properties)) {
         expected_type <- interface$properties[[prop]]
         actual_value <- obj[[prop]]
-        
+
         if (!check_type(actual_value, expected_type)) {
             stop(sprintf("Property '%s' does not match the expected type specification", prop))
         }

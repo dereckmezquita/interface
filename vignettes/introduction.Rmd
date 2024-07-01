@@ -1,0 +1,213 @@
+---
+title: "Introduction to interface"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with interface}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+```{r setup}
+box::use(interface[interface, implement])
+```
+
+## Introduction
+
+The `interface` package provides a system for defining and implementing interfaces in R, with optional runtime type checking. This approach brings some of the benefits of statically-typed languages to R, allowing for more structured and safer code.
+
+## Why Use Interfaces?
+
+Interfaces in R can be beneficial for several reasons:
+
+1. **Code Structure**: They provide a clear contract for what properties and methods an object should have.
+2. **Type Safety**: They allow for runtime type checking, catching errors early.
+3. **Documentation**: They serve as self-documenting code, clearly stating the expected structure of objects.
+4. **Flexibility**: They allow for implementation of multiple interfaces, promoting code reuse.
+
+## Basic Usage
+
+### Defining an Interface
+
+To define an interface, use the `interface()` function:
+
+```{r}
+Person <- interface("Person",
+    name = "character",
+    age = "numeric",
+    email = "character"
+)
+```
+
+This creates an interface named "Person" with three properties:
+
+1. name (a character)
+1. age (a numeric)
+1. email (a character)
+
+### Implementing an Interface
+
+To create an object that implements an interface, use the `implement()` function:
+
+```{r}
+john <- implement(Person,
+    name = "John Doe",
+    age = 30,
+    email = "john@example.com"
+)
+```
+
+### Accessing Properties
+
+You can access properties of the implemented object just like a regular list:
+
+```{r}
+print(john$name)
+print(john$age)
+```
+
+### Type Checking
+
+By default, type checking occurs when you access properties:
+
+```{r, error=TRUE}
+john$age <- "thirty"
+```
+
+This error is raised because we're trying to assign a character value to a numeric property.
+
+## Advanced Features
+
+### Disabling Type Checking
+
+You can disable type checking to reduce overhead:
+
+```{r}
+Dog <- interface("Dog",
+    name = "character",
+    age = "numeric",
+    breed = "character",
+    validate_on_access = FALSE
+)
+
+fido <- implement(Dog,
+    name = "Fido",
+    age = 5,
+    breed = "Golden Retriever"
+)
+
+fido$age <- "five" # No error, type checking is disabled
+print(fido$age)
+```
+
+### Nested Interfaces
+
+You can use interfaces as property types for other interfaces:
+
+```{r}
+Address <- interface("Address",
+    street = "character",
+    city = "character",
+    state = "character",
+    zip = "numeric"
+)
+
+Employee <- interface("Employee",
+    name = "character",
+    age = "numeric",
+    email = "character",
+    address = Address
+)
+
+jane <- implement(Employee,
+    name = "Jane Doe",
+    age = 28,
+    email = "jane@company.com",
+    address = implement(Address,
+        street = "123 Main St",
+        city = "Anytown",
+        state = "CA",
+        zip = 12345
+    )
+)
+
+print(jane$address$city)
+```
+
+### Custom Validation Functions
+
+You can use custom functions for more complex validation:
+
+```{r}
+positive_number <- function(x) is.numeric(x) && x > 0
+
+Account <- interface("Account",
+    id = "character",
+    balance = positive_number
+)
+
+my_account <- implement(Account,
+    id = "ACC123",
+    balance = 1000
+)
+
+print(my_account$balance)
+
+# This will raise an error
+tryCatch(
+    implement(Account, id = "ACC124", balance = -500),
+    error = function(e) print(e$message)
+)
+```
+
+### Using with Other R Types
+
+The `interface` package supports various R types:
+
+```{r}
+ComplexPerson <- interface("ComplexPerson",
+    name = "character",
+    age = "numeric",
+    hobbies = "list",
+    scores = "data.frame",
+    metadata = "ANY" # ANY allows any type
+)
+
+person <- implement(ComplexPerson,
+    name = "Alice Johnson",
+    age = 35,
+    hobbies = list("painting", "cycling"),
+    scores = data.frame(subject = c("Art", "Physics"), score = c(95, 88)),
+    metadata = list(last_updated = Sys.time())
+)
+
+print(person$hobbies)
+print(person$scores)
+```
+
+## Best Practices
+
+1. **Be Specific**: Define your interfaces as specifically as possible. This helps catch errors early.
+2. **Use Custom Validators**: For complex rules, create custom validator functions.
+3. **Compose Interfaces**: Use nested interfaces to create more complex structures.
+4. **Document Your Interfaces**: Good documentation helps other developers understand how to use your interfaces.
+
+## Conclusion
+
+The `interface` package provides a powerful way to bring interface-like structures to R programming. By using interfaces, you can create more robust, self-documenting code that's easier to maintain and extend.
+
+Remember, while interfaces provide many benefits, they also add a layer of complexity to your code. Use them judiciously where their benefits outweigh the added complexity.
+
+This vignette provides a comprehensive introduction to your `interface` package. It covers:
+
+1. The motivation behind using interfaces in R
+2. Basic usage of the package
+3. Advanced features like disabling type checking, nested interfaces, and custom validation functions
+4. Examples of using interfaces with various R types
+5. Best practices for using the package

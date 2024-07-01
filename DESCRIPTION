@@ -13,4 +13,10 @@ Description: An easy to use TypeScript-like system for defining and implementing
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+VignetteBuilder: knitr
 RoxygenNote: 7.3.2
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    box
