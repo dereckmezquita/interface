@@ -1,8 +1,8 @@
-^renv$
-^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-
-research/
-dev/
+^\.pre-commit-config\.yaml$
+^renv$
+^renv\.lock$
 dev-docs/
+dev/
+research/
