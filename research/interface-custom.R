@@ -1,11 +1,16 @@
 # Define the Interface class
-Interface <- function(interface_name, properties) {
-    structure(list(interface_name = interface_name, properties = properties), class = "Interface")
+Interface <- function(interface_name, properties, validate_on_access = FALSE) {
+    return(structure(list(
+        interface_name = interface_name,
+        properties = properties,
+        validate_on_access = validate_on_access
+    ), class = "Interface"))
 }
 
 # Function to create an interface
-interface <- function(interface_name, ...) {
-    Interface(interface_name, list(...))
+interface <- function(interface_name, ..., validate_on_access = FALSE) {
+    properties <- list(...)
+    return(Interface(interface_name, properties, validate_on_access))
 }
 
 # Helper function to check if a value matches a type specification
@@ -57,7 +62,7 @@ custom_accessor <- function(x, i) {
 }
 
 # Function to create an object that implements an interface
-implement <- function(interface, ..., validate_on_access = FALSE) {
+implement <- function(interface, ..., validate_on_access = NULL) {
     obj <- list(...)
 
     # Check if all required properties are present
@@ -68,6 +73,11 @@ implement <- function(interface, ..., validate_on_access = FALSE) {
     
     # Initial validation
     validate_object(obj, interface)
+
+    # Determine validate_on_access value
+    if (is.null(validate_on_access)) {
+        validate_on_access <- interface$validate_on_access
+    }
 
     # Return the object as a simple list with custom class and attributes
     return(structure(
@@ -86,7 +96,8 @@ implement <- function(interface, ..., validate_on_access = FALSE) {
 Person <- interface("Person",
     name = "character",
     age = "numeric",
-    email = "character"
+    email = "character",
+    validate_on_access = TRUE  # Set default validation for Person
 )
 
 # Define an interface that uses another interface and includes an "any" type
@@ -95,15 +106,16 @@ Employee <- interface("Employee",
     job_title = "character",
     salary = "numeric",
     tasks = "list",
-    additional_info = "ANY"  # This can be any type
+    additional_info = "ANY",  # This can be any type
+    validate_on_access = FALSE  # Set default validation for Employee
 )
 
 # Create objects implementing the interfaces
 john <- implement(Person,
     name = "John Doe",
     age = 30,
-    email = "john@example.com",
-    validate_on_access = TRUE
+    email = "john@example.com"
+    # validate_on_access is not specified, so it will use the interface default (TRUE)
 )
 
 jane <- implement(Employee,
@@ -112,12 +124,12 @@ jane <- implement(Employee,
     salary = 50000,
     tasks = list("Task 1", "Task 2"),
     additional_info = data.frame(skill = c("Leadership", "Communication"), level = c(9, 8)),
-    validate_on_access = TRUE
+    validate_on_access = TRUE  # Override the interface default
 )
 
-# Accessing properties (this will trigger validation)
-print(john$name)  # Should print "John Doe"
-print(jane$person$name)  # Should print "John Doe"
+# Accessing properties (this will trigger validation for john, but not for jane)
+print(john$name)  # Should print "John Doe" and trigger validation
+print(jane$job_title)  # Should print "Manager" and trigger validation (due to override)
 
 # Try to modify the object in a way that violates the interface
 john$age <- "thirty"  # This should not cause an immediate error
@@ -125,7 +137,7 @@ john$age <- "thirty"  # This should not cause an immediate error
 # But when we try to access any property, it will trigger validation and raise an error
 try(print(john$name))
 
-# Create an object without validation on access
+# Create an object explicitly without validation on access
 my_account <- implement(Account,
     id = "ACC123",
     balance = 1000,
