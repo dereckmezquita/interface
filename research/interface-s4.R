@@ -14,12 +14,14 @@ interface <- function(interface_name, ...) {
 
 # Helper function to check if a value matches a type specification
 check_type <- function(value, type_spec) {
-    if (is(type_spec, "Interface")) {
+    if (identical(type_spec, "ANY")) {
+        # "ANY" type always returns TRUE
+        return(TRUE)
+    } else if (is(type_spec, "Interface")) {
         # If type_spec is an Interface, check if value implements the interface
         if (is(value, paste0(type_spec@interface_name, "Implementation"))) {
             return(TRUE)
         }
-
         return(
             all(names(type_spec@properties) %in% slotNames(value)) &&
             all(mapply(check_type, sapply(names(type_spec@properties), slot, object = value), type_spec@properties))
@@ -65,7 +67,9 @@ implement <- function(interface, ...) {
 
     # Create an S4 class dynamically
     class_name <- paste0(interface@interface_name, "Implementation")
-    slot_def <- sapply(interface@properties, function(x) if(is(x, "Interface")) "ANY" else x)
+    slot_def <- sapply(interface@properties, function(x) {
+        return(if(identical(x, "ANY") || is(x, "Interface")) "ANY" else x)
+    })
     if (!isClass(class_name)) {
         setClass(class_name, slots = slot_def)
     }
@@ -82,12 +86,13 @@ Person <- interface("Person",
     email = "character"
 )
 
-# Define an interface that uses another interface
+# Define an interface that uses another interface and includes an "any" type
 Employee <- interface("Employee",
     person = Person,
     job_title = "character",
     salary = "numeric",
-    tasks = "list"
+    tasks = "list",
+    additional_info = "ANY"  # This can be any type
 )
 
 # Create objects implementing the interfaces
@@ -101,7 +106,8 @@ jane <- implement(Employee,
     person = john,
     job_title = "Manager",
     salary = 50000,
-    tasks = list("Task 1", "Task 2")
+    tasks = list("Task 1", "Task 2"),
+    additional_info = data.frame(skill = c("Leadership", "Communication"), level = c(9, 8))
 )
 
 # Example with custom validation function
@@ -111,18 +117,22 @@ positiveNumber <- function(x) {
 
 Account <- interface("Account",
     id = "character",
-    balance = positiveNumber
+    balance = positiveNumber,
+    metadata = "ANY"  # This can be any type
 )
 
 my_account <- implement(Account,
     id = "ACC123",
-    balance = 1000
+    balance = 1000,
+    metadata = list(created_at = Sys.time(), last_transaction = "2023-07-01")
 )
 
 # Accessing properties
 print(john@name)  # Should print "John Doe"
 print(jane@person@name)  # Should print "John Doe"
+print(jane@additional_info)  # Should print the data frame
 print(my_account@balance)  # Should print 1000
+print(my_account@metadata)  # Should print the list
 
 # This would raise an error with type mismatches
 try(implement(Person,
