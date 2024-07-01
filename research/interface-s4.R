@@ -56,7 +56,7 @@ implement <- function(interface, ...) {
         if (!check_type(actual_value, expected_type)) {
             type_errors <- c(
                 type_errors,
-                sprintf("Property '%s' does not match the expected type specification", prop)
+                sprintf("Property '%s' does not match the expected type specification of %s", prop, expected_type)
             )
         }
     }
