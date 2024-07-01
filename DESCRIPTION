@@ -1,0 +1,10 @@
+Package: interface
+Type: Package
+Title: Data validation and typing in R
+Version: 0.1.0
+Author: Dereck Mezquita
+Maintainer: Dereck Mezquita <dereck@mezquita.io>
+Description: Easy to use TypeScript-like data validation and typing for R
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
