@@ -1,132 +1,36 @@
-library(methods)
-
-# Define the Interface class
-setClass("Interface", slots = list(
-    interface_name = "character",
-    properties = "list"
-))
-
-# Function to create an interface
-interface <- function(interface_name, ...) {
-    properties <- list(...)
-    new("Interface", interface_name = interface_name, properties = properties)
-}
-
-# Helper function to check if a value matches a type specification
-check_type <- function(value, type_spec) {
-    if (is(type_spec, "Interface")) {
-        # If type_spec is an Interface, check if value implements the interface
-        if (is(value, paste0(type_spec@interface_name, "Implementation"))) {
-            return(TRUE)
-        }
-
-        return(
-            all(names(type_spec@properties) %in% slotNames(value)) &&
-            all(mapply(check_type, sapply(names(type_spec@properties), slot, object = value), type_spec@properties))
-        )
-    } else if (is.character(type_spec)) {
-        # Handle base R types and S3/S4/R6 classes
-        return(is(value, type_spec))
-    } else if (is.function(type_spec)) {
-        # Custom validation function
-        return(type_spec(value))
-    } else {
-        stop("Unsupported type specification")
-    }
-}
-
-# Function to create an object that implements an interface
-implement <- function(interface, ...) {
+implement <- function(interface, ..., validate_on_access = NULL) {
     obj <- list(...)
 
     # Check if all required properties are present
-    missing_props <- setdiff(names(interface@properties), names(obj))
+    missing_props <- setdiff(names(interface$properties), names(obj))
     if (length(missing_props) > 0) {
         stop(paste("Missing properties:", paste(missing_props, collapse = ", ")))
     }
     
-    # Check types of properties
-    type_errors <- character()
-    for (prop in names(interface@properties)) {
-        expected_type <- interface@properties[[prop]]
-        actual_value <- obj[[prop]]
-        
-        if (!check_type(actual_value, expected_type)) {
-            type_errors <- c(
-                type_errors,
-                sprintf("Property '%s' does not match the expected type specification", prop)
-            )
-        }
+    # Initial validation
+    validate_object(obj, interface)
+
+    # Determine validate_on_access value
+    if (is.null(validate_on_access)) {
+        validate_on_access <- interface$validate_on_access
     }
 
-    if (length(type_errors) > 0) {
-        stop(paste("Type mismatch errors:", paste(type_errors, collapse = "\n"), sep = "\n"))
+    # Prepare class and attributes
+    class_name <- paste0(interface$interface_name, "Implementation")
+    classes <- c(class_name, "list")
+    attrs <- list(interface = interface)
+
+    # Only add validation if required
+    if (validate_on_access) {
+        classes <- c("validated_list", classes)
+        attrs$validate_on_access <- TRUE
     }
 
-    # Create an S4 class dynamically
-    class_name <- paste0(interface@interface_name, "Implementation")
-    slot_def <- sapply(interface@properties, function(x) if(is(x, "Interface")) "ANY" else x)
-    if (!isClass(class_name)) {
-        setClass(class_name, slots = slot_def)
-    }
-
-    # Create and return the object
-    do.call(new, c(class_name, obj))
+    # Return the object as a simple list with appropriate class and attributes
+    return(structure(
+        obj,
+        class = classes, 
+        interface = interface,
+        validate_on_access = if(validate_on_access) TRUE else NULL
+    ))
 }
-
-# Example usage
-# Define interfaces
-Person <- interface("Person",
-    name = "character",
-    age = "numeric",
-    email = "character"
-)
-
-# Define an interface that uses another interface
-Employee <- interface("Employee",
-    person = Person,
-    job_title = "character",
-    salary = "numeric",
-    tasks = "list"
-)
-
-# Create objects implementing the interfaces
-john <- implement(Person,
-    name = "John Doe",
-    age = 30,
-    email = "john@example.com"
-)
-
-jane <- implement(Employee,
-    person = john,
-    job_title = "Manager",
-    salary = 50000,
-    tasks = list("Task 1", "Task 2")
-)
-
-# Example with custom validation function
-positiveNumber <- function(x) {
-    return(is.numeric(x) && x > 0)
-}
-
-Account <- interface("Account",
-    id = "character",
-    balance = positiveNumber
-)
-
-my_account <- implement(Account,
-    id = "ACC123",
-    balance = 1000
-)
-
-# Accessing properties
-print(john@name)  # Should print "John Doe"
-print(jane@person@name)  # Should print "John Doe"
-print(my_account@balance)  # Should print 1000
-
-# This would raise an error with type mismatches
-try(implement(Person,
-    name = 123,  # Should be character
-    age = "thirty",  # Should be numeric
-    email = TRUE  # Should be character
-))

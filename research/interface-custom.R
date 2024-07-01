@@ -59,6 +59,26 @@ custom_accessor <- function(x, i) {
     return(x[[i]])
 }
 
+# Custom print method for implemented interface objects
+print.InterfaceImplementation <- function(x, ...) {
+    interface <- attr(x, "interface")
+    cat("Object implementing", interface$interface_name, "interface:\n")
+    for (prop in names(x)) {
+        cat(sprintf("  %s: ", prop))
+        if (is.atomic(x[[prop]]) && length(x[[prop]]) == 1) {
+            cat(x[[prop]], "\n")
+        } else if (inherits(x[[prop]], "InterfaceImplementation")) {
+            cat("<", class(x[[prop]])[1], ">\n", sep = "")
+        } else {
+            cat("<", class(x[[prop]])[1], ">\n", sep = "")
+        }
+    }
+    cat("Validation on access:", 
+        if(isTRUE(attr(x, "validate_on_access"))) "Enabled" else "Disabled", 
+        "\n")
+    invisible(x)
+}
+
 # Function to create an object that implements an interface
 implement <- function(interface, ..., validate_on_access = NULL) {
     obj <- list(...)
@@ -79,13 +99,11 @@ implement <- function(interface, ..., validate_on_access = NULL) {
 
     # Prepare class and attributes
     class_name <- paste0(interface$interface_name, "Implementation")
-    classes <- c(class_name, "list")
-    attrs <- list(interface = interface)
-
-    # Only add validation if required
+    classes <- c(class_name, "InterfaceImplementation", "list")
+    
+    # Only add validated_list if required
     if (validate_on_access) {
         classes <- c("validated_list", classes)
-        attrs$validate_on_access <- TRUE
     }
 
     # Return the object as a simple list with appropriate class and attributes
@@ -99,6 +117,32 @@ implement <- function(interface, ..., validate_on_access = NULL) {
 
 # Define custom `$` method only for validated lists
 `$.validated_list` <- custom_accessor
+
+# Custom print method for Interface objects
+print.Interface <- function(x, ...) {
+    cat("Interface:", x$interface_name, "\n")
+    cat("Properties:\n")
+    for (prop in names(x$properties)) {
+        prop_type <- x$properties[[prop]]
+        if (inherits(prop_type, "Interface")) {
+            cat(sprintf("  %s: <Interface %s>\n", prop, prop_type$interface_name))
+        } else if (is.function(prop_type)) {
+            cat(sprintf("  %s: <Custom Validator>\n", prop))
+        } else {
+            cat(sprintf("  %s: %s\n", prop, prop_type))
+        }
+    }
+    cat("Default validation on access:", if(x$validate_on_access) "Enabled" else "Disabled", "\n")
+    invisible(x)
+}
+
+# You might also want to add a summary method for more concise output
+summary.Interface <- function(object, ...) {
+    cat("Interface:", object$interface_name, "\n")
+    cat("Number of properties:", length(object$properties), "\n")
+    cat("Default validation on access:", if(object$validate_on_access) "Enabled" else "Disabled", "\n")
+    invisible(object)
+}
 
 # Example usage
 # Define interfaces
@@ -126,7 +170,8 @@ john <- implement(Person,
     email = "john@example.com"
 )
 
-john
+summary(Person)
+summary(john)
 
 jane <- implement(Employee,
     person = john,
