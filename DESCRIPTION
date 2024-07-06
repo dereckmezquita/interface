@@ -1,7 +1,7 @@
 Package: interface
 Type: Package
 Title: Interfaces for data validation and typing in R
-Version: 0.1.0
+Version: 0.0.1
 Authors@R: 
     person(given = "Dereck",
            family = "Mezquita",
