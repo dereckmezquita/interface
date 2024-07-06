@@ -1,10 +1,25 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "man/figures/README-",
+    fig.align = "center",
+    out.width = "100%",
+    dpi = 75,
+    collapse = TRUE,
+    comment = "#>"
+)
+```
 
 # interface: Bringing Structure and Safety to R
 
 <!-- badges: start -->
-
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build
@@ -13,30 +28,19 @@ status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://
 
 ## Overview
 
-The `interface` package brings the power of interfaces and runtime type
-checking to R, offering a robust solution for data structure validation
-and enhancing code reliability. In the dynamic world of R programming,
-where data structures can be fluid, `interface` provides a safety net,
-ensuring that your data conforms to expected structures and types.
+The `interface` package brings the power of interfaces and runtime type checking to R, offering a robust solution for data structure validation and enhancing code reliability. In the dynamic world of R programming, where data structures can be fluid, `interface` provides a safety net, ensuring that your data conforms to expected structures and types.
 
 ### Why `interface`?
 
-1.  **Data Integrity**: Ensure your data structures are consistent and
-    valid throughout your analysis pipeline.
-2.  **Early Error Detection**: Catch type mismatches and structural
-    issues at runtime, preventing silent errors that could compromise
-    your results.
-3.  **Self-Documenting Code**: Interfaces serve as clear contracts,
-    making your code more readable and self-explanatory.
-4.  **Flexible Validation**: From simple type checks to complex custom
-    validations, `interface` adapts to your needs.
-5.  **Performance Control**: Toggle validation on/off as needed,
-    balancing safety and performance.
+1. **Data Integrity**: Ensure your data structures are consistent and valid throughout your analysis pipeline.
+2. **Early Error Detection**: Catch type mismatches and structural issues at runtime, preventing silent errors that could compromise your results.
+3. **Self-Documenting Code**: Interfaces serve as clear contracts, making your code more readable and self-explanatory.
+4. **Flexible Validation**: From simple type checks to complex custom validations, `interface` adapts to your needs.
+5. **Performance Control**: Toggle validation on/off as needed, balancing safety and performance.
 
 ## Installation
 
-You can install the development version of interface from
-[GitHub](https://github.com/) with:
+You can install the development version of interface from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -45,7 +49,7 @@ remote::install_github("dereckmezquita/interface")
 
 ## Quick Start
 
-``` r
+```{r example}
 box::use(interface[interface, implement])
 
 # Define an interface for a data structure
@@ -66,17 +70,7 @@ john_data <- implement(PersonData,
 
 # Access data safely
 print(john_data$name)
-#> [1] "John Doe"
-```
-
-``` r
 print(john_data$scores)
-#>   subject score
-#> 1    Math    95
-#> 2 Science    88
-```
-
-``` r
 
 # This will raise an error, preventing silent issues
 try(john_data$age <- "thirty")
@@ -88,7 +82,7 @@ try(john_data$age <- "thirty")
 
 Interfaces in R provide a clear contract for data structures:
 
-``` r
+```{r basic_interface}
 # Define a basic interface
 SimpleDataset <- interface("SimpleDataset",
     id = "integer",
@@ -104,18 +98,13 @@ valid_data <- implement(SimpleDataset,
 )
 
 print(valid_data)
-#> Object implementing SimpleDataset interface:
-#>   id: 1 
-#>   value: 10.5 
-#>   category: 1 
-#> Validation on access: Disabled
 ```
 
 ### Custom Validation Functions
 
 For more complex validations, use custom functions:
 
-``` r
+```{r custom_validation}
 # Custom validation function
 is_valid_email <- function(x) {
     grepl("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", x)
@@ -136,14 +125,6 @@ valid_user <- implement(UserProfile,
 )
 
 print(valid_user)
-#> Object implementing UserProfile interface:
-#>   username: john_doe 
-#>   email: john@example.com 
-#>   age: 25 
-#> Validation on access: Disabled
-```
-
-``` r
 
 # This will raise an error due to invalid email
 try(implement(UserProfile,
@@ -151,15 +132,13 @@ try(implement(UserProfile,
     email = "not_an_email",
     age = 30
 ))
-#> Error in validate_object(obj, interface) : 
-#>   Property 'email' does not match the expected type specification
 ```
 
 ### Nested Interfaces
 
 Compose complex data structures with nested interfaces:
 
-``` r
+```{r nested_interfaces}
 Address <- interface("Address",
     street = "character",
     city = "character",
@@ -183,14 +162,13 @@ employee_data <- implement(Employee,
 )
 
 print(employee_data$address$city)
-#> [1] "Data City"
 ```
 
 ### Flexible Validation Control
 
 Toggle validation for performance optimisation:
 
-``` r
+```{r validation_control}
 LargeDataset <- interface("LargeDataset",
     data = "data.frame",
     metadata = "list",
@@ -212,7 +190,7 @@ big_data$data[1, "x"] <- "should be numeric but no error raised"
 
 Ensure consistent data structures throughout your analysis pipeline:
 
-``` r
+```{r data_pipeline}
 # Define interfaces for each stage of your pipeline
 RawData <- interface("RawData",
     timestamp = "POSIXct",
@@ -260,35 +238,20 @@ processed <- process_data(raw_data)
 result <- analyze_data(processed)
 
 print(result)
-#> Object implementing AnalysisResult interface:
-#>   data: <ProcessedDataImplementation>
-#>   model_fit: <list>
-#>   r_squared: 0.85 
-#> Validation on access: Disabled
 ```
 
-This example demonstrates how `interface` can ensure data integrity
-throughout a multi-stage analysis pipeline, catching any structural or
-type inconsistencies early in the process.
+This example demonstrates how `interface` can ensure data integrity throughout a multi-stage analysis pipeline, catching any structural or type inconsistencies early in the process.
 
 ## Conclusion
 
-The `interface` package brings a new level of structure and safety to R
-programming. By providing clear contracts for data structures and
-runtime type checking, it helps prevent common errors, improves code
-readability, and ensures data integrity throughout your projects.
+The `interface` package brings a new level of structure and safety to R programming. By providing clear contracts for data structures and runtime type checking, it helps prevent common errors, improves code readability, and ensures data integrity throughout your projects.
 
-Whether you’re working on small scripts or large-scale data analysis
-pipelines, `interface` offers the flexibility and robustness to enhance
-your R code. Start using `interface` today to write safer, more reliable
-R code!
+Whether you're working on small scripts or large-scale data analysis pipelines, `interface` offers the flexibility and robustness to enhance your R code. Start using `interface` today to write safer, more reliable R code!
 
 ## Contributing
 
-Contributions to `interface` are welcome! Please refer to the
-[Contribution Guidelines](CONTRIBUTING.md) for more information.
+Contributions to `interface` are welcome! Please refer to the [Contribution Guidelines](CONTRIBUTING.md) for more information.
 
 ## License
 
-This project is licensed under the MIT License - see the
-[LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

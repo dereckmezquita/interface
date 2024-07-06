@@ -4,6 +4,7 @@ repos:
 -   repo: https://github.com/lorenzwalthert/precommit
     rev: v0.4.2
     hooks:
+    -   id: readme-rmd-rendered
     -   id: style-files
         args: [--style_pkg=styler, --style_fun=tidyverse_style, --indent_by=4]
     -   id: roxygenize
@@ -43,7 +44,6 @@ repos:
     -   id: lintr
         args: [--warn_only]
         exclude: dev/.*|
-    -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: no-print-statement
