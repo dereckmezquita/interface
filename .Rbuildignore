@@ -1,3 +1,7 @@
+.github
+.lintr
+README.Rmd
+TODO.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.pre-commit-config\.yaml$
