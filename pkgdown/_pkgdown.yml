@@ -1,4 +1,13 @@
-url: https://dereckmezquita.github.io/interface/
+template:
+  bootstrap: 5
+  bslib:
+    pkgdown-nav-height: 100px
+
+url: https://dereckmezquita.github.io/dmplot/
+
+authors:
+  Dereck Mezquita:
+    href: https://derecksnotes.com
 
 navbar:
   structure:
