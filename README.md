@@ -1,6 +1,6 @@
 # interface
 
-[![R-CMD-check](https://github.com/derecksprojects/interface/workflows/R-CMD-check/badge.svg)](https://github.com/derecksprojects/interface/actions)
+[![R-CMD-check](https://github.com/dereckmezquita/interface/workflows/R-CMD-check/badge.svg)](https://github.com/dereckmezquita/interface/actions)
 <!-- [![CRAN status](https://www.r-pkg.org/badges/version/interface)](https://CRAN.R-project.org/package=interface) -->
 
 `interface` provides a system for defining and implementing `interfaces` in R, with optional runtime type checking.
