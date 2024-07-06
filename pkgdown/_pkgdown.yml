@@ -1,0 +1,10 @@
+url: https://dereckmezquita.github.io/interface/
+
+navbar:
+  components:
+    github:
+      icon: fa-github fa-lg
+      href: https://github.com/dereckmezquita/interface
+    twitter:
+      icon: fa-twitter fa-lg
+      href: https://twitter.com/dereckmezquita
