@@ -1,9 +1,7 @@
 template:
   bootstrap: 5
-  bslib:
-    pkgdown-nav-height: 100px
 
-url: https://dereckmezquita.github.io/dmplot/
+url: https://dereckmezquita.github.io/interface/
 
 authors:
   Dereck Mezquita:
