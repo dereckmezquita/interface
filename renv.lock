@@ -4,7 +4,7 @@
     "Repositories": [
       {
         "Name": "CRAN",
-        "URL": "https://lib.stat.cmu.edu/R/CRAN"
+        "URL": "https://packagemanager.posit.co/cran/latest"
       }
     ]
   },
