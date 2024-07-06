@@ -14,6 +14,7 @@ knitr
 LazyData
 Lifecycle
 LinkingTo
+lintr
 lockfile
 MERCHANTABILITY
 mezquita
@@ -21,6 +22,7 @@ Mezquita
 NONINFRINGEMENT
 optimisation
 ORCID
+rcmdcheck
 README
 Reproducibility
 rmarkdown

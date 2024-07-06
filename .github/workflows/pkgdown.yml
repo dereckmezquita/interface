@@ -1,6 +1,9 @@
 # https://github.com/Appsilon/shiny.blueprint
 name: pkgdown
-on: push
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:

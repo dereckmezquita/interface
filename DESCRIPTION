@@ -19,4 +19,6 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
-    box
+    box,
+    rcmdcheck,
+    lintr
