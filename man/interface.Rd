@@ -4,7 +4,7 @@
 \alias{Interface}
 \title{Internal function to create an Interface object}
 \usage{
-Interface(interface_name, properties, validate_on_access = FALSE)
+Interface(interface_name, properties, validate_on_access = TRUE)
 }
 \arguments{
 \item{interface_name}{A character string naming the interface}

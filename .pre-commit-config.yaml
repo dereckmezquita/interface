@@ -7,6 +7,7 @@ repos:
     -   id: readme-rmd-rendered
     -   id: style-files
         args: [--style_pkg=styler, --style_fun=tidyverse_style, --indent_by=4]
+        exclude: dev/.*|
     -   id: roxygenize
     # codemeta must be above use-tidy-description when both are used
     # -   id: codemeta-description-updated
@@ -45,11 +46,15 @@ repos:
         args: [--warn_only]
         exclude: dev/.*|
     -   id: parsable-R
+        exclude: dev/.*|
     -   id: no-browser-statement
+        exclude: dev/.*|
     -   id: no-print-statement
         exclude: dev/.*|
     -   id: no-debug-statement
+        exclude: dev/.*|
     -   id: deps-in-desc
+        exclude: dev/.*|
         args: [--allow_private_imports]
     -   id: pkgdown
 -   repo: https://github.com/pre-commit/pre-commit-hooks
