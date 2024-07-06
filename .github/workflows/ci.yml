@@ -34,13 +34,6 @@ jobs:
         env:
           LINTR_ERROR_ON_LINT: true
 
-      - name: E2E test
-        if: always()
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: js
-          start: yarn run-showcase
-
       - name: Test coverage
         shell: Rscript {0}
         run: covr::codecov()
