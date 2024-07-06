@@ -1,4 +1,10 @@
-# Helper function to check if a value matches a type specification
+#' Check if a value matches a type specification
+#'
+#' @param value The value to check
+#' @param type_spec The type specification to check against
+#'
+#' @return Logical indicating whether the value matches the type specification
+#' @keywords internal
 check_type <- function(value, type_spec) {
     if (identical(type_spec, "ANY")) {
         return(TRUE)
@@ -30,16 +36,30 @@ check_type <- function(value, type_spec) {
     }
 }
 
-# Helper function to check if a value implements an interface
+#' Check if a value implements an interface
+#'
+#' @param value The value to check
+#' @param interface The interface to check against
+#'
+#' @return Logical indicating whether the value implements the interface
+#' @keywords internal
 check_interface <- function(value, interface) {
     if (!is.list(value)) {
         return(FALSE)
     }
-    all(names(interface$properties) %in% names(value)) &&
-        all(mapply(check_type, value[names(interface$properties)], interface$properties))
+    return(
+        all(names(interface$properties) %in% names(value)) &&
+            all(mapply(check_type, value[names(interface$properties)], interface$properties))
+    )
 }
 
-# Validation function
+#' Validate an object against an interface
+#'
+#' @param obj The object to validate
+#' @param interface The interface to validate against
+#'
+#' @return TRUE if the object is valid, otherwise throws an error
+#' @keywords internal
 validate_object <- function(obj, interface) {
     for (prop in names(interface$properties)) {
         expected_type <- interface$properties[[prop]]
@@ -51,5 +71,3 @@ validate_object <- function(obj, interface) {
     }
     return(TRUE)
 }
-
-# Custom accessor function is no longer needed here as it's defined in implement.R

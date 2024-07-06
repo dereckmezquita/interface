@@ -1,4 +1,4 @@
 library(testthat)
-library(YourPackageName)
+library(interface)
 
-test_check("YourPackageName")
+test_check("interface")
