@@ -1,4 +1,5 @@
 aut
+bioconductor
 CMD
 Codebase
 cre
@@ -12,6 +13,7 @@ jira
 knitr
 LazyData
 Lifecycle
+LinkingTo
 lockfile
 MERCHANTABILITY
 mezquita
@@ -31,4 +33,5 @@ TypeScript
 TypeScript's
 validator
 Validators
+vcs
 VignetteBuilder
