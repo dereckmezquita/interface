@@ -5,11 +5,28 @@ check_type <- function(value, type_spec) {
     } else if (inherits(type_spec, "Interface")) {
         return(check_interface(value, type_spec))
     } else if (is.character(type_spec)) {
-        return(inherits(value, type_spec))
+        if (type_spec %in% c("numeric", "integer", "logical", "character", "list", "data.frame", "matrix", "array", "factor", "Date", "POSIXct", "POSIXlt")) {
+            return(inherits(value, type_spec))
+        } else if (type_spec == "data.table") {
+            return(inherits(value, "data.table") || inherits(value, "data.frame"))
+        } else {
+            stop(sprintf("Unsupported character type specification: %s", type_spec))
+        }
     } else if (is.function(type_spec)) {
-        return(type_spec(value))
+        tryCatch(
+            {
+                result <- type_spec(value)
+                if (!is.logical(result) || length(result) != 1) {
+                    stop("Custom type check function must return a single logical value")
+                }
+                return(result)
+            },
+            error = function(e) {
+                stop(sprintf("Error in custom type check function: %s", e$message))
+            }
+        )
     } else {
-        stop("Unsupported type specification")
+        stop(sprintf("Unsupported type specification: %s", class(type_spec)[1]))
     }
 }
 
@@ -35,8 +52,4 @@ validate_object <- function(obj, interface) {
     return(TRUE)
 }
 
-# Custom accessor function
-custom_accessor <- function(x, i) {
-    validate_object(x, attr(x, "interface"))
-    x[[i]]
-}
+# Custom accessor function is no longer needed here as it's defined in implement.R

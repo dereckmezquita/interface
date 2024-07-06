@@ -166,9 +166,9 @@ tryCatch(
 )
 ```
 
-### Using with Other R Types
+### Using with Various R Types
 
-The `interface` package supports various R types:
+The `interface` package supports a wide range of R types:
 
 ```{r}
 ComplexPerson <- interface("ComplexPerson",
@@ -176,6 +176,9 @@ ComplexPerson <- interface("ComplexPerson",
     age = "numeric",
     hobbies = "list",
     scores = "data.frame",
+    factors = "factor",
+    dates = "Date",
+    times = "POSIXct",
     metadata = "ANY" # ANY allows any type
 )
 
@@ -184,12 +187,20 @@ person <- implement(ComplexPerson,
     age = 35,
     hobbies = list("painting", "cycling"),
     scores = data.frame(subject = c("Art", "Physics"), score = c(95, 88)),
+    factors = factor(c("A", "B", "A", "C")),
+    dates = as.Date(c("2023-01-01", "2023-06-30")),
+    times = as.POSIXct(c("2023-01-01 09:00:00", "2023-01-01 17:00:00")),
     metadata = list(last_updated = Sys.time())
 )
 
 print(person$hobbies)
 print(person$scores)
+print(person$factors)
+print(person$dates)
+print(person$times)
 ```
+
+This example demonstrates that our interface system now supports various R types, including data.frames, data.tables, factors, dates, and times.
 
 ## Best Practices
 
