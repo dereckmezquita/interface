@@ -12,6 +12,8 @@ implement(interface, ..., validate_on_access = NULL, allow_extra = FALSE)
 \item{...}{Properties to implement the interface}
 
 \item{validate_on_access}{Logical, whether to validate on access}
+
+\item{allow_extra}{Logical, whether to allow extra properties not defined in the interface}
 }
 \value{
 An object implementing the interface

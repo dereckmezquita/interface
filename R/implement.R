@@ -3,6 +3,7 @@
 #' @param interface An Interface object
 #' @param ... Properties to implement the interface
 #' @param validate_on_access Logical, whether to validate on access
+#' @param allow_extra Logical, whether to allow extra properties not defined in the interface
 #'
 #' @return An object implementing the interface
 #' @export
@@ -38,10 +39,7 @@ implement <- function(interface, ..., validate_on_access = NULL, allow_extra = F
 
     # Prepare class and attributes
     class_name <- paste0(interface$interface_name, "Implementation")
-    classes <- c(class_name, "InterfaceImplementation")
-
-    # Always add "validated_list" class to ensure custom accessor is used
-    classes <- c("validated_list", classes)
+    classes <- c("validated_list", class_name, "InterfaceImplementation")
 
     # Return the object with appropriate class and attributes
     return(structure(
@@ -53,14 +51,27 @@ implement <- function(interface, ..., validate_on_access = NULL, allow_extra = F
     ))
 }
 
+#' Custom accessor for validated_list objects
+#'
+#' @param x The validated_list object
+#' @param i The name of the property to access
+#'
+#' @return The value of the property
 #' @export
 `$.validated_list` <- function(x, i) {
     if (isTRUE(attr(x, "validate_on_access"))) {
         validate_object(x, attr(x, "interface"))
     }
-    x[[i]]
+    return(x[[i]])
 }
 
+#' Custom assignment for validated_list objects
+#'
+#' @param x The validated_list object
+#' @param i The name of the property to assign
+#' @param value The value to assign
+#'
+#' @return The updated validated_list object
 #' @export
 `$<-.validated_list` <- function(x, i, value) {
     interface <- attr(x, "interface")
@@ -73,5 +84,5 @@ implement <- function(interface, ..., validate_on_access = NULL, allow_extra = F
         stop(sprintf("Cannot add new property '%s' to the object", i))
     }
     x[[i]] <- value
-    x
+    return(x)
 }

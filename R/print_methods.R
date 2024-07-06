@@ -1,3 +1,9 @@
+#' Print method for InterfaceImplementation objects
+#'
+#' @param x The InterfaceImplementation object to print
+#' @param ... Additional arguments passed to print
+#'
+#' @return Invisibly returns the object
 #' @export
 print.InterfaceImplementation <- function(x, ...) {
     interface <- attr(x, "interface")
@@ -20,6 +26,12 @@ print.InterfaceImplementation <- function(x, ...) {
     invisible(x)
 }
 
+#' Print method for Interface objects
+#'
+#' @param x The Interface object to print
+#' @param ... Additional arguments passed to print
+#'
+#' @return Invisibly returns the object
 #' @export
 print.Interface <- function(x, ...) {
     cat("Interface:", x$interface_name, "\n")
@@ -38,6 +50,12 @@ print.Interface <- function(x, ...) {
     invisible(x)
 }
 
+#' Summary method for Interface objects
+#'
+#' @param object The Interface object to summarize
+#' @param ... Additional arguments passed to summary
+#'
+#' @return Invisibly returns the object
 #' @export
 summary.Interface <- function(object, ...) {
     cat("Interface:", object$interface_name, "\n")
