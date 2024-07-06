@@ -5,26 +5,11 @@ check_type <- function(value, type_spec) {
     } else if (inherits(type_spec, "Interface")) {
         return(check_interface(value, type_spec))
     } else if (is.character(type_spec)) {
-        if (type_spec %in% c("numeric", "integer", "logical", "character", "list")) {
-            return(inherits(value, type_spec))
-        } else {
-            stop(sprintf("Unsupported character type specification: %s", type_spec))
-        }
+        return(inherits(value, type_spec))
     } else if (is.function(type_spec)) {
-        tryCatch(
-            {
-                result <- type_spec(value)
-                if (!is.logical(result) || length(result) != 1) {
-                    stop("Custom type check function must return a single logical value")
-                }
-                return(result)
-            },
-            error = function(e) {
-                stop(sprintf("Error in custom type check function: %s", e$message))
-            }
-        )
+        return(type_spec(value))
     } else {
-        stop(sprintf("Unsupported type specification: %s", class(type_spec)[1]))
+        stop("Unsupported type specification")
     }
 }
 

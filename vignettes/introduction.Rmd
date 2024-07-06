@@ -77,7 +77,7 @@ print(john$age)
 By default, type checking occurs when you access properties:
 
 ```{r, error=TRUE}
-john$age <- "thirty"
+try(john$age <- "thirty")
 ```
 
 This error is raised because we're trying to assign a character value to a numeric property.
@@ -102,7 +102,7 @@ fido <- implement(Dog,
     breed = "Golden Retriever"
 )
 
-fido$age <- "five" # No error, type checking is disabled
+try(fido$age <- "five") # No error, type checking is disabled
 print(fido$age)
 ```
 
