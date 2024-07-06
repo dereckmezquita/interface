@@ -1,0 +1,22 @@
+Package: interface
+Type: Package
+Title: Interfaces for data validation and typing in R
+Version: 0.0.1
+Authors@R: 
+    person(given = "Dereck",
+           family = "Mezquita",
+           role = c("aut", "cre"),
+           email = "dereck@mezquita.io",
+           comment = c(ORCID = "0000-0002-9307-6762"))
+Maintainer: Dereck Mezquita <dereck@mezquita.io>
+Description: An easy to use TypeScript-like system for defining and implementing interfaces in R, with optional runtime type checking.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    box
