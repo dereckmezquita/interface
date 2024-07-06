@@ -4,7 +4,7 @@
 \alias{implement}
 \title{Implement an Interface}
 \usage{
-implement(interface, ..., validate_on_access = NULL)
+implement(interface, ..., validate_on_access = NULL, allow_extra = FALSE)
 }
 \arguments{
 \item{interface}{An Interface object}

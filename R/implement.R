@@ -6,13 +6,26 @@
 #'
 #' @return An object implementing the interface
 #' @export
-implement <- function(interface, ..., validate_on_access = NULL) {
+implement <- function(interface, ..., validate_on_access = NULL, allow_extra = FALSE) {
     obj <- list(...)
 
-    # Check if all required properties are present
+    # Check if all required properties are present and not NULL
     missing_props <- setdiff(names(interface$properties), names(obj))
-    if (length(missing_props) > 0) {
-        stop(paste("Missing properties:", paste(missing_props, collapse = ", ")))
+    null_props <- names(obj)[vapply(obj, is.null, logical(1))]
+    if (length(missing_props) > 0 || length(null_props) > 0) {
+        stop(paste(
+            "Missing or NULL properties:",
+            paste(c(missing_props, null_props), collapse = ", ")
+        ))
+    }
+
+    # Remove extra properties if not allowed
+    if (!allow_extra) {
+        extra_props <- setdiff(names(obj), names(interface$properties))
+        if (length(extra_props) > 0) {
+            obj <- obj[names(interface$properties)]
+            warning(paste("Removed extra properties:", paste(extra_props, collapse = ", ")))
+        }
     }
 
     # Initial validation
@@ -27,18 +40,18 @@ implement <- function(interface, ..., validate_on_access = NULL) {
     class_name <- paste0(interface$interface_name, "Implementation")
     classes <- c(class_name, "InterfaceImplementation", "list")
 
-    # Only add validated_list if required
     if (validate_on_access) {
         classes <- c("validated_list", classes)
     }
 
-    # Return the object as a simple list with appropriate class and attributes
-    structure(
+    # Return the object with appropriate class and attributes
+    return(structure(
         obj,
         class = classes,
         interface = interface,
-        validate_on_access = if (validate_on_access) TRUE else NULL
-    )
+        validate_on_access = if (validate_on_access) TRUE else NULL,
+        allow_extra = allow_extra
+    ))
 }
 
 #' @export
