@@ -6,7 +6,7 @@
 #'
 #' @return An Interface object
 #' @export
-interface <- function(interface_name, ..., validate_on_access = FALSE) {
+interface <- function(interface_name, ..., validate_on_access = TRUE) {
     properties <- list(...)
     return(structure(list(
         interface_name = interface_name,
@@ -23,7 +23,7 @@ interface <- function(interface_name, ..., validate_on_access = FALSE) {
 #'
 #' @return An Interface object
 #' @keywords internal
-Interface <- function(interface_name, properties, validate_on_access = FALSE) {
+Interface <- function(interface_name, properties, validate_on_access = TRUE) {
     return(structure(list(
         interface_name = interface_name,
         properties = properties,

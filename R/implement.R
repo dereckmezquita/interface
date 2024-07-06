@@ -7,7 +7,7 @@
 #'
 #' @return An object implementing the interface
 #' @export
-implement <- function(interface, ..., validate_on_access = NULL, allow_extra = FALSE) {
+implement <- function(interface, ..., validate_on_access = TRUE, allow_extra = FALSE) {
     obj <- list(...)
 
     # Check if all required properties are present and not NULL
