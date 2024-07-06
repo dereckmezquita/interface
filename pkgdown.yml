@@ -3,7 +3,7 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   introduction: introduction.html
-last_built: 2024-07-06T22:52Z
+last_built: 2024-07-06T22:56Z
 urls:
   reference: https://dereckmezquita.github.io/interface/reference
   article: https://dereckmezquita.github.io/interface/articles
