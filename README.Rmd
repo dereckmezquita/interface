@@ -44,7 +44,7 @@ You can install the development version of interface from [GitHub](https://githu
 
 ``` r
 # install.packages("devtools")
-remote::install_github("dereckmezquita/interface")
+remotes::install_github("dereckmezquita/interface")
 ```
 
 ## Quick Start

@@ -40,7 +40,7 @@ You can install the development version of interface from
 
 ``` r
 # install.packages("devtools")
-remote::install_github("dereckmezquita/interface")
+remotes::install_github("dereckmezquita/interface")
 ```
 
 ## Quick Start
@@ -80,6 +80,8 @@ print(john_data$scores)
 
 # This will raise an error, preventing silent issues
 try(john_data$age <- "thirty")
+#> Error in `$<-.validated_list`(`*tmp*`, age, value = "thirty") : 
+#>   Property 'age' does not match the expected type specification
 ```
 
 ## Detailed Usage
@@ -108,7 +110,7 @@ print(valid_data)
 #>   id: 1 
 #>   value: 10.5 
 #>   category: 1 
-#> Validation on access: Disabled
+#> Validation on access: Enabled
 ```
 
 ### Custom Validation Functions
@@ -140,7 +142,7 @@ print(valid_user)
 #>   username: john_doe 
 #>   email: john@example.com 
 #>   age: 25 
-#> Validation on access: Disabled
+#> Validation on access: Enabled
 ```
 
 ``` r
@@ -261,10 +263,10 @@ result <- analyze_data(processed)
 
 print(result)
 #> Object implementing AnalysisResult interface:
-#>   data: <ProcessedDataImplementation>
+#>   data: <validated_list>
 #>   model_fit: <list>
 #>   r_squared: 0.85 
-#> Validation on access: Disabled
+#> Validation on access: Enabled
 ```
 
 This example demonstrates how `interface` can ensure data integrity
