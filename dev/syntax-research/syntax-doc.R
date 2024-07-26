@@ -2,7 +2,7 @@ box::use(interface[interface, fun, type.frame, u, enum, type.list])
 
 Colour <- enum("red", "green", "blue")
 my_colour <- Colour("red")
-Colour("yellow") # Error: 'yellow' is not a valid value for Colour
+try(Colour("yellow")) # Error: 'yellow' is not a valid value for Colour
 
 # interface allows for arguments defining properties and types on a list object
 # interface reserves some properties for internal use, such as `validate_on_access` and `extends`
