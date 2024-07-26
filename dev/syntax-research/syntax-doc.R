@@ -1,22 +1,25 @@
-box::use(interface[interface, fun, generic])
+box::use(interface[interface, fun, type.frame])
 
-# Define an interface for a data structure
-PersonData <- interface(
+# interface allows for arguments defining properties and types on a list object
+# interface reserves some properties for internal use, such as `validate_on_access` and `extends`
+# `validate_on_access` is a boolean that determines whether to validate the data on access
+# `extends` is a list of interfaces that the current interface extends
+
+# define an interface
+Person <- interface(
     name = "character",
     age = "numeric",
-    email = "character",
-    scores = "data.frame"
+    email = "character"
 )
 
-# Implement the interface
-john_data <- PersonData(,
+# implement the interface
+john <- Person(
     name = "John Doe",
     age = 30,
-    email = "john@example.com",
-    scores = data.frame(subject = c("Math", "Science"), score = c(95, 88))
+    email = "john@example.com"
 )
 
-# Access data safely
+# access data safely
 print(john_data$name)
 #> [1] "John Doe"
 
@@ -31,29 +34,57 @@ try(john_data$age <- "thirty")
 #>   Property 'age' does not match the expected type specification
 
 # Define a basic interface
-SimpleDataset <- interface(
-    id = "integer",
-    value = "numeric",
-    category = "factor"
+Address <- interface(
+    street = "character",
+    city = "character",
+    postal_code = "character"
 )
 
 # Implement the interface
-valid_data <- SimpleDataset(
-    id = 1L,
-    value = 10.5,
-    category = factor("A", levels = c("A", "B", "C"))
+home <- Address(
+    street = "123 Main St",
+    city = "Small town",
+    postal_code = "12345"
 )
 
-print(valid_data)
-#> Object implementing SimpleDataset interface:
-#>   id: 1 
-#>   value: 10.5 
-#>   category: 1 
+print(home)
+#> Object implementing Address interface:
+#>   street: 123 Main St
+#>   city: Small town
+#>   postal_code: 12345
 #> Validation on access: Enabled
 
-### Custom Validation Functions
+# extending an interface and using nested interfaces
+Student <- interface(
+    extends = c(Person, Address),
+    student_id = "character",
+    scores = "data.frame",
+    # here we show declaring nested interface in place
+    scholarship = interface(
+        amount = "numeric",
+        status = "logical"
+    )
+)
 
-# Custom validation function
+john_student <- Student(
+    name = "John Doe",
+    age = 30,
+    email = "john@example.com",
+    street = "123 Main St",
+    city = "Small town",
+    postal_code = "12345",
+    student_id = "123456",
+    scores = data.frame(
+        subject = c("Math", "Science"),
+        score = c(95, 88)
+    ),
+    scholarship = list(
+        amount = 5000,
+        status = TRUE
+    )
+)
+
+# custom validation functions
 is_valid_email <- function(x) {
     grepl("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", x)
 }
@@ -66,7 +97,7 @@ UserProfile <- interface(
 )
 
 # Implement with valid data
-valid_user <- UserProfile(,
+valid_user <- UserProfile(
     username = "john_doe",
     email = "john@example.com",
     age = 25
@@ -83,54 +114,37 @@ print(valid_user)
 try(UserProfile(
     username = "jane_doe",
     email = "not_an_email",
-    age = 30
+    age = "30"
 ))
-#> Error in validate_object(obj, interface) : 
+#> Errors in validate_object(obj, interface) : 
 #>   Property 'email' does not match the expected type specification
-
-# nested interfaces
-Address <- interface(
-    street = "character",
-    city = "character",
-    postal_code = "character"
-)
-
-Employee <- interface(
-    name = "character",
-    position = "character",
-    address = Address
-)
-
-employee_data <- Employee(,
-    name = "Alice Johnson",
-    position = "Data Scientist",
-    address = Address(
-        street = "123 Tech Street",
-        city = "Data City",
-        postal_code = "12345"
-    )
-)
-
-print(employee_data$address$city)
-#> [1] "Data City"
+#>   Property 'age' does not match the expected type specification
 
 
 # Toggle validation for performance optimisation:
-
-LargeDataset <- interface(
-    data = "data.frame",
-    metadata = "list",
-    validate_on_access = FALSE # Disable validation for performance
+Location <- interface(
+    latitude = "numeric",
+    longitude = "numeric"
 )
 
-big_data <- implement(LargeDataset,
-    data = data.frame(x = 1:1000, y = runif(1000)),
-    metadata = list(source = "simulation", date = Sys.Date())
+# error not thrown if validation is disabled
+loc <- Location(
+    latitude = "37.7749",
+    longitude = -122.4194,
+    validate_on_access = FALSE
 )
 
-# No validation on access for better performance
-big_data$data[1, "x"] <- "should be numeric but no error raised"
+# can turn off validation for all future objects
+Location2 <- interface(
+    latitude = "numeric",
+    longitude = "numeric",
+    validate_on_access = FALSE
+)
 
+loc2 <- Location2(
+    latitude = "37.7749",
+    longitude = -122.4194
+)
 
 # functions
 typed_fun <- fun(
@@ -176,23 +190,36 @@ try(typed_fun2("a", 2))
 # allow for passing generics in interfaces like typescript does with interface ApiResponse<T>
 # Generics
 # Define a generic interface
-ApiResponse <- generic(function(T) {
+ApiResponse <- function(T) {
     interface(
         data = T,
         status = "numeric",
         message = "character"
     )
-})
+}
+
+# use the generic directly
+api_obj <- ApiResponse("logical")(
+    data = TRUE,
+    status = 200,
+    message = "Data retrieved successfully"
+)
+
+print(api_obj)
+#> Object implementing ApiResponse interface:
+#>   data: TRUE
+#>   status: 200
+#>   message: Data retrieved successfully
 
 # Use the generic interface with a specific type
-UserResponse <- ApiResponse(UserProfile)
+UserResponse <- ApiResponse(Person)
 
 # Implement the generic interface
 user_response <- UserResponse(
-    data = UserProfile(
-        username = "john_doe",
-        email = "john@example.com",
-        age = 25
+    data = Person(
+        name = "John Doe",
+        age = 30,
+        email = "john@example.com"
     ),
     status = 200,
     message = "User retrieved successfully"
@@ -201,49 +228,62 @@ user_response <- UserResponse(
 print(user_response$data$username)
 #> [1] "john_doe"
 
-# Another example with a different type
-NumberResponse <- ApiResponse("numeric")
-
-number_response <- NumberResponse(
-    data = 42,
-    status = 200,
-    message = "Number retrieved successfully"
-)
-
-print(number_response$data)
-#> [1] 42
-
-# Generic typed function
-map_data <- generic(function(T, U) {
+# functions with generics
+GenericApiResponse <- function(T) {
     fun(
         args = list(
             data = T,
-            mapper = fun(args = list(x = T), return = U)
+            status = "numeric",
+            message = "character"
         ),
-        return = U,
-        impl = function(data, mapper) {
-            mapper(data)
+        return = T,
+        impl = function(data, status, message) {
+            return(data)
         }
     )
-})
+}
 
-# Use the generic function with specific types
-double_number <- map_data("numeric", "numeric")(
-    data = 21,
-    mapper = function(x) x * 2
-)
-
-print(double_number)
-#> [1] 42
-
-# Using generics with previously defined interfaces
-EmployeeResponse <- ApiResponse(Employee)
-
-employee_response <- EmployeeResponse(
-    data = employee_data,  # Using the previously defined employee_data
+# use the generic function
+response <- GenericApiResponse("numeric")(
+    data = 100,
     status = 200,
-    message = "Employee data retrieved successfully"
+    message = "Data retrieved successfully"
 )
 
-print(employee_response$data$address$city)
-#> [1] "Data City"
+## ------------------------------------------------
+# dataframe and other typed objects
+# Base type.frame function
+PersonFrame <- type.frame(
+    frame = data.frame, # can use any 2 dimensional data structure
+    col_types = list(
+        id = "integer",
+        name = "character",
+        age = "numeric",
+        is_student = "logical"
+    ),
+    max_cols = 5
+)
+
+# Additional arguments
+PersonFrame <- type.frame(
+    frame = data.frame,
+    col_types = list(
+        id = "integer",
+        name = "character",
+        age = "numeric",
+        is_student = "logical",
+        email = function(x) grepl("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", x)
+    ),
+    freeze_n_cols = TRUE, # does not allow adding or removing columns
+    row_validator = function(row) row$age >= 18 && row$is_student, # allows for custom row validation
+    allow_na = FALSE, # does not allow NA values
+    on_violation = c("error", "warning", "silent") # action to take on violation
+)
+
+# Usage remains the same
+df <- PersonFrame(
+    id = 1:3,
+    name = c("Alice", "Bob", "Charlie"),
+    age = c(25, 30, 35),
+    is_student = c(TRUE, FALSE, TRUE)
+)
