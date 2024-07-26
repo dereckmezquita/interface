@@ -63,6 +63,10 @@ validate_property <- function(name, value, validator) {
     if (!is.numeric(value) || length(value) != 1) {
       stop(sprintf("Property '%s' must be a single numeric value", name), call. = FALSE)
     }
+  } else if (identical(validator, logical) || identical(validator, "logical")) {
+    if (!is.logical(value)) {
+      stop(sprintf("Property '%s' must be a logical value", name), call. = FALSE)
+    }
   } else if (is.function(validator)) {
     tryCatch({
       if (!validator(value)) {
