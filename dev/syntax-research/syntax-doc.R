@@ -7,9 +7,9 @@ box::use(interface[interface, fun, type.frame])
 
 # define an interface
 Person <- interface(
-    name = "character",
-    age = "numeric",
-    email = "character"
+    name = character,
+    age = numeric,
+    email = character
 )
 
 # implement the interface
@@ -35,9 +35,9 @@ try(john_data$age <- "thirty")
 
 # Define a basic interface
 Address <- interface(
-    street = "character",
-    city = "character",
-    postal_code = "character"
+    street = character,
+    city = character,
+    postal_code = character
 )
 
 # Implement the interface
@@ -57,12 +57,12 @@ print(home)
 # extending an interface and using nested interfaces
 Student <- interface(
     extends = c(Person, Address),
-    student_id = "character",
-    scores = "data.frame",
+    student_id = character,
+    scores = data.frame,
     # here we show declaring nested interface in place
     scholarship = interface(
-        amount = "numeric",
-        status = "logical"
+        amount = numeric,
+        status = logical
     )
 )
 
@@ -91,7 +91,7 @@ is_valid_email <- function(x) {
 
 # Interface with custom validation
 UserProfile <- interface(
-    username = "character",
+    username = character,
     email = is_valid_email,
     age = function(x) is.numeric(x) && x >= 18
 )
@@ -123,8 +123,8 @@ try(UserProfile(
 
 # Toggle validation for performance optimisation:
 Location <- interface(
-    latitude = "numeric",
-    longitude = "numeric"
+    latitude = numeric,
+    longitude = numeric
 )
 
 # error not thrown if validation is disabled
@@ -136,8 +136,8 @@ loc <- Location(
 
 # can turn off validation for all future objects
 Location2 <- interface(
-    latitude = "numeric",
-    longitude = "numeric",
+    latitude = numeric,
+    longitude = numeric,
     validate_on_access = FALSE
 )
 
@@ -149,10 +149,10 @@ loc2 <- Location2(
 # functions
 typed_fun <- fun(
     args = list(
-        x = "numeric",
-        y = "numeric"
+        x = numeric,
+        y = numeric
     ),
-    return = "numeric",
+    return = numeric,
     impl = function(x, y) {
         return(x + y)
     }
@@ -168,10 +168,10 @@ try(typed_fun(1, 2))
 # allow for multiple return types
 typed_fun2 <- fun(
     args = list(
-        x = c("numeric", "character"),
-        y = "numeric"
+        x = c(numeric, character),
+        y = numeric
     ),
-    return = c("numeric", "character"),
+    return = c(numeric, character),
     impl = function(x, y) {
         if (is.numeric(x)) {
             return(x + y)
@@ -193,13 +193,13 @@ try(typed_fun2("a", 2))
 ApiResponse <- function(T) {
     interface(
         data = T,
-        status = "numeric",
-        message = "character"
+        status = numeric,
+        message = character
     )
 }
 
 # use the generic directly
-api_obj <- ApiResponse("logical")(
+api_obj <- ApiResponse(logical)(
     data = TRUE,
     status = 200,
     message = "Data retrieved successfully"
@@ -233,8 +233,8 @@ GenericApiResponse <- function(T) {
     fun(
         args = list(
             data = T,
-            status = "numeric",
-            message = "character"
+            status = numeric,
+            message = character
         ),
         return = T,
         impl = function(data, status, message) {
@@ -244,7 +244,7 @@ GenericApiResponse <- function(T) {
 }
 
 # use the generic function
-response <- GenericApiResponse("numeric")(
+response <- GenericApiResponse(numeric)(
     data = 100,
     status = 200,
     message = "Data retrieved successfully"
@@ -256,10 +256,10 @@ response <- GenericApiResponse("numeric")(
 PersonFrame <- type.frame(
     frame = data.frame, # can use any 2 dimensional data structure
     col_types = list(
-        id = "integer",
-        name = "character",
-        age = "numeric",
-        is_student = "logical"
+        id = integer,
+        name = character,
+        age = numeric,
+        is_student = logical
     ),
     max_cols = 5
 )
@@ -268,10 +268,10 @@ PersonFrame <- type.frame(
 PersonFrame <- type.frame(
     frame = data.frame,
     col_types = list(
-        id = "integer",
-        name = "character",
-        age = "numeric",
-        is_student = "logical",
+        id = integer,
+        name = character,
+        age = numeric,
+        is_student = logical,
         email = function(x) grepl("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", x)
     ),
     freeze_n_cols = TRUE, # does not allow adding or removing columns
