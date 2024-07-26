@@ -1,6 +1,6 @@
 Package: interface
 Type: Package
-Title: Interfaces for data validation and typing in R
+Title: Typings and interfaces for data validation and safety in R
 Version: 0.0.2
 Authors@R: 
     person(given = "Dereck",
@@ -15,6 +15,7 @@ Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2
+Depends: R (>= 4.1.0)
 Suggests:
     testthat (>= 3.0.0),
     knitr,

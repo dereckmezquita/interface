@@ -4,7 +4,6 @@ README.Rmd
 TODO.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.pre-commit-config\.yaml$
 ^renv$
 ^renv\.lock$
 dev-docs/
