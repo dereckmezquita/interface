@@ -1,4 +1,8 @@
-box::use(interface[interface, fun, type.frame])
+box::use(interface[interface, fun, type.frame, u, enum, type.list])
+
+Colour <- enum("red", "green", "blue")
+my_colour <- Colour("red")
+Colour("yellow") # Error: 'yellow' is not a valid value for Colour
 
 # interface allows for arguments defining properties and types on a list object
 # interface reserves some properties for internal use, such as `validate_on_access` and `extends`
@@ -56,7 +60,7 @@ print(home)
 
 # extending an interface and using nested interfaces
 Student <- interface(
-    extends = c(Person, Address),
+    extends = u(Address, Person),
     student_id = character,
     scores = data.frame,
     # here we show declaring nested interface in place
@@ -168,10 +172,10 @@ try(typed_fun(1, 2))
 # allow for multiple return types
 typed_fun2 <- fun(
     args = list(
-        x = c(numeric, character),
+        x = u(numeric, character),
         y = numeric
     ),
-    return = c(numeric, character),
+    return = u(numeric, character),
     impl = function(x, y) {
         if (is.numeric(x)) {
             return(x + y)
@@ -286,4 +290,21 @@ df <- PersonFrame(
     name = c("Alice", "Bob", "Charlie"),
     age = c(25, 30, 35),
     is_student = c(TRUE, FALSE, TRUE)
+)
+
+print(df)
+
+# helper for typed lists
+IntList <- type.list(
+    list_type = integer,
+    max_length = 5
+)
+
+# other arguments
+IntList <- type.list(
+    list_type = integer,
+    max_length = 5,
+    allow_na = FALSE,
+    on_violation = c("error", "warning", "silent"),
+    validate_on_access = TRUE
 )
