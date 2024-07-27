@@ -23,6 +23,13 @@ validate_property <- function(name, value, validator) {
         if (!inherits(value, "interface_object") || !identical(attr(value, "properties"), attr(validator, "properties"))) {
             return(sprintf("Property '%s' must be an object implementing the specified interface", name))
         }
+    } else if (inherits(validator, "enum_type")) {
+        tryCatch({
+            validator(value)
+            return(NULL)
+        }, error = function(e) {
+            return(sprintf("Invalid value for property '%s': %s", name, e$message))
+        })
     } else if (is.function(validator)) {
         if (identical(validator, character)) {
             if (!is.character(value)) {
