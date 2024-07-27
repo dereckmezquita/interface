@@ -38,13 +38,28 @@ type.frame <- function(frame, col_types, freeze_n_cols = TRUE,
     
     # Validate rows
     if (!is.null(row_validator)) {
-      invalid_rows <- which(!apply(df, 1, function(row) {
+      validation_results <- apply(df, 1, function(row) {
         row_df <- as.data.frame(t(row))
         names(row_df) <- names(df)
-        row_validator(row_df)
-      }))
+        tryCatch({
+          valid <- row_validator(row_df)
+          if (!valid) {
+            return(paste("Failed validation:", deparse(body(row_validator))))
+          }
+          return(TRUE)
+        }, error = function(e) {
+          return(paste("Error during validation:", e$message))
+        })
+      })
+      
+      invalid_rows <- which(validation_results != TRUE)
       if (length(invalid_rows) > 0) {
-        handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), on_violation)
+        error_message <- sprintf("Row validation failed:\n%s", 
+                                 paste(sprintf("  Row %d: %s", 
+                                               invalid_rows, 
+                                               validation_results[invalid_rows]), 
+                                       collapse = "\n"))
+        handle_violation(error_message, on_violation)
       }
     }
     
@@ -62,6 +77,7 @@ type.frame <- function(frame, col_types, freeze_n_cols = TRUE,
   
   return(creator)
 }
+
 #' Handle violations based on the specified action
 #'
 #' @param message The error message
