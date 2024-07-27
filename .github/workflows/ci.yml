@@ -36,9 +36,11 @@ jobs:
       - name: Lint
         if: always()
         shell: Rscript {0}
-        run: lintr::lint_package()
-        env:
-          LINTR_ERROR_ON_LINT: true
+        run: |
+          library(lintr)
+          lint_results <- lint_package()
+          print(lint_results)
+          if (length(lint_results) > 0) quit(status = 1)
 
       - name: Test coverage
         shell: Rscript {0}
