@@ -6,12 +6,6 @@
 #' @param ... The allowed values for this enum type.
 #' @return A function that creates and validates values of this enum type.
 #' @export
-#'
-#' @examples
-#' Colors <- enum("red", "green", "blue")
-#' my_color <- Colors("red")  # Valid
-#' print(my_color)  # [1] "red"
-#' try(Colors("yellow"))  # Error: Invalid value. Allowed values are: red, green, blue
 enum <- function(...) {
   allowed_values <- c(...)
   
@@ -22,7 +16,7 @@ enum <- function(...) {
     if (!(x %in% allowed_values)) {
       stop(sprintf("Invalid value. Allowed values are: %s", paste(allowed_values, collapse = ", ")))
     }
-    structure(x, class = c("enum", "character"))
+    structure(x, class = c("enum", "character"), allowed_values = allowed_values)
   }
   
   structure(validator, class = "enum_type", allowed_values = allowed_values)
@@ -34,5 +28,27 @@ enum <- function(...) {
 #' @param ... Additional arguments (not used)
 #' @export
 print.enum <- function(x, ...) {
-  cat(sprintf("Enum value: %s\n", x))
+  cat(sprintf("Enum: %s\n", x))
+}
+
+#' Format method for enum types
+#'
+#' @param x An enum type
+#' @param ... Additional arguments (not used)
+#' @export
+format.enum_type <- function(x, ...) {
+  sprintf("enum(%s)", paste(attr(x, "allowed_values"), collapse = ", "))
+}
+
+#' Assignment method for enum values
+#'
+#' @param x An enum value
+#' @param value The new value to set
+#' @export
+`<-.enum` <- function(x, value) {
+  allowed_values <- attr(x, "allowed_values")
+  if (!(value %in% allowed_values)) {
+    stop(sprintf("Invalid value. Allowed values are: %s", paste(allowed_values, collapse = ", ")))
+  }
+  structure(value, class = c("enum", "character"), allowed_values = allowed_values)
 }

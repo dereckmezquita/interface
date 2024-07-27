@@ -4,38 +4,24 @@
 #' An interface defines a structure with specified properties and their types or validation functions. 
 #' This is useful for ensuring that objects adhere to a particular format and type constraints.
 #'
-#' @param properties A named list where names are property names and values are their expected types or validation functions.
+#' @param ... Named arguments defining the properties and their types or validators.
+#' @param validate_on_access Logical, whether to validate properties on access (default: FALSE).
+#' @param extends List of interfaces to extend (default: empty list).
 #' @return A function to create objects that implement the defined interface.
-#' @details
-#' The `interface` function creates a blueprint for objects, specifying what properties they must have and what types those properties must be. 
-#' When an object is created using this interface, it ensures that the object adheres to these specifications.
-#'
-#' @examples
-#' # Define an interface for a person
-#' Person <- interface(
-#'   name = character,
-#'   age = numeric,
-#'   email = character
-#' )
-#'
-#' # Create an object that implements the Person interface
-#' john <- Person(
-#'   name = "John Doe",
-#'   age = 30,
-#'   email = "john@example.com"
-#' )
-#'
-#' # Access properties
-#' print(john$name)  # [1] "John Doe"
-#'
-#' # Valid assignment
-#' john$age <- c(10, 11)
-#'
-#' # Invalid assignment (throws error)
-#' try(john$age <- "thirty")
 #' @export
 interface <- function(..., validate_on_access = FALSE, extends = list()) {
     properties <- list(...)
+
+    # Process in-place declarations
+    for (name in names(properties)) {
+        if (is.function(properties[[name]]) && identical(properties[[name]], enum)) {
+            # Handle in-place enum declarations
+            properties[[name]] <- do.call(enum, list())
+        } else if (is.function(properties[[name]]) && identical(properties[[name]], interface)) {
+            # Handle in-place nested interface declarations
+            properties[[name]] <- do.call(interface, list())
+        }
+    }
 
     # Merge properties from extended interfaces
     all_properties <- properties
@@ -62,11 +48,22 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
             value <- values[[name]]
             validator <- all_properties[[name]]
 
-            error <- validate_property(name, value, validator)
+            if (inherits(validator, "enum_type")) {
+                error <- tryCatch({
+                    obj[[name]] <- validator(value)
+                    NULL
+                }, error = function(e) {
+                    return(sprintf("Invalid value for property '%s': %s", name, e$message))
+                })
+            } else {
+                error <- validate_property(name, value, validator)
+                if (is.null(error)) {
+                    obj[[name]] <- value
+                }
+            }
+
             if (!is.null(error)) {
                 errors <- c(errors, error)
-            } else {
-                obj[[name]] <- value
             }
         }
 
@@ -126,12 +123,26 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
         stop(sprintf("Property '%s' does not exist", name), call. = FALSE)
     }
 
-    error <- validate_property(name, value, attributes(x)$properties[[name]])
+    validator <- attributes(x)$properties[[name]]
+
+    if (inherits(validator, "enum_type")) {
+        error <- tryCatch({
+            x[[name]] <- validator(value)
+            NULL
+        }, error = function(e) {
+            return(sprintf("Invalid value for property '%s': %s", name, e$message))
+        })
+    } else {
+        error <- validate_property(name, value, validator)
+    }
+
     if (!is.null(error)) {
         stop(error, call. = FALSE)
     }
 
-    assign(name, value, envir = x)
+    if (is.null(error)) {
+        assign(name, value, envir = x)
+    }
     return(x)
 }
 
