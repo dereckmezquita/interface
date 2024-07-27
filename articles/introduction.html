@@ -33,16 +33,18 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/introduction.html">Introduction to interface</a></li>
+<li><a class="dropdown-item" href="../articles/introduction.html">Getting Started with interface</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/donate.html">Donate</a></li>
       </ul>
 <ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/dereckmezquita/interface" target="_blank"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://www.youtube.com/@derecksyoutube" target="_blank"><span class="fa fa-youtube fa-lg"></span></a></li>
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/dereckmezquita/interface"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://derecksprojects.com" target="_blank">derecksprojects.com</a></li>
       </ul>
 </div>
 
@@ -65,16 +67,10 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">interface</span><span class="op">[</span><span class="va">interface</span>, <span class="va">implement</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h2>
 <p>The <code>interface</code> package provides a system for defining and
-implementing interfaces in R, with optional runtime type checking. This
-approach brings some of the benefits of statically-typed languages to R,
-allowing for more structured and safer code.</p>
-</div>
+implementing interfaces in R, with runtime type checking. This approach
+brings some of the benefits of statically-typed languages to R, allowing
+for more structured and safer code.</p>
 <div class="section level2">
 <h2 id="why-use-interfaces">Why Use Interfaces?<a class="anchor" aria-label="anchor" href="#why-use-interfaces"></a>
 </h2>
@@ -93,239 +89,374 @@ clearly stating the expected structure of objects.</li>
 <strong>Flexibility</strong>: They allow for implementation of
 multiple interfaces, promoting code reuse.</li>
 </ol>
-</div>
-<div class="section level2">
-<h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
-</h2>
-<div class="section level3">
-<h3 id="defining-an-interface">Defining an Interface<a class="anchor" aria-label="anchor" href="#defining-an-interface"></a>
-</h3>
-<p>To define an interface, use the <code>interface()</code>
-function:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Person</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"Person"</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    age <span class="op">=</span> <span class="st">"numeric"</span>,</span>
-<span>    email <span class="op">=</span> <span class="st">"character"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>This creates an interface named “Person” with three properties:</p>
+<p><code>interface</code> package provides the following:</p>
 <ol style="list-style-type: decimal">
-<li>name (a character)</li>
-<li>age (a numeric)</li>
-<li>email (a character)</li>
+<li>
+<strong>Interfaces</strong>: Define and implement interfaces with
+type checking. Interfaces can be extended and nested.</li>
+<li>
+<strong>Typed Functions</strong>: Define functions with strict type
+constraints.</li>
+<li>
+<strong>Typed Data Frames</strong>: Create data frames with column
+type constraints and row validation. Data frames can have custom
+validation functions and row callbacks.</li>
 </ol>
 </div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>To install the package, use the following command:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Install the package from the source</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"dereckmezquita/interface"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
+<p>Import the package functions.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">interface</span><span class="op">[</span> <span class="va">interface</span>, <span class="va">type.frame</span>, <span class="va">fun</span> <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="implementing-an-interface">Implementing an Interface<a class="anchor" aria-label="anchor" href="#implementing-an-interface"></a>
+<h3 id="interfaces">Interfaces<a class="anchor" aria-label="anchor" href="#interfaces"></a>
 </h3>
-<p>To create an object that implements an interface, use the
-<code><a href="../reference/implement.html">implement()</a></code> function:</p>
+<p>To define an interface, use the <code><a href="../reference/interface.html">interface()</a></code>
+function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">john</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/implement.html">implement</a></span><span class="op">(</span><span class="va">Person</span>,</span>
+<code class="sourceCode R"><span><span class="co"># Define an interface</span></span>
+<span><span class="va">Person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interface.html">interface</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="va">character</span>,</span>
+<span>    age <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>    email <span class="op">=</span> <span class="va">character</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Implement the interface</span></span>
+<span><span class="va">john</span> <span class="op">&lt;-</span> <span class="fu">Person</span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="st">"John Doe"</span>,</span>
 <span>    age <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"john@example.com"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="accessing-properties">Accessing Properties<a class="anchor" aria-label="anchor" href="#accessing-properties"></a>
-</h3>
-<p>You can access properties of the implemented object just like a
-regular list:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   name: John Doe</span></span>
+<span><span class="co">#&gt;   age: 30</span></span>
+<span><span class="co">#&gt;   email: john@example.com</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span>
+<span></span>
+<span><span class="co"># interfaces are lists</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "John Doe"</span></span>
+<span></span>
+<span><span class="co"># Valid assignment</span></span>
+<span><span class="va">john</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">age</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 30</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 10</span></span>
+<span></span>
+<span><span class="co"># Invalid assignment (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;-</span> <span class="st">"thirty"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error : Property 'age' must be of type numeric</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="type-checking">Type Checking<a class="anchor" aria-label="anchor" href="#type-checking"></a>
+<h3 id="nested-interfaces-and-extending-interfaces">Nested Interfaces and Extending Interfaces<a class="anchor" aria-label="anchor" href="#nested-interfaces-and-extending-interfaces"></a>
 </h3>
-<p>By default, type checking occurs when you access properties:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;-</span> <span class="st">"thirty"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `$&lt;-.validated_list`(`*tmp*`, age, value = "thirty") : </span></span>
-<span><span class="co">#&gt;   Property 'age' does not match the expected type specification</span></span></code></pre></div>
-<p>This error is raised because we’re trying to assign a character value
-to a numeric property.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="advanced-features">Advanced Features<a class="anchor" aria-label="anchor" href="#advanced-features"></a>
-</h2>
-<div class="section level3">
-<h3 id="disabling-type-checking">Disabling Type Checking<a class="anchor" aria-label="anchor" href="#disabling-type-checking"></a>
-</h3>
-<p>You can disable type checking to reduce overhead:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Dog</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"Dog"</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    age <span class="op">=</span> <span class="st">"numeric"</span>,</span>
-<span>    breed <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    validate_on_access <span class="op">=</span> <span class="cn">FALSE</span></span>
+<p>You can create nested interfaces and extend existing interfaces:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define an Address interface</span></span>
+<span><span class="va">Address</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interface.html">interface</a></span><span class="op">(</span></span>
+<span>    street <span class="op">=</span> <span class="va">character</span>,</span>
+<span>    city <span class="op">=</span> <span class="va">character</span>,</span>
+<span>    postal_code <span class="op">=</span> <span class="va">character</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fido</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/implement.html">implement</a></span><span class="op">(</span><span class="va">Dog</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"Fido"</span>,</span>
-<span>    age <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>    breed <span class="op">=</span> <span class="st">"Golden Retriever"</span></span>
+<span><span class="co"># Define a Scholarship interface</span></span>
+<span><span class="va">Scholarship</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interface.html">interface</a></span><span class="op">(</span></span>
+<span>    amount <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>    status <span class="op">=</span> <span class="va">logical</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">fido</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;-</span> <span class="st">"five"</span><span class="op">)</span> <span class="co"># No error, type checking is disabled</span></span>
-<span><span class="co">#&gt; Error in `$&lt;-.validated_list`(`*tmp*`, age, value = "five") : </span></span>
-<span><span class="co">#&gt;   Property 'age' does not match the expected type specification</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fido</span><span class="op">$</span><span class="va">age</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 5</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="nested-interfaces">Nested Interfaces<a class="anchor" aria-label="anchor" href="#nested-interfaces"></a>
-</h3>
-<p>You can use interfaces as property types for other interfaces:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Address</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"Address"</span>,</span>
-<span>    street <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    city <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    state <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    zip <span class="op">=</span> <span class="st">"numeric"</span></span>
+<span><span class="co"># Extend the Person and Address interfaces</span></span>
+<span><span class="va">Student</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interface.html">interface</a></span><span class="op">(</span></span>
+<span>    extends <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Address</span>, <span class="va">Person</span><span class="op">)</span>, <span class="co"># will inherit properties from Address and Person</span></span>
+<span>    student_id <span class="op">=</span> <span class="va">character</span>,</span>
+<span>    scores <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="va"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span>,</span>
+<span>    scholarship <span class="op">=</span> <span class="va">Scholarship</span> <span class="co"># nested interface</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">Employee</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"Employee"</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    age <span class="op">=</span> <span class="st">"numeric"</span>,</span>
-<span>    email <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    address <span class="op">=</span> <span class="va">Address</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">jane</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/implement.html">implement</a></span><span class="op">(</span><span class="va">Employee</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"Jane Doe"</span>,</span>
-<span>    age <span class="op">=</span> <span class="fl">28</span>,</span>
-<span>    email <span class="op">=</span> <span class="st">"jane@company.com"</span>,</span>
-<span>    address <span class="op">=</span> <span class="fu"><a href="../reference/implement.html">implement</a></span><span class="op">(</span><span class="va">Address</span>,</span>
-<span>        street <span class="op">=</span> <span class="st">"123 Main St"</span>,</span>
-<span>        city <span class="op">=</span> <span class="st">"Anytown"</span>,</span>
-<span>        state <span class="op">=</span> <span class="st">"CA"</span>,</span>
-<span>        zip <span class="op">=</span> <span class="fl">12345</span></span>
+<span><span class="co"># Implement the extended interface</span></span>
+<span><span class="va">john_student</span> <span class="op">&lt;-</span> <span class="fu">Student</span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="st">"John Doe"</span>,</span>
+<span>    age <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>    email <span class="op">=</span> <span class="st">"john@example.com"</span>,</span>
+<span>    street <span class="op">=</span> <span class="st">"123 Main St"</span>,</span>
+<span>    city <span class="op">=</span> <span class="st">"Small town"</span>,</span>
+<span>    postal_code <span class="op">=</span> <span class="st">"12345"</span>,</span>
+<span>    student_id <span class="op">=</span> <span class="st">"123456"</span>,</span>
+<span>    scores <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span></span>
+<span>        subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Math"</span>, <span class="st">"Science"</span><span class="op">)</span>,</span>
+<span>        score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">95</span>, <span class="fl">88</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    scholarship <span class="op">=</span> <span class="fu">Scholarship</span><span class="op">(</span></span>
+<span>        amount <span class="op">=</span> <span class="fl">5000</span>,</span>
+<span>        status <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">jane</span><span class="op">$</span><span class="va">address</span><span class="op">$</span><span class="va">city</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Anytown"</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john_student</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   student_id: 123456</span></span>
+<span><span class="co">#&gt;   scores: Math</span></span>
+<span><span class="co">#&gt;    scores: Science</span></span>
+<span><span class="co">#&gt;    scores: 95</span></span>
+<span><span class="co">#&gt;    scores: 88</span></span>
+<span><span class="co">#&gt;   scholarship: &lt;environment: 0x557676cb9f28&gt;</span></span>
+<span><span class="co">#&gt;   street: 123 Main St</span></span>
+<span><span class="co">#&gt;   city: Small town</span></span>
+<span><span class="co">#&gt;   postal_code: 12345</span></span>
+<span><span class="co">#&gt;   name: John Doe</span></span>
+<span><span class="co">#&gt;   age: 30</span></span>
+<span><span class="co">#&gt;   email: john@example.com</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="custom-validation-functions">Custom Validation Functions<a class="anchor" aria-label="anchor" href="#custom-validation-functions"></a>
 </h3>
-<p>You can use custom functions for more complex validation:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">positive_number</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">x</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
+<p>Interfaces can have custom validation functions:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">is_valid_email</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"[a-z|0-9]+\\@[a-z|0-9]+\\.[a-z|0-9]+"</span>, <span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">Account</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"Account"</span>,</span>
-<span>    id <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    balance <span class="op">=</span> <span class="va">positive_number</span></span>
+<span><span class="va">UserProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interface.html">interface</a></span><span class="op">(</span></span>
+<span>    username <span class="op">=</span> <span class="va">character</span>,</span>
+<span>    email <span class="op">=</span> <span class="va">is_valid_email</span>,</span>
+<span>    age <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">x</span> <span class="op">&gt;=</span> <span class="fl">18</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">my_account</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/implement.html">implement</a></span><span class="op">(</span><span class="va">Account</span>,</span>
-<span>    id <span class="op">=</span> <span class="st">"ACC123"</span>,</span>
-<span>    balance <span class="op">=</span> <span class="fl">1000</span></span>
+<span><span class="co"># Implement with valid data</span></span>
+<span><span class="va">valid_user</span> <span class="op">&lt;-</span> <span class="fu">UserProfile</span><span class="op">(</span></span>
+<span>    username <span class="op">=</span> <span class="st">"john_doe"</span>,</span>
+<span>    email <span class="op">=</span> <span class="st">"john@example.com"</span>,</span>
+<span>    age <span class="op">=</span> <span class="fl">25</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">my_account</span><span class="op">$</span><span class="va">balance</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1000</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valid_user</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   username: john_doe</span></span>
+<span><span class="co">#&gt;   email: john@example.com</span></span>
+<span><span class="co">#&gt;   age: 25</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span>
 <span></span>
-<span><span class="co"># This will raise an error</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="../reference/implement.html">implement</a></span><span class="op">(</span><span class="va">Account</span>, id <span class="op">=</span> <span class="st">"ACC124"</span>, balance <span class="op">=</span> <span class="op">-</span><span class="fl">500</span><span class="op">)</span>,</span>
-<span>    error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">e</span><span class="op">$</span><span class="va">message</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Property 'balance' does not match the expected type specification"</span></span></code></pre></div>
+<span><span class="co"># Invalid implementation (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">UserProfile</span><span class="op">(</span></span>
+<span>    username <span class="op">=</span> <span class="st">"jane_doe"</span>,</span>
+<span>    email <span class="op">=</span> <span class="st">"not_an_email"</span>,</span>
+<span>    age <span class="op">=</span> <span class="st">"30"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error : Errors occurred during interface creation:</span></span>
+<span><span class="co">#&gt;   - Invalid value(s) for property 'email' at index(es): 1</span></span>
+<span><span class="co">#&gt;   - Invalid value(s) for property 'age' at index(es): 1</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="using-with-various-r-types">Using with Various R Types<a class="anchor" aria-label="anchor" href="#using-with-various-r-types"></a>
+<h3 id="typed-functions">Typed Functions<a class="anchor" aria-label="anchor" href="#typed-functions"></a>
 </h3>
-<p>The <code>interface</code> package supports a wide range of R
-types:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ComplexPerson</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"ComplexPerson"</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"character"</span>,</span>
-<span>    age <span class="op">=</span> <span class="st">"numeric"</span>,</span>
-<span>    hobbies <span class="op">=</span> <span class="st">"list"</span>,</span>
-<span>    scores <span class="op">=</span> <span class="st">"data.frame"</span>,</span>
-<span>    factors <span class="op">=</span> <span class="st">"factor"</span>,</span>
-<span>    dates <span class="op">=</span> <span class="st">"Date"</span>,</span>
-<span>    times <span class="op">=</span> <span class="st">"POSIXct"</span>,</span>
-<span>    metadata <span class="op">=</span> <span class="st">"ANY"</span> <span class="co"># ANY allows any type</span></span>
+<p>Define functions with strict type constraints:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">typed_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fun.html">fun</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>    return <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>    impl <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="va">y</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">person</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/implement.html">implement</a></span><span class="op">(</span><span class="va">ComplexPerson</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"Alice Johnson"</span>,</span>
-<span>    age <span class="op">=</span> <span class="fl">35</span>,</span>
-<span>    hobbies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"painting"</span>, <span class="st">"cycling"</span><span class="op">)</span>,</span>
-<span>    scores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Art"</span>, <span class="st">"Physics"</span><span class="op">)</span>, score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">95</span>, <span class="fl">88</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    factors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2023-01-01"</span>, <span class="st">"2023-06-30"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2023-01-01 09:00:00"</span>, <span class="st">"2023-01-01 17:00:00"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    metadata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>last_updated <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Valid call</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] 3</span></span>
+<span><span class="co">#&gt; [1] 3</span></span>
+<span></span>
+<span><span class="co"># Invalid call (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">typed_fun</span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error : Property 'x' must be of type numeric</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="functions-with-multiple-possible-return-types">Functions with Multiple Possible Return Types<a class="anchor" aria-label="anchor" href="#functions-with-multiple-possible-return-types"></a>
+</h4>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">typed_fun2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fun.html">fun</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">numeric</span>, <span class="va">character</span><span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>    return <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">numeric</span>, <span class="va">character</span><span class="op">)</span>,</span>
+<span>    impl <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>            <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="va">y</span><span class="op">)</span></span>
+<span>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>            <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span>    <span class="op">}</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">person</span><span class="op">$</span><span class="va">hobbies</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [[1]]</span></span>
-<span><span class="co">#&gt; [1] "painting"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun2</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] 3</span></span>
+<span><span class="co">#&gt; [1] 3</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun2</span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] "a 2"</span></span>
+<span><span class="co">#&gt; [1] "a 2"</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="typed-data-framedata-tables">Typed <code>data.frame</code>/<code>data.table</code>s<a class="anchor" aria-label="anchor" href="#typed-data-framedata-tables"></a>
+</h3>
+<p>Create data frames with column type constraints and row
+validation:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
+<span>    frame <span class="op">=</span> <span class="va">data.frame</span>, </span>
+<span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        id <span class="op">=</span> <span class="va">integer</span>,</span>
+<span>        name <span class="op">=</span> <span class="va">character</span>,</span>
+<span>        age <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>        is_student <span class="op">=</span> <span class="va">logical</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create a data frame</span></span>
+<span><span class="va">persons</span> <span class="op">&lt;-</span> <span class="fu">PersonFrame</span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
+<span>    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span><span class="op">)</span>,</span>
+<span>    age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">30</span>, <span class="fl">35</span><span class="op">)</span>,</span>
+<span>    is_student <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">persons</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Typed data frame with the following properties:</span></span>
+<span><span class="co">#&gt; Number of rows: 3</span></span>
+<span><span class="co">#&gt; Number of columns: 4</span></span>
+<span><span class="co">#&gt; Column types:</span></span>
+<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
+<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
+<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
+<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
+<span><span class="co">#&gt; Freeze columns: Yes</span></span>
+<span><span class="co">#&gt; Allow NA: Yes</span></span>
+<span><span class="co">#&gt; On violation: error</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] "cycling"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">person</span><span class="op">$</span><span class="va">scores</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   subject score</span></span>
-<span><span class="co">#&gt; 1     Art    95</span></span>
-<span><span class="co">#&gt; 2 Physics    88</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">person</span><span class="op">$</span><span class="va">factors</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] A B A C</span></span>
-<span><span class="co">#&gt; Levels: A B C</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">person</span><span class="op">$</span><span class="va">dates</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-01-01" "2023-06-30"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">person</span><span class="op">$</span><span class="va">times</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-01-01 09:00:00 UTC" "2023-01-01 17:00:00 UTC"</span></span></code></pre></div>
-<p>This example demonstrates that our interface system now supports
-various R types, including data.frames, data.tables, factors, dates, and
-times.</p>
+<span><span class="co">#&gt; Data:</span></span>
+<span><span class="co">#&gt;   id    name age is_student</span></span>
+<span><span class="co">#&gt; 1  1   Alice  25       TRUE</span></span>
+<span><span class="co">#&gt; 2  2     Bob  30      FALSE</span></span>
+<span><span class="co">#&gt; 3  3 Charlie  35       TRUE</span></span>
+<span></span>
+<span><span class="co"># Invalid modification (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error : Property 'id' must be of type integer</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="additional-options">Additional Options<a class="anchor" aria-label="anchor" href="#additional-options"></a>
+</h4>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
+<span>    frame <span class="op">=</span> <span class="va">data.frame</span>,</span>
+<span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        id <span class="op">=</span> <span class="va">integer</span>,</span>
+<span>        name <span class="op">=</span> <span class="va">character</span>,</span>
+<span>        age <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>        is_student <span class="op">=</span> <span class="va">logical</span>,</span>
+<span>        email <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    freeze_n_cols <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    row_callback <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">row</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="va">row</span><span class="op">$</span><span class="va">age</span> <span class="op">&gt;=</span> <span class="fl">40</span><span class="op">)</span> <span class="op">{</span></span>
+<span>            <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Age must be less than 40 (got %d)"</span>, <span class="va">row</span><span class="op">$</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="va">row</span><span class="op">$</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Yanice"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>            <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"Name cannot be 'Yanice'"</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span>        <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span>    allow_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    on_violation <span class="op">=</span> <span class="st">"error"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">PersonFrame</span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
+<span>    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span><span class="op">)</span>,</span>
+<span>    age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">35</span>, <span class="fl">35</span><span class="op">)</span>,</span>
+<span>    is_student <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    email <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alice@test.com"</span>, <span class="st">"bob_no_valid@test.com"</span>, <span class="st">"charlie@example.com"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Typed data frame with the following properties:</span></span>
+<span><span class="co">#&gt; Number of rows: 3</span></span>
+<span><span class="co">#&gt; Number of columns: 5</span></span>
+<span><span class="co">#&gt; Column types:</span></span>
+<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
+<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
+<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
+<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
+<span><span class="co">#&gt;   email: function (x) </span></span>
+<span><span class="co">#&gt;    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", </span></span>
+<span><span class="co">#&gt;    email:     x))</span></span>
+<span><span class="co">#&gt; Freeze columns: No</span></span>
+<span><span class="co">#&gt; Allow NA: No</span></span>
+<span><span class="co">#&gt; On violation: error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Data:</span></span>
+<span><span class="co">#&gt;   id    name age is_student                 email</span></span>
+<span><span class="co">#&gt; 1  1   Alice  25       TRUE        alice@test.com</span></span>
+<span><span class="co">#&gt; 2  2     Bob  35      FALSE bob_no_valid@test.com</span></span>
+<span><span class="co">#&gt; 3  3 Charlie  35       TRUE   charlie@example.com</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Typed data frame summary:</span></span>
+<span><span class="co">#&gt; Number of rows: 3</span></span>
+<span><span class="co">#&gt; Number of columns: 5</span></span>
+<span><span class="co">#&gt; Column types:</span></span>
+<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
+<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
+<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
+<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
+<span><span class="co">#&gt;   email: function (x) </span></span>
+<span><span class="co">#&gt;    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", </span></span>
+<span><span class="co">#&gt;    email:     x))</span></span>
+<span><span class="co">#&gt; Freeze columns: No</span></span>
+<span><span class="co">#&gt; Allow NA: No</span></span>
+<span><span class="co">#&gt; On violation: error</span></span>
+<span><span class="co">#&gt; Validation status:</span></span>
+<span><span class="co">#&gt;   All rows passed validation.</span></span>
+<span></span>
+<span><span class="co"># Invalid row addition (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>    name <span class="op">=</span> <span class="st">"David"</span>,</span>
+<span>    age <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>    is_student <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    email <span class="op">=</span> <span class="st">"d@test.com"</span></span>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in rbind(deparse.level, ...) : </span></span>
+<span><span class="co">#&gt;   Row 1 failed validation: Age must be less than 40 (got 500)</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="best-practices">Best Practices<a class="anchor" aria-label="anchor" href="#best-practices"></a>
-</h2>
-<ol style="list-style-type: decimal">
-<li>
-<strong>Be Specific</strong>: Define your interfaces as specifically
-as possible. This helps catch errors early.</li>
-<li>
-<strong>Use Custom Validators</strong>: For complex rules, create
-custom validator functions.</li>
-<li>
-<strong>Compose Interfaces</strong>: Use nested interfaces to create
-more complex structures.</li>
-<li>
-<strong>Document Your Interfaces</strong>: Good documentation helps
-other developers understand how to use your interfaces.</li>
-</ol>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>The <code>interface</code> package provides a powerful way to bring
-interface-like structures to R programming. By using interfaces, you can
-create more robust, self-documenting code that’s easier to maintain and
-extend.</p>
-<p>Remember, while interfaces provide many benefits, they also add a
-layer of complexity to your code. Use them judiciously where their
-benefits outweigh the added complexity.</p>
-<p>This vignette provides a comprehensive introduction to your
-<code>interface</code> package. It covers:</p>
-<ol style="list-style-type: decimal">
-<li>The motivation behind using interfaces in R</li>
-<li>Basic usage of the package</li>
-<li>Advanced features like disabling type checking, nested interfaces,
-and custom validation functions</li>
-<li>Examples of using interfaces with various R types</li>
-<li>Best practices for using the package</li>
-</ol>
+<p>This package provides powerful tools for ensuring type safety and
+validation in R. By defining interfaces, typed functions, typed data
+frames, and enums, you can create robust and reliable data structures
+and functions with strict type constraints.</p>
+<p>This vignette demonstrates the basic usage and capabilities of the
+package. For more details, refer to the package documentation and
+examples provided in the source code.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

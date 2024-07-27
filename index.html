@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Interfaces for data validation and typing in R • interface</title>
+<title>Typings and interfaces for data validation and safety in R • interface</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Interfaces for data validation and typing in R">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Typings and interfaces for data validation and safety in R">
 <meta name="description" content="A type system for defining and implementing interfaces in R, with optional runtime data validation and type checking.">
 <meta property="og:description" content="A type system for defining and implementing interfaces in R, with optional runtime data validation and type checking.">
 </head>
@@ -35,16 +35,18 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/introduction.html">Introduction to interface</a></li>
+<li><a class="dropdown-item" href="articles/introduction.html">Getting Started with interface</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/donate.html">Donate</a></li>
       </ul>
 <ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/dereckmezquita/interface" target="_blank"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://www.youtube.com/@derecksyoutube" target="_blank"><span class="fa fa-youtube fa-lg"></span></a></li>
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/dereckmezquita/interface"><span class="fa fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://derecksprojects.com" target="_blank">derecksprojects.com</a></li>
       </ul>
 </div>
 
@@ -93,7 +95,7 @@
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">interface</span><span class="op">[</span><span class="va">interface</span>, <span class="va">implement</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define an interface for a data structure</span></span>
-<span><span class="va">PersonData</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"PersonData"</span>,</span>
+<span><span class="va">PersonData</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"PersonData"</span>,</span>
 <span>    name <span class="op">=</span> <span class="st">"character"</span>,</span>
 <span>    age <span class="op">=</span> <span class="st">"numeric"</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"character"</span>,</span>
@@ -101,7 +103,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Implement the interface</span></span>
-<span><span class="va">john_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">PersonData</span>,</span>
+<span><span class="va">john_data</span> <span class="op">&lt;-</span> <span class="fu">implement</span><span class="op">(</span><span class="va">PersonData</span>,</span>
 <span>    name <span class="op">=</span> <span class="st">"John Doe"</span>,</span>
 <span>    age <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"john@example.com"</span>,</span>
@@ -132,14 +134,14 @@
 <p>Interfaces in R provide a clear contract for data structures:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define a basic interface</span></span>
-<span><span class="va">SimpleDataset</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"SimpleDataset"</span>,</span>
+<span><span class="va">SimpleDataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"SimpleDataset"</span>,</span>
 <span>    id <span class="op">=</span> <span class="st">"integer"</span>,</span>
 <span>    value <span class="op">=</span> <span class="st">"numeric"</span>,</span>
 <span>    category <span class="op">=</span> <span class="st">"factor"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Implement the interface</span></span>
-<span><span class="va">valid_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">SimpleDataset</span>,</span>
+<span><span class="va">valid_data</span> <span class="op">&lt;-</span> <span class="fu">implement</span><span class="op">(</span><span class="va">SimpleDataset</span>,</span>
 <span>    id <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>    value <span class="op">=</span> <span class="fl">10.5</span>,</span>
 <span>    category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="st">"A"</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span>
@@ -163,14 +165,14 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Interface with custom validation</span></span>
-<span><span class="va">UserProfile</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"UserProfile"</span>,</span>
+<span><span class="va">UserProfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"UserProfile"</span>,</span>
 <span>    username <span class="op">=</span> <span class="st">"character"</span>,</span>
 <span>    email <span class="op">=</span> <span class="va">is_valid_email</span>,</span>
 <span>    age <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">is.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="va">x</span> <span class="op">&gt;=</span> <span class="fl">18</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Implement with valid data</span></span>
-<span><span class="va">valid_user</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">UserProfile</span>,</span>
+<span><span class="va">valid_user</span> <span class="op">&lt;-</span> <span class="fu">implement</span><span class="op">(</span><span class="va">UserProfile</span>,</span>
 <span>    username <span class="op">=</span> <span class="st">"john_doe"</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"john@example.com"</span>,</span>
 <span>    age <span class="op">=</span> <span class="fl">25</span></span>
@@ -185,7 +187,7 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># This will raise an error due to invalid email</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">UserProfile</span>,</span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">implement</span><span class="op">(</span><span class="va">UserProfile</span>,</span>
 <span>    username <span class="op">=</span> <span class="st">"jane_doe"</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"not_an_email"</span>,</span>
 <span>    age <span class="op">=</span> <span class="fl">30</span></span>
@@ -198,22 +200,22 @@
 </h3>
 <p>Compose complex data structures with nested interfaces:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Address</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"Address"</span>,</span>
+<code class="sourceCode R"><span><span class="va">Address</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"Address"</span>,</span>
 <span>    street <span class="op">=</span> <span class="st">"character"</span>,</span>
 <span>    city <span class="op">=</span> <span class="st">"character"</span>,</span>
 <span>    postal_code <span class="op">=</span> <span class="st">"character"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">Employee</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"Employee"</span>,</span>
+<span><span class="va">Employee</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"Employee"</span>,</span>
 <span>    name <span class="op">=</span> <span class="st">"character"</span>,</span>
 <span>    position <span class="op">=</span> <span class="st">"character"</span>,</span>
 <span>    address <span class="op">=</span> <span class="va">Address</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">employee_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">Employee</span>,</span>
+<span><span class="va">employee_data</span> <span class="op">&lt;-</span> <span class="fu">implement</span><span class="op">(</span><span class="va">Employee</span>,</span>
 <span>    name <span class="op">=</span> <span class="st">"Alice Johnson"</span>,</span>
 <span>    position <span class="op">=</span> <span class="st">"Data Scientist"</span>,</span>
-<span>    address <span class="op">=</span> <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">Address</span>,</span>
+<span>    address <span class="op">=</span> <span class="fu">implement</span><span class="op">(</span><span class="va">Address</span>,</span>
 <span>        street <span class="op">=</span> <span class="st">"123 Tech Street"</span>,</span>
 <span>        city <span class="op">=</span> <span class="st">"Data City"</span>,</span>
 <span>        postal_code <span class="op">=</span> <span class="st">"12345"</span></span>
@@ -228,13 +230,13 @@
 </h3>
 <p>Toggle validation for performance optimisation:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">LargeDataset</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"LargeDataset"</span>,</span>
+<code class="sourceCode R"><span><span class="va">LargeDataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"LargeDataset"</span>,</span>
 <span>    data <span class="op">=</span> <span class="st">"data.frame"</span>,</span>
 <span>    metadata <span class="op">=</span> <span class="st">"list"</span>,</span>
 <span>    validate_on_access <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># Disable validation for performance</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">big_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">LargeDataset</span>,</span>
+<span><span class="va">big_data</span> <span class="op">&lt;-</span> <span class="fu">implement</span><span class="op">(</span><span class="va">LargeDataset</span>,</span>
 <span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1000000</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">1000000</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    metadata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"simulation"</span>, date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -252,18 +254,18 @@
 <p>Ensure consistent data structures throughout your analysis pipeline:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define interfaces for each stage of your pipeline</span></span>
-<span><span class="va">RawData</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"RawData"</span>,</span>
+<span><span class="va">RawData</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"RawData"</span>,</span>
 <span>    timestamp <span class="op">=</span> <span class="st">"POSIXct"</span>,</span>
 <span>    measurements <span class="op">=</span> <span class="st">"list"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ProcessedData</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"ProcessedData"</span>,</span>
+<span><span class="va">ProcessedData</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"ProcessedData"</span>,</span>
 <span>    timestamp <span class="op">=</span> <span class="st">"POSIXct"</span>,</span>
 <span>    average <span class="op">=</span> <span class="st">"numeric"</span>,</span>
 <span>    stddev <span class="op">=</span> <span class="st">"numeric"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">AnalysisResult</span> <span class="op">&lt;-</span> <span class="fu">interface</span><span class="op">(</span><span class="st">"AnalysisResult"</span>,</span>
+<span><span class="va">AnalysisResult</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span><span class="st">"AnalysisResult"</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">ProcessedData</span>,</span>
 <span>    model_fit <span class="op">=</span> <span class="st">"list"</span>,</span>
 <span>    r_squared <span class="op">=</span> <span class="st">"numeric"</span></span>
@@ -272,7 +274,7 @@
 <span><span class="co"># Your pipeline functions</span></span>
 <span><span class="va">process_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># Processing logic here</span></span>
-<span>    <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">ProcessedData</span>,</span>
+<span>    <span class="fu">implement</span><span class="op">(</span><span class="va">ProcessedData</span>,</span>
 <span>        timestamp <span class="op">=</span> <span class="va">raw_data</span><span class="op">$</span><span class="va">timestamp</span>,</span>
 <span>        average <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">raw_data</span><span class="op">$</span><span class="va">measurements</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        stddev <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">raw_data</span><span class="op">$</span><span class="va">measurements</span><span class="op">)</span><span class="op">)</span></span>
@@ -281,7 +283,7 @@
 <span></span>
 <span><span class="va">analyze_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">processed_data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># Analysis logic here</span></span>
-<span>    <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">AnalysisResult</span>,</span>
+<span>    <span class="fu">implement</span><span class="op">(</span><span class="va">AnalysisResult</span>,</span>
 <span>        data <span class="op">=</span> <span class="va">processed_data</span>,</span>
 <span>        model_fit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>coefficients <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0.5</span>, slope <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>        r_squared <span class="op">=</span> <span class="fl">0.85</span></span>
@@ -289,7 +291,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Run the pipeline</span></span>
-<span><span class="va">raw_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/implement.html">implement</a></span><span class="op">(</span><span class="va">RawData</span>,</span>
+<span><span class="va">raw_data</span> <span class="op">&lt;-</span> <span class="fu">implement</span><span class="op">(</span><span class="va">RawData</span>,</span>
 <span>    timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    measurements <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">18</span>, <span class="fl">22</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
