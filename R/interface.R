@@ -11,6 +11,9 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
   # Merge properties from extended interfaces
   all_properties <- properties
   for (ext in extends) {
+    if (!inherits(ext, "interface")) {
+      stop(sprintf("Invalid extends argument: %s is not an interface", deparse(substitute(ext))), call. = FALSE)
+    }
     ext_properties <- attr(ext, "properties")
     all_properties <- c(all_properties, ext_properties[setdiff(names(ext_properties), names(all_properties))])
   }
@@ -19,7 +22,6 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
     values <- list(...)
     obj <- new.env(parent = emptyenv())
     
-
     errors <- character()
 
     for (name in names(all_properties)) {
@@ -57,56 +59,6 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
             properties = all_properties,
             validate_on_access = validate_on_access,
             extends = extends)
-}
-
-#' Validate a property
-#'
-#' @param name The name of the property
-#' @param value The value to validate
-#' @param validator The validator function or specification
-#' @return NULL if valid, otherwise a character string describing the error
-validate_property <- function(name, value, validator) {
-  if (inherits(validator, "interface")) {
-    if (!inherits(value, "interface_object") || !identical(attr(value, "properties"), attr(validator, "properties"))) {
-      return(sprintf("Property '%s' must be an object implementing the specified interface", name))
-    }
-  } else if (identical(validator, character) || identical(validator, "character")) {
-    if (!is.character(value)) {
-      return(sprintf("Property '%s' must be a character string", name))
-    }
-  } else if (identical(validator, numeric) || identical(validator, "numeric")) {
-    if (!is.numeric(value)) {
-      return(sprintf("Property '%s' must be a numeric value", name))
-    }
-  } else if (identical(validator, logical) || identical(validator, "logical")) {
-    if (!is.logical(value)) {
-      return(sprintf("Property '%s' must be a logical value", name))
-    }
-  } else if (identical(validator, data.frame) || identical(validator, "data.frame")) {
-    if (!is.data.frame(value)) {
-      return(sprintf("Property '%s' must be a data.frame", name))
-    }
-  } else if (identical(validator, data.table::data.table) || identical(validator, "data.table")) {
-    if (!inherits(value, "data.table")) {
-      return(sprintf("Property '%s' must be a data.table", name))
-    }
-  } else if (identical(validator, matrix) || identical(validator, "matrix")) {
-    if (!is.matrix(value)) {
-      return(sprintf("Property '%s' must be a matrix", name))
-    }
-  } else if (is.function(validator)) {
-    if (!validator(value)) {
-      return(sprintf("Invalid value for property '%s'", name))
-    }
-  } else if (is.character(validator)) {
-    if (!inherits(value, validator)) {
-      return(sprintf("Property '%s' must be of type %s, but got %s", name, validator, class(value)[1]))
-    }
-  } else {
-    return(sprintf("Invalid validator for property '%s'", name))
-  }
-  
-  return(NULL)
 }
 
 #' Get a property from an interface object
