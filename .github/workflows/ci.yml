@@ -1,0 +1,39 @@
+# https://github.com/Appsilon/shiny.blueprint
+name: CI
+on: push
+jobs:
+  main:
+    name: Check, lint & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.3.2'
+          use-public-rspm: true
+
+      - name: Install R package dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: local::. # Necessary to avoid object usage linter errors.
+
+      - name: R CMD check
+        if: always()
+        uses: r-lib/actions/check-r-package@v2
+        with:
+          error-on: '"note"'
+
+      - name: Lint
+        if: always()
+        shell: Rscript {0}
+        run: lintr::lint_package()
+        env:
+          LINTR_ERROR_ON_LINT: true
+
+      - name: Test coverage
+        shell: Rscript {0}
+        run: covr::codecov()

@@ -1,7 +1,10 @@
+# dev
+*.ignore
+assets/
+
 README.html
 
 # renv
-/renv/
 !renv.lock
 
 # History files
@@ -53,3 +56,6 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# machine
+.DS_Store

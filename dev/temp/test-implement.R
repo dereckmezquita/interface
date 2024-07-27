@@ -51,6 +51,6 @@ test_that("validation on access works", {
         email = "john@example.com"
     )
 
-    john$age <- "thirty"
-    expect_error(john$name, "Property 'age' does not match the expected type specification")
+    # error when setting character to numeric type
+    expect_error(john$age <- "thirty", "Property 'age' does not match the expected type specification")
 })

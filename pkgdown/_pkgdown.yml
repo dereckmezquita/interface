@@ -1,0 +1,38 @@
+template:
+  bootstrap: 5
+
+url: https://dereckmezquita.github.io/interface/
+
+authors:
+  Dereck Mezquita:
+    href: https://derecksnotes.com
+
+navbar:
+  structure:
+    left: [home, reference, articles, donate]
+    right: [github, youtube, search, website, website2]
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: "Introduction to interface"
+        href: articles/introduction.html
+    donate:
+      text: Donate
+      href: articles/donate.html
+    github:
+      icon: fa-github fa-lg
+      href: https://github.com/dereckmezquita/interface
+      target: _blank
+    youtube:
+      icon: fa-youtube fa-lg
+      href: https://www.youtube.com/@derecksyoutube
+      target: _blank
+    website:
+      text: derecksprojects.com
+      href: https://derecksprojects.com
+      target: _blank
+    website2:
+      text: derecksnotes.com
+      href: https://derecksnotes.com
+      target: _blank
