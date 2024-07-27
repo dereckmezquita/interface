@@ -2,13 +2,13 @@
 #'
 #' @param frame The base data structure (e.g., data.frame, data.table)
 #' @param col_types A list of column types and validators
-#' @param freeze_n_cols Logical, whether to freeze the number of columns (default: FALSE)
+#' @param freeze_n_cols Logical, whether to freeze the number of columns (default: TRUE)
 #' @param row_validator A function to validate each row (optional)
 #' @param allow_na Logical, whether to allow NA values (default: TRUE)
 #' @param on_violation Action to take on violation: "error", "warning", or "silent" (default: "error")
 #' @return A function that creates typed data frames
 #' @export
-type.frame <- function(frame, col_types, freeze_n_cols = FALSE, 
+type.frame <- function(frame, col_types, freeze_n_cols = TRUE, 
                        row_validator = NULL, allow_na = TRUE, 
                        on_violation = c("error", "warning", "silent")) {
   on_violation <- match.arg(on_violation)
@@ -38,7 +38,11 @@ type.frame <- function(frame, col_types, freeze_n_cols = FALSE,
     
     # Validate rows
     if (!is.null(row_validator)) {
-      invalid_rows <- which(!apply(df, 1, row_validator))
+      invalid_rows <- which(!apply(df, 1, function(row) {
+        row_df <- as.data.frame(t(row))
+        names(row_df) <- names(df)
+        row_validator(row_df)
+      }))
       if (length(invalid_rows) > 0) {
         handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), on_violation)
       }
@@ -58,7 +62,6 @@ type.frame <- function(frame, col_types, freeze_n_cols = FALSE,
   
   return(creator)
 }
-
 #' Handle violations based on the specified action
 #'
 #' @param message The error message

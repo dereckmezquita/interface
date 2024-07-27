@@ -39,8 +39,13 @@ validate_property <- function(name, value, validator) {
       if (!data.table::is.data.table(value)) {
         return(sprintf("Property '%s' must be a data.table", name))
       }
-    } else if (!validator(value)) {
-      return(sprintf("Invalid value for property '%s'", name))
+    } else {
+      # Custom validator function
+      validation_result <- vapply(value, validator, logical(1))
+      if (!all(validation_result)) {
+        invalid_indices <- which(!validation_result)
+        return(sprintf("Invalid value(s) for property '%s' at index(es): %s", name, paste(invalid_indices, collapse = ", ")))
+      }
     }
   } else if (is.character(validator)) {
     if (!inherits(value, validator)) {
