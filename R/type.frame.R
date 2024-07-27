@@ -9,7 +9,7 @@
 #' @return A function that creates typed data frames
 #' @export
 type.frame <- function(frame, col_types, freeze_n_cols = TRUE, 
-                       row_validator = NULL, allow_na = TRUE, 
+                       row_callback = NULL, allow_na = TRUE, 
                        on_violation = c("error", "warning", "silent")) {
   on_violation <- match.arg(on_violation)
   
@@ -36,30 +36,18 @@ type.frame <- function(frame, col_types, freeze_n_cols = TRUE,
       handle_violation("NA values are not allowed", on_violation)
     }
     
-    # Validate rows
-    if (!is.null(row_validator)) {
-      validation_results <- apply(df, 1, function(row) {
-        row_df <- as.data.frame(t(row))
-        names(row_df) <- names(df)
+    # Process rows with callback
+    if (!is.null(row_callback)) {
+      for (i in seq_len(nrow(df))) {
+        row <- df[i, , drop = FALSE]
         tryCatch({
-          valid <- row_validator(row_df)
-          if (!valid) {
-            return(paste("Failed validation:", deparse(body(row_validator))))
+          result <- row_callback(row)
+          if (!isTRUE(result)) {
+            handle_violation(sprintf("Row %d failed validation: %s", i, as.character(result)), on_violation)
           }
-          return(TRUE)
         }, error = function(e) {
-          return(paste("Error during validation:", e$message))
+          handle_violation(sprintf("Error processing row %d: %s", i, e$message), on_violation)
         })
-      })
-      
-      invalid_rows <- which(validation_results != TRUE)
-      if (length(invalid_rows) > 0) {
-        error_message <- sprintf("Row validation failed:\n%s", 
-                                 paste(sprintf("  Row %d: %s", 
-                                               invalid_rows, 
-                                               validation_results[invalid_rows]), 
-                                       collapse = "\n"))
-        handle_violation(error_message, on_violation)
       }
     }
     
@@ -68,7 +56,7 @@ type.frame <- function(frame, col_types, freeze_n_cols = TRUE,
                           class = c("typed_frame", class(df)),
                           col_types = col_types,
                           freeze_n_cols = freeze_n_cols,
-                          row_validator = row_validator,
+                          row_callback = row_callback,
                           allow_na = allow_na,
                           on_violation = on_violation)
     
@@ -131,6 +119,18 @@ handle_violation <- function(message, action) {
       handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), attr(x, "on_violation"))
     }
   }
+
+  # Process new or modified rows with callback
+  if (!is.null(attr(x, "row_callback"))) {
+    affected_rows <- unique(i)
+    for (row_index in affected_rows) {
+      row <- x[row_index, , drop = FALSE]
+      result <- attr(x, "row_callback")(row)
+      if (!isTRUE(result)) {
+        handle_violation(sprintf("Row %d failed validation: %s", row_index, as.character(result)), attr(x, "on_violation"))
+      }
+    }
+  }
   
   return(x)
 }
@@ -171,6 +171,17 @@ handle_violation <- function(message, action) {
     invalid_rows <- which(!apply(x, 1, attr(x, "row_validator")))
     if (length(invalid_rows) > 0) {
       handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), attr(x, "on_violation"))
+    }
+  }
+
+  # Process all rows with callback if column modification occurs
+  if (!is.null(attr(x, "row_callback"))) {
+    for (i in seq_len(nrow(x))) {
+      row <- x[i, , drop = FALSE]
+      result <- attr(x, "row_callback")(row)
+      if (!isTRUE(result)) {
+        handle_violation(sprintf("Row %d failed validation after column modification: %s", i, as.character(result)), attr(x, "on_violation"))
+      }
     }
   }
   
