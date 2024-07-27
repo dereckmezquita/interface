@@ -2,25 +2,19 @@
 #'
 #' @param frame The base data structure (e.g., data.frame, data.table)
 #' @param col_types A list of column types and validators
-#' @param max_cols Maximum number of columns allowed (optional)
 #' @param freeze_n_cols Logical, whether to freeze the number of columns (default: FALSE)
 #' @param row_validator A function to validate each row (optional)
 #' @param allow_na Logical, whether to allow NA values (default: TRUE)
 #' @param on_violation Action to take on violation: "error", "warning", or "silent" (default: "error")
 #' @return A function that creates typed data frames
 #' @export
-type.frame <- function(frame, col_types, max_cols = NULL, freeze_n_cols = FALSE, 
+type.frame <- function(frame, col_types, freeze_n_cols = FALSE, 
                        row_validator = NULL, allow_na = TRUE, 
                        on_violation = c("error", "warning", "silent")) {
   on_violation <- match.arg(on_violation)
   
   creator <- function(...) {
     df <- frame(...)
-    
-    # Check number of columns
-    if (!is.null(max_cols) && ncol(df) > max_cols) {
-      stop(sprintf("Number of columns (%d) exceeds maximum allowed (%d)", ncol(df), max_cols))
-    }
     
     # Validate column types
     for (col_name in names(col_types)) {
@@ -54,7 +48,6 @@ type.frame <- function(frame, col_types, max_cols = NULL, freeze_n_cols = FALSE,
     typed_df <- structure(df,
                           class = c("typed_frame", class(df)),
                           col_types = col_types,
-                          max_cols = max_cols,
                           freeze_n_cols = freeze_n_cols,
                           row_validator = row_validator,
                           allow_na = allow_na,
@@ -136,7 +129,6 @@ print.typed_frame <- function(x, ...) {
   for (name in names(attr(x, "col_types"))) {
     cat(sprintf("  %s: %s\n", name, format(attr(x, "col_types")[[name]])))
   }
-  cat(sprintf("Maximum columns: %s\n", ifelse(is.null(attr(x, "max_cols")), "Unlimited", attr(x, "max_cols"))))
   cat(sprintf("Freeze columns: %s\n", ifelse(attr(x, "freeze_n_cols"), "Yes", "No")))
   cat(sprintf("Allow NA: %s\n", ifelse(attr(x, "allow_na"), "Yes", "No")))
   cat(sprintf("On violation: %s\n", attr(x, "on_violation")))
