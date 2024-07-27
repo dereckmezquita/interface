@@ -1,13 +1,5 @@
-box::use(interface[interface, fun, type.frame, u, enum, type.list])
-
-Colour <- enum("red", "green", "blue")
-my_colour <- Colour("red")
-try(Colour("yellow")) # Error: 'yellow' is not a valid value for Colour
-
-# interface allows for arguments defining properties and types on a list object
-# interface reserves some properties for internal use, such as `validate_on_access` and `extends`
-# `validate_on_access` is a boolean that determines whether to validate the data on access
-# `extends` is a list of interfaces that the current interface extends
+source("./R/interface.R")
+source("./R/validate_property.R")
 
 # define an interface
 Person <- interface(
@@ -23,17 +15,17 @@ john <- Person(
     email = "john@example.com"
 )
 
+print(john)
+
 # access data safely
-print(john_data$name)
+print(john$name)
 #> [1] "John Doe"
 
-print(john_data$scores)
-#>   subject score
-#> 1    Math    95
-#> 2 Science    88
+# should not throw an error; we show later on how to declare a type of a specific length
+john$age <- c(10, 11)
 
 # This will raise an error, preventing silent issues
-try(john_data$age <- "thirty")
+try(john$age <- "thirty")
 #> Error in `$<-.validated_list`(`*tmp*`, age, value = "thirty") : 
 #>   Property 'age' does not match the expected type specification
 
@@ -58,16 +50,18 @@ print(home)
 #>   postal_code: 12345
 #> Validation on access: Enabled
 
+Scholarship <- interface(
+    amount = numeric,
+    status = logical
+)
+
 # extending an interface and using nested interfaces
 Student <- interface(
-    extends = u(Address, Person),
+    extends = c(Address, Person),
     student_id = character,
-    scores = data.frame,
+    scores = data.table::data.table,
     # here we show declaring nested interface in place
-    scholarship = interface(
-        amount = numeric,
-        status = logical
-    )
+    scholarship = Scholarship
 )
 
 john_student <- Student(
@@ -78,15 +72,17 @@ john_student <- Student(
     city = "Small town",
     postal_code = "12345",
     student_id = "123456",
-    scores = data.frame(
+    scores = data.table::data.table(
         subject = c("Math", "Science"),
         score = c(95, 88)
     ),
-    scholarship = list(
+    scholarship = Scholarship(
         amount = 5000,
         status = TRUE
     )
 )
+
+john_student$scores
 
 # custom validation functions
 is_valid_email <- function(x) {
@@ -128,34 +124,26 @@ try(UserProfile(
 # Toggle validation for performance optimisation:
 Location <- interface(
     latitude = numeric,
-    longitude = numeric
-)
-
-# error not thrown if validation is disabled
-loc <- Location(
-    latitude = "37.7749",
-    longitude = -122.4194,
-    validate_on_access = FALSE
-)
-
-# can turn off validation for all future objects
-Location2 <- interface(
-    latitude = numeric,
     longitude = numeric,
     validate_on_access = FALSE
 )
 
-loc2 <- Location2(
-    latitude = "37.7749",
+loc <- Location(
+    latitude = 37.7749,
     longitude = -122.4194
 )
 
+# does not run the validate function when validated_on_access FALSE
+loc$latitude
+
+## ----------------------------------------
+## ----------------------------------------
+source("./R/fun.R")
+
 # functions
 typed_fun <- fun(
-    args = list(
-        x = numeric,
-        y = numeric
-    ),
+    x = numeric,
+    y = numeric,
     return = numeric,
     impl = function(x, y) {
         return(x + y)
@@ -169,13 +157,12 @@ try(typed_fun("a", 2))
 try(typed_fun(1, 2))
 # [1] 3
 
+
 # allow for multiple return types
 typed_fun2 <- fun(
-    args = list(
-        x = u(numeric, character),
-        y = numeric
-    ),
-    return = u(numeric, character),
+    x = c(numeric, character),
+    y = numeric,
+    return = c(numeric, character),
     impl = function(x, y) {
         if (is.numeric(x)) {
             return(x + y)
@@ -229,32 +216,35 @@ user_response <- UserResponse(
     message = "User retrieved successfully"
 )
 
-print(user_response$data$username)
-#> [1] "john_doe"
+print(user_response$data$name)
+#> [1] "John Doe"
 
 # functions with generics
 GenericApiResponse <- function(T) {
     fun(
-        args = list(
-            data = T,
-            status = numeric,
-            message = character
-        ),
-        return = T,
+        data = T,
+        status = numeric,
+        message = character,
+        return = character,
         impl = function(data, status, message) {
-            return(data)
+            return(paste(message, "with status", status, "and data", data))
         }
     )
 }
 
 # use the generic function
-response <- GenericApiResponse(numeric)(
+res <- GenericApiResponse(numeric)(
     data = 100,
     status = 200,
     message = "Data retrieved successfully"
 )
 
+res
+
 ## ------------------------------------------------
+source("./R/type.frame.R")
+source("./R/validate_property.R")
+
 # dataframe and other typed objects
 # Base type.frame function
 PersonFrame <- type.frame(
@@ -264,9 +254,20 @@ PersonFrame <- type.frame(
         name = character,
         age = numeric,
         is_student = logical
-    ),
-    max_cols = 5
+    )
 )
+
+persons <- PersonFrame(
+    id = 1:3,
+    name = c("Alice", "Bob", "Charlie"),
+    age = c(25, 30, 35),
+    is_student = c(TRUE, FALSE, TRUE)
+)
+
+try(persons$id <- letters[1:3]) # Error: 'id' is a required column
+try(persons$yeet <- letters[1:3]) # no error since 'yeet' is not a required column
+
+class(persons)
 
 # Additional arguments
 PersonFrame <- type.frame(
@@ -276,23 +277,46 @@ PersonFrame <- type.frame(
         name = character,
         age = numeric,
         is_student = logical,
-        email = function(x) grepl("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", x)
+        email = function(x) all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", x))
     ),
-    freeze_n_cols = TRUE, # does not allow adding or removing columns
-    row_validator = function(row) row$age >= 18 && row$is_student, # allows for custom row validation
+    freeze_n_cols = FALSE, # does not allow adding or removing columns
+    row_callback = function(row) {
+        if (row$age >= 40) {
+            return(sprintf("Age must be less than 40 (got %d)", row$age))
+        }
+        if (row$name == "Yanice") {
+            return("Name cannot be 'Yanice'")
+        }
+        return(TRUE)
+    }, # allows for custom row validation
     allow_na = FALSE, # does not allow NA values
-    on_violation = c("error", "warning", "silent") # action to take on violation
+    on_violation = "error" # action to take on violation
 )
 
-# Usage remains the same
+# Usage
 df <- PersonFrame(
     id = 1:3,
     name = c("Alice", "Bob", "Charlie"),
-    age = c(25, 30, 35),
-    is_student = c(TRUE, FALSE, TRUE)
+    age = c(25, 35, 35),
+    is_student = c(TRUE, FALSE, TRUE),
+    email = c("alice@test.com", "bob_no_valid@test.com", "charlie@example.com")
 )
 
 print(df)
+summary(df)
+
+df[1, "age"] <- 55 # correctly throws error
+
+# add a new row; should throw error because over age of 40
+rbind(df, data.frame(
+    id = 4,
+    name = "David",
+    age = 500,
+    is_student = TRUE,
+    email = "d@test.com"
+))
+
+cbind(df, list(yeet = 1:3))
 
 # helper for typed lists
 IntList <- type.list(
@@ -308,3 +332,9 @@ IntList <- type.list(
     on_violation = c("error", "warning", "silent"),
     validate_on_access = TRUE
 )
+
+# ----------------------------------------------
+# Enums
+Colour <- enum("red", "green", "blue")
+my_colour <- Colour("red")
+try(Colour("yellow")) # Error: 'yellow' is not a valid value for Colour
