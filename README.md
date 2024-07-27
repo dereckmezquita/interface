@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# interface: Bringing Structure and Safety to R
+# interface
 
 <!-- badges: start -->
 
@@ -11,286 +11,356 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckmezquita/kucoin)
 <!-- badges: end -->
 
-## Overview
-
-The `interface` package brings the power of interfaces and runtime type
-checking to R, offering a robust solution for data structure validation
-and enhancing code reliability. In the dynamic world of R programming,
-where data structures can be fluid, `interface` provides a safety net,
-ensuring that your data conforms to expected structures and types.
-
-### Why `interface`?
-
-1.  **Data Integrity**: Ensure your data structures are consistent and
-    valid throughout your analysis pipeline.
-2.  **Early Error Detection**: Catch type mismatches and structural
-    issues at runtime, preventing silent errors that could compromise
-    your results.
-3.  **Self-Documenting Code**: Interfaces serve as clear contracts,
-    making your code more readable and self-explanatory.
-4.  **Flexible Validation**: From simple type checks to complex custom
-    validations, `interface` adapts to your needs.
-5.  **Performance Control**: Toggle validation on/off as needed,
-    balancing safety and performance.
+The `interface` package provides a system for defining and implementing
+interfaces in R, with runtime type checking, bringing some of the
+benefits of statically-typed languages to R.
 
 ## Installation
 
-You can install the development version of interface from
-[GitHub](https://github.com/) with:
+To install the package, use the following command:
 
 ``` r
-# install.packages("devtools")
+# Install the package from the source
 remotes::install_github("dereckmezquita/interface")
 ```
 
-## Quick Start
+## Getting started
+
+Import the package functions.
 
 ``` r
-box::use(interface[interface, implement])
+box::use(interface[ interface, type.frame, fun ])
+```
 
-# Define an interface for a data structure
-PersonData <- interface("PersonData",
-    name = "character",
-    age = "numeric",
-    email = "character",
-    scores = "data.frame"
+Define an interface and implement it:
+
+``` r
+# Define an interface
+Person <- interface(
+    name = character,
+    age = numeric,
+    email = character
 )
 
 # Implement the interface
-john_data <- implement(PersonData,
+john <- Person(
+    name = "John Doe",
+    age = 30,
+    email = "john@example.com"
+)
+
+print(john)
+#> Object implementing interface:
+#>   name: John Doe
+#>   age: 30
+#>   email: john@example.com
+#> Validation on access: Disabled
+
+# interfaces are lists
+print(john$name)
+#> [1] "John Doe"
+
+# Modify the object
+john$age <- 10
+print(john$age)
+#> [1] 10
+
+# Invalid assignment (throws error)
+try(john$age <- "thirty")
+#> Error : Property 'age' must be of type numeric
+```
+
+### Extending Interfaces and Nested Interfaces
+
+Create nested and extended interfaces:
+
+``` r
+# Define nested interfaces
+Address <- interface(
+    street = character,
+    city = character,
+    postal_code = character
+)
+
+Scholarship <- interface(
+    amount = numeric,
+    status = logical
+)
+
+# Extend interfaces
+Student <- interface(
+    extends = c(Address, Person),
+    student_id = character,
+    scores = data.table::data.table,
+    scholarship = Scholarship
+)
+
+# Implement the extended interface
+john_student <- Student(
     name = "John Doe",
     age = 30,
     email = "john@example.com",
-    scores = data.frame(subject = c("Math", "Science"), score = c(95, 88))
+    street = "123 Main St",
+    city = "Small town",
+    postal_code = "12345",
+    student_id = "123456",
+    scores = data.table::data.table(
+        subject = c("Math", "Science"),
+        score = c(95, 88)
+    ),
+    scholarship = Scholarship(
+        amount = 5000,
+        status = TRUE
+    )
 )
 
-# Access data safely
-print(john_data$name)
-#> [1] "John Doe"
-```
-
-``` r
-print(john_data$scores)
-#>   subject score
-#> 1    Math    95
-#> 2 Science    88
-```
-
-``` r
-
-# This will raise an error, preventing silent issues
-try(john_data$age <- "thirty")
-#> Error in `$<-.validated_list`(`*tmp*`, age, value = "thirty") : 
-#>   Property 'age' does not match the expected type specification
-```
-
-## Detailed Usage
-
-### Basic Interface Definition
-
-Interfaces in R provide a clear contract for data structures:
-
-``` r
-# Define a basic interface
-SimpleDataset <- interface("SimpleDataset",
-    id = "integer",
-    value = "numeric",
-    category = "factor"
-)
-
-# Implement the interface
-valid_data <- implement(SimpleDataset,
-    id = 1L,
-    value = 10.5,
-    category = factor("A", levels = c("A", "B", "C"))
-)
-
-print(valid_data)
-#> Object implementing SimpleDataset interface:
-#>   id: 1 
-#>   value: 10.5 
-#>   category: 1 
-#> Validation on access: Enabled
+print(john_student)
+#> Object implementing interface:
+#>   student_id: 123456
+#>   scores: Math
+#>    scores: Science
+#>    scores: 95
+#>    scores: 88
+#>   scholarship: <environment: 0x130931c10>
+#>   street: 123 Main St
+#>   city: Small town
+#>   postal_code: 12345
+#>   name: John Doe
+#>   age: 30
+#>   email: john@example.com
+#> Validation on access: Disabled
 ```
 
 ### Custom Validation Functions
 
-For more complex validations, use custom functions:
+Interfaces can have custom validation functions:
 
 ``` r
-# Custom validation function
 is_valid_email <- function(x) {
-    grepl("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", x)
+    grepl("[a-z|0-9]+\\@[a-z|0-9]+\\.[a-z|0-9]+", x)
 }
 
-# Interface with custom validation
-UserProfile <- interface("UserProfile",
-    username = "character",
+UserProfile <- interface(
+    username = character,
     email = is_valid_email,
     age = function(x) is.numeric(x) && x >= 18
 )
 
 # Implement with valid data
-valid_user <- implement(UserProfile,
+valid_user <- UserProfile(
     username = "john_doe",
     email = "john@example.com",
     age = 25
 )
 
 print(valid_user)
-#> Object implementing UserProfile interface:
-#>   username: john_doe 
-#>   email: john@example.com 
-#>   age: 25 
-#> Validation on access: Enabled
-```
+#> Object implementing interface:
+#>   username: john_doe
+#>   email: john@example.com
+#>   age: 25
+#> Validation on access: Disabled
 
-``` r
-
-# This will raise an error due to invalid email
-try(implement(UserProfile,
+# Invalid implementation (throws error)
+try(UserProfile(
     username = "jane_doe",
     email = "not_an_email",
-    age = 30
+    age = "30"
 ))
-#> Error in validate_object(obj, interface) : 
-#>   Property 'email' does not match the expected type specification
+#> Error : Errors occurred during interface creation:
+#>   - Invalid value(s) for property 'email' at index(es): 1
+#>   - Invalid value(s) for property 'age' at index(es): 1
 ```
 
-### Nested Interfaces
+### Typed Functions
 
-Compose complex data structures with nested interfaces:
+Define functions with strict type constraints:
 
 ``` r
-Address <- interface("Address",
-    street = "character",
-    city = "character",
-    postal_code = "character"
+typed_fun <- fun(
+    x = numeric,
+    y = numeric,
+    return = numeric,
+    impl = function(x, y) {
+        return(x + y)
+    }
 )
 
-Employee <- interface("Employee",
-    name = "character",
-    position = "character",
-    address = Address
+print(typed_fun(1, 2))  # [1] 3
+#> [1] 3
+try(typed_fun("a", 2))  # Invalid call
+#> Error : Property 'x' must be of type numeric
+```
+
+Functions with multiple possible return types:
+
+``` r
+typed_fun2 <- fun(
+    x = c(numeric, character),
+    y = numeric,
+    return = c(numeric, character),
+    impl = function(x, y) {
+        if (is.numeric(x)) {
+            return(x + y)
+        } else {
+            return(paste(x, y))
+        }
+    }
 )
 
-employee_data <- implement(Employee,
-    name = "Alice Johnson",
-    position = "Data Scientist",
-    address = implement(Address,
-        street = "123 Tech Street",
-        city = "Data City",
-        postal_code = "12345"
+print(typed_fun2(1, 2))  # [1] 3
+#> [1] 3
+print(typed_fun2("a", 2))  # [1] "a 2"
+#> [1] "a 2"
+```
+
+### Typed Data Frames and Data Tables
+
+Create data frames with column type constraints and row validation:
+
+``` r
+PersonFrame <- type.frame(
+    frame = data.frame, 
+    col_types = list(
+        id = integer,
+        name = character,
+        age = numeric,
+        is_student = logical
     )
 )
 
-print(employee_data$address$city)
-#> [1] "Data City"
+# Create a data frame
+persons <- PersonFrame(
+    id = 1:3,
+    name = c("Alice", "Bob", "Charlie"),
+    age = c(25, 30, 35),
+    is_student = c(TRUE, FALSE, TRUE)
+)
+
+print(persons)
+#> Typed data frame with the following properties:
+#> Number of rows: 3
+#> Number of columns: 4
+#> Column types:
+#>   id: function (length = 0L) 
+#>    id: .Internal(vector("integer", length))
+#>   name: function (length = 0L) 
+#>    name: .Internal(vector("character", length))
+#>   age: function (length = 0L) 
+#>    age: .Internal(vector("double", length))
+#>   is_student: function (length = 0L) 
+#>    is_student: .Internal(vector("logical", length))
+#> Freeze columns: Yes
+#> Allow NA: Yes
+#> On violation: error
+#> 
+#> Data:
+#>   id    name age is_student
+#> 1  1   Alice  25       TRUE
+#> 2  2     Bob  30      FALSE
+#> 3  3 Charlie  35       TRUE
+
+# Invalid modification (throws error)
+try(persons$id <- letters[1:3])
+#> Error : Property 'id' must be of type integer
 ```
 
-### Flexible Validation Control
-
-Toggle validation for performance optimisation:
+Additional options for data frame validation:
 
 ``` r
-LargeDataset <- interface("LargeDataset",
-    data = "data.frame",
-    metadata = "list",
-    validate_on_access = FALSE # Disable validation for performance
+PersonFrame <- type.frame(
+    frame = data.frame,
+    col_types = list(
+        id = integer,
+        name = character,
+        age = numeric,
+        is_student = logical,
+        email = function(x) all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", x))
+    ),
+    freeze_n_cols = FALSE,
+    row_callback = function(row) {
+        if (row$age >= 40) {
+            return(sprintf("Age must be less than 40 (got %d)", row$age))
+        }
+        if (row$name == "Yanice") {
+            return("Name cannot be 'Yanice'")
+        }
+        return(TRUE)
+    },
+    allow_na = FALSE,
+    on_violation = "error"
 )
 
-big_data <- implement(LargeDataset,
-    data = data.frame(x = 1:1000000, y = runif(1000000)),
-    metadata = list(source = "simulation", date = Sys.Date())
+df <- PersonFrame(
+    id = 1:3,
+    name = c("Alice", "Bob", "Charlie"),
+    age = c(25, 35, 35),
+    is_student = c(TRUE, FALSE, TRUE),
+    email = c("alice@test.com", "bob_no_valid@test.com", "charlie@example.com")
 )
 
-# No validation on access for better performance
-big_data$data[1, "x"] <- "should be numeric but no error raised"
+print(df)
+#> Typed data frame with the following properties:
+#> Number of rows: 3
+#> Number of columns: 5
+#> Column types:
+#>   id: function (length = 0L) 
+#>    id: .Internal(vector("integer", length))
+#>   name: function (length = 0L) 
+#>    name: .Internal(vector("character", length))
+#>   age: function (length = 0L) 
+#>    age: .Internal(vector("double", length))
+#>   is_student: function (length = 0L) 
+#>    is_student: .Internal(vector("logical", length))
+#>   email: function (x) 
+#>    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
+#>    email:     x))
+#> Freeze columns: No
+#> Allow NA: No
+#> On violation: error
+#> 
+#> Data:
+#>   id    name age is_student                 email
+#> 1  1   Alice  25       TRUE        alice@test.com
+#> 2  2     Bob  35      FALSE bob_no_valid@test.com
+#> 3  3 Charlie  35       TRUE   charlie@example.com
+summary(df)
+#> Typed data frame summary:
+#> Number of rows: 3
+#> Number of columns: 5
+#> Column types:
+#>   id: function (length = 0L) 
+#>    id: .Internal(vector("integer", length))
+#>   name: function (length = 0L) 
+#>    name: .Internal(vector("character", length))
+#>   age: function (length = 0L) 
+#>    age: .Internal(vector("double", length))
+#>   is_student: function (length = 0L) 
+#>    is_student: .Internal(vector("logical", length))
+#>   email: function (x) 
+#>    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
+#>    email:     x))
+#> Freeze columns: No
+#> Allow NA: No
+#> On violation: error
+#> Validation status:
+#>   All rows passed validation.
+
+# Invalid row addition (throws error)
+try(rbind(df, data.frame(
+    id = 4,
+    name = "David",
+    age = 50,
+    is_student = TRUE,
+    email = "d@test.com"
+)))
+#> Error in rbind(deparse.level, ...) : 
+#>   Row 1 failed validation: Age must be less than 40 (got 50)
 ```
-
-## Benefits in Real-world Scenarios
-
-### Data Pipeline Integrity
-
-Ensure consistent data structures throughout your analysis pipeline:
-
-``` r
-# Define interfaces for each stage of your pipeline
-RawData <- interface("RawData",
-    timestamp = "POSIXct",
-    measurements = "list"
-)
-
-ProcessedData <- interface("ProcessedData",
-    timestamp = "POSIXct",
-    average = "numeric",
-    stddev = "numeric"
-)
-
-AnalysisResult <- interface("AnalysisResult",
-    data = ProcessedData,
-    model_fit = "list",
-    r_squared = "numeric"
-)
-
-# Your pipeline functions
-process_data <- function(raw_data) {
-    # Processing logic here
-    implement(ProcessedData,
-        timestamp = raw_data$timestamp,
-        average = mean(unlist(raw_data$measurements)),
-        stddev = sd(unlist(raw_data$measurements))
-    )
-}
-
-analyze_data <- function(processed_data) {
-    # Analysis logic here
-    implement(AnalysisResult,
-        data = processed_data,
-        model_fit = list(coefficients = c(intercept = 0.5, slope = 1.2)),
-        r_squared = 0.85
-    )
-}
-
-# Run the pipeline
-raw_data <- implement(RawData,
-    timestamp = Sys.time(),
-    measurements = list(10, 15, 20, 18, 22)
-)
-
-processed <- process_data(raw_data)
-result <- analyze_data(processed)
-
-print(result)
-#> Object implementing AnalysisResult interface:
-#>   data: <validated_list>
-#>   model_fit: <list>
-#>   r_squared: 0.85 
-#> Validation on access: Enabled
-```
-
-This example demonstrates how `interface` can ensure data integrity
-throughout a multi-stage analysis pipeline, catching any structural or
-type inconsistencies early in the process.
 
 ## Conclusion
 
-The `interface` package brings a new level of structure and safety to R
-programming. By providing clear contracts for data structures and
-runtime type checking, it helps prevent common errors, improves code
-readability, and ensures data integrity throughout your projects.
-
-Whether you’re working on small scripts or large-scale data analysis
-pipelines, `interface` offers the flexibility and robustness to enhance
-your R code. Start using `interface` today to write safer, more reliable
-R code!
-
-## Contributing
-
-Contributions to `interface` are welcome! Please refer to the
-[Contribution Guidelines](CONTRIBUTING.md) for more information.
-
-## License
-
-This project is licensed under the MIT License - see the
-[LICENSE.md](LICENSE.md) file for details.
+The `interface` package provides powerful tools for ensuring type safety
+and validation in R. By defining interfaces, typed functions, and typed
+data frames, you can create robust and reliable data structures and
+functions with strict type constraints. For more details, refer to the
+package documentation.
