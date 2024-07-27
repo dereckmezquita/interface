@@ -5,7 +5,7 @@
 #' @param extends List of interfaces that this interface extends
 #' @return A function that creates objects implementing the interface
 #' @export
-interface <- function(..., validate_on_access = TRUE, extends = list()) {
+interface <- function(..., validate_on_access = FALSE, extends = list()) {
   properties <- list(...)
   
   # Merge properties from extended interfaces
