@@ -215,3 +215,44 @@ print.typed_frame <- function(x, ...) {
   cat("\nData:\n")
   NextMethod()
 }
+
+rbind.typed_frame <- function(..., deparse.level = 1) {
+  dfs <- list(...)
+  base_df <- dfs[[1]]
+
+  for (df in dfs[-1]) {
+    # Validate number of columns
+    if (ncol(df) != ncol(base_df)) {
+      stop("Number of columns must match")
+    }
+    
+    # Convert types to match base_df
+    for (col_name in names(attr(base_df, "col_types"))) {
+      col_type <- class(base_df[[col_name]])
+      df[[col_name]] <- as(df[[col_name]], col_type)
+    }
+    
+    # Validate rows with row_callback
+    row_callback <- attr(base_df, "row_callback")
+    if (!is.null(row_callback)) {
+      for (i in seq_len(nrow(df))) {
+        row <- df[i, , drop = FALSE]
+        result <- row_callback(row)
+        if (!isTRUE(result)) {
+          stop(sprintf("Row %d failed validation: %s", i, as.character(result)))
+        }
+      }
+    }
+  }
+  
+  result <- do.call(base::rbind, c(dfs, deparse.level = deparse.level))
+  
+  class(result) <- class(base_df)
+  attr(result, "col_types") <- attr(base_df, "col_types")
+  attr(result, "freeze_n_cols") <- attr(base_df, "freeze_n_cols")
+  attr(result, "row_callback") <- attr(base_df, "row_callback")
+  attr(result, "allow_na") <- attr(base_df, "allow_na")
+  attr(result, "on_violation") <- attr(base_df, "on_violation")
+  
+  return(result)
+}
