@@ -1,12 +1,47 @@
 #' Create a typed data frame
 #'
-#' @param frame The base data structure (e.g., data.frame, data.table)
-#' @param col_types A list of column types and validators
-#' @param freeze_n_cols Logical, whether to freeze the number of columns (default: TRUE)
-#' @param row_callback A function to validate and process each row (optional)
-#' @param allow_na Logical, whether to allow NA values (default: TRUE)
-#' @param on_violation Action to take on violation: "error", "warning", or "silent" (default: "error")
-#' @return A function that creates typed data frames
+#' @description
+#' Creates a data frame with specified column types and validation rules. 
+#' Ensures that the data frame adheres to the specified structure and validation rules during creation and modification.
+#'
+#' @param frame The base data structure (e.g., data.frame, data.table).
+#' @param col_types A list of column types and validators.
+#' @param freeze_n_cols Logical, whether to freeze the number of columns (default: TRUE).
+#' @param row_callback A function to validate and process each row (optional).
+#' @param allow_na Logical, whether to allow NA values (default: TRUE).
+#' @param on_violation Action to take on violation: "error", "warning", or "silent" (default: "error").
+#' @return A function that creates typed data frames.
+#' @details
+#' The `type.frame` function defines a blueprint for a data frame, specifying the types of its columns and optional validation rules for its rows. 
+#' When a data frame is created or modified using this blueprint, it ensures that all data adheres to the specified rules.
+#'
+#' @examples
+#' # Define a typed data frame
+#' PersonFrame <- type.frame(
+#'     frame = data.frame,
+#'     col_types = list(
+#'         id = integer,
+#'         name = character,
+#'         age = numeric,
+#'         is_student = logical
+#'     )
+#' )
+#'
+#' # Create a data frame
+#' persons <- PersonFrame(
+#'     id = 1:3,
+#'     name = c("Alice", "Bob", "Charlie"),
+#'     age = c(25, 30, 35),
+#'     is_student = c(TRUE, FALSE, TRUE)
+#' )
+#'
+#' print(persons)
+#'
+#' # Invalid modification (throws error)
+#' try(persons$id <- letters[1:3])
+#'
+#' # Adding a column (throws error if freeze_n_cols is TRUE)
+#' try(persons$yeet <- letters[1:3])
 #' @export
 type.frame <- function(frame, col_types, freeze_n_cols = TRUE, 
                        row_callback = NULL, allow_na = TRUE, 
@@ -76,8 +111,12 @@ type.frame <- function(frame, col_types, freeze_n_cols = TRUE,
 
 #' Handle violations based on the specified action
 #'
-#' @param message The error message
-#' @param action The action to take: "error", "warning", or "silent"
+#' @description
+#' Handles violations by either throwing an error, issuing a warning, or doing nothing, depending on the specified action.
+#'
+#' @param message The error message to be handled.
+#' @param action The action to take: "error", "warning", or "silent".
+
 handle_violation <- function(message, action) {
   switch(action,
          "error" = stop(message, call. = FALSE),
@@ -87,11 +126,14 @@ handle_violation <- function(message, action) {
 
 #' Modify a typed data frame using [ ]
 #'
-#' @param x A typed data frame
-#' @param i Row index
-#' @param j Column index or name
-#' @param value The new value to assign
-#' @return The modified typed data frame
+#' @description
+#' Allows modifying a typed data frame using the [ ] operator, with validation checks.
+#'
+#' @param x A typed data frame.
+#' @param i Row index.
+#' @param j Column index or name.
+#' @param value The new value to assign.
+#' @return The modified typed data frame.
 #' @export
 `[<-.typed_frame` <- function(x, i, j, value) {
   # Check if adding new columns is allowed
@@ -145,10 +187,13 @@ handle_violation <- function(message, action) {
 
 #' Modify a typed data frame using $
 #'
-#' @param x A typed data frame
-#' @param name The name of the column to modify or add
-#' @param value The new value to assign
-#' @return The modified typed data frame
+#' @description
+#' Allows modifying a typed data frame using the $ operator, with validation checks.
+#'
+#' @param x A typed data frame.
+#' @param name The name of the column to modify or add.
+#' @param value The new value to assign.
+#' @return The modified typed data frame.
 #' @export
 `$<-.typed_frame` <- function(x, name, value) {
   # Check if adding new columns is allowed
@@ -198,8 +243,11 @@ handle_violation <- function(message, action) {
 
 #' Print method for typed data frames
 #'
-#' @param x A typed data frame
-#' @param ... Additional arguments passed to print
+#' @description
+#' Provides a custom print method for typed data frames, displaying their properties and validation status.
+#'
+#' @param x A typed data frame.
+#' @param ... Additional arguments passed to print.
 #' @export
 print.typed_frame <- function(x, ...) {
   cat("Typed data frame with the following properties:\n")
@@ -216,6 +264,20 @@ print.typed_frame <- function(x, ...) {
   NextMethod()
 }
 
+#' Combine typed data frames row-wise
+#'
+#' @description
+#' This function combines multiple typed data frames row-wise, ensuring type consistency and applying row validation rules.
+#' It extends the base \code{\link[base]{rbind}} function by adding type checks and row validation based on the specified rules for typed data frames.
+#'
+#' @param ... Typed data frames to combine.
+#' @param deparse.level See \code{\link[base]{rbind}}.
+#' @return The combined typed data frame.
+#' @details
+#' This version of \code{rbind} for \code{typed_frame} performs extra type checking and row validation to ensure consistency and adherence to specified rules. 
+#' Refer to the base \code{rbind} documentation for additional details on combining data frames: \code{\link[base]{rbind}}.
+#'
+#' @export
 rbind.typed_frame <- function(..., deparse.level = 1) {
   dfs <- list(...)
   base_df <- dfs[[1]]
@@ -259,8 +321,11 @@ rbind.typed_frame <- function(..., deparse.level = 1) {
 
 #' Summary method for typed data frames
 #'
-#' @param x A typed data frame
-#' @return Summary information of the typed data frame
+#' @description
+#' Provides a summary of the typed data frame, including validation status.
+#'
+#' @param x A typed data frame.
+#' @return Summary information of the typed data frame.
 #' @export
 summary.typed_frame <- function(x) {
   cat("Typed data frame summary:\n")

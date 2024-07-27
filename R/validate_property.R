@@ -1,3 +1,16 @@
+#' Validate a property against a given type or validation function
+#'
+#' @description
+#' Validates a property to ensure it matches the expected type or satisfies the given validation function.
+#'
+#' @param name The name of the property being validated.
+#' @param value The value of the property.
+#' @param validator The expected type or a custom validation function.
+#' @return NULL if the validation passes, otherwise an error message.
+#' @details
+#' The `validate_property` function checks whether a property value adheres to the specified type or validation function. 
+#' If the property value does not meet the criteria, an error message is returned.
+#'
 validate_property <- function(name, value, validator) {
   if (is.list(validator) && !is.function(validator)) {
     # Multiple allowed types
@@ -46,56 +59,6 @@ validate_property <- function(name, value, validator) {
         invalid_indices <- which(!validation_result)
         return(sprintf("Invalid value(s) for property '%s' at index(es): %s", name, paste(invalid_indices, collapse = ", ")))
       }
-    }
-  } else if (is.character(validator)) {
-    if (!inherits(value, validator)) {
-      return(sprintf("Property '%s' must be of type %s, but got %s", name, validator, class(value)[1]))
-    }
-  } else {
-    return(sprintf("Invalid validator for property '%s'", name))
-  }
-  
-  return(NULL)
-}
-
-#' Validate a property
-#'
-#' @param name The name of the property
-#' @param value The value to validate
-#' @param validator The validator function or specification
-#' @return NULL if valid, otherwise a character string describing the error
-validate_property_old <- function(name, value, validator) {
-  if (inherits(validator, "interface")) {
-    if (!inherits(value, "interface_object") || !identical(attr(value, "properties"), attr(validator, "properties"))) {
-      return(sprintf("Property '%s' must be an object implementing the specified interface", name))
-    }
-  } else if (identical(validator, character) || identical(validator, "character")) {
-    if (!is.character(value)) {
-      return(sprintf("Property '%s' must be a character string", name))
-    }
-  } else if (identical(validator, numeric) || identical(validator, "numeric")) {
-    if (!is.numeric(value)) {
-      return(sprintf("Property '%s' must be a numeric value", name))
-    }
-  } else if (identical(validator, logical) || identical(validator, "logical")) {
-    if (!is.logical(value)) {
-      return(sprintf("Property '%s' must be a logical value", name))
-    }
-  } else if (identical(validator, data.frame) || identical(validator, "data.frame")) {
-    if (!is.data.frame(value)) {
-      return(sprintf("Property '%s' must be a data.frame", name))
-    }
-  } else if (identical(validator, data.table::data.table) || identical(validator, "data.table")) {
-    if (!inherits(value, "data.table")) {
-      return(sprintf("Property '%s' must be a data.table", name))
-    }
-  } else if (identical(validator, matrix) || identical(validator, "matrix")) {
-    if (!is.matrix(value)) {
-      return(sprintf("Property '%s' must be a matrix", name))
-    }
-  } else if (is.function(validator)) {
-    if (!validator(value)) {
-      return(sprintf("Invalid value for property '%s'", name))
     }
   } else if (is.character(validator)) {
     if (!inherits(value, validator)) {

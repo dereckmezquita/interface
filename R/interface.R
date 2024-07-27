@@ -1,9 +1,38 @@
-#' Create an interface
+#' Define an interface
 #'
-#' @param ... Named arguments defining the interface properties and their types
-#' @param validate_on_access Logical, whether to validate on access (default: TRUE)
-#' @param extends List of interfaces that this interface extends
-#' @return A function that creates objects implementing the interface
+#' @description
+#' An interface defines a structure with specified properties and their types or validation functions. 
+#' This is useful for ensuring that objects adhere to a particular format and type constraints.
+#'
+#' @param properties A named list where names are property names and values are their expected types or validation functions.
+#' @return A function to create objects that implement the defined interface.
+#' @details
+#' The `interface` function creates a blueprint for objects, specifying what properties they must have and what types those properties must be. 
+#' When an object is created using this interface, it ensures that the object adheres to these specifications.
+#'
+#' @examples
+#' # Define an interface for a person
+#' Person <- interface(
+#'   name = character,
+#'   age = numeric,
+#'   email = character
+#' )
+#'
+#' # Create an object that implements the Person interface
+#' john <- Person(
+#'   name = "John Doe",
+#'   age = 30,
+#'   email = "john@example.com"
+#' )
+#'
+#' # Access properties
+#' print(john$name)  # [1] "John Doe"
+#'
+#' # Valid assignment
+#' john$age <- c(10, 11)
+#'
+#' # Invalid assignment (throws error)
+#' try(john$age <- "thirty")
 #' @export
 interface <- function(..., validate_on_access = FALSE, extends = list()) {
   properties <- list(...)
