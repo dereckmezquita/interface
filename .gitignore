@@ -1,5 +1,6 @@
 # dev
 *.ignore
+assets/
 
 README.html
 
