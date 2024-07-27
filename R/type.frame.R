@@ -70,7 +70,7 @@ handle_violation <- function(message, action) {
          "silent" = invisible(NULL))
 }
 
-#' Modify a typed data frame
+#' Modify a typed data frame using [ ]
 #'
 #' @param x A typed data frame
 #' @param i Row index
@@ -97,6 +97,48 @@ handle_violation <- function(message, action) {
       if (!is.null(error)) {
         handle_violation(error, attr(x, "on_violation"))
       }
+    }
+  }
+  
+  # Check for NA values
+  if (!attr(x, "allow_na") && any(is.na(x))) {
+    handle_violation("NA values are not allowed", attr(x, "on_violation"))
+  }
+  
+  # Validate rows
+  if (!is.null(attr(x, "row_validator"))) {
+    invalid_rows <- which(!apply(x, 1, attr(x, "row_validator")))
+    if (length(invalid_rows) > 0) {
+      handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), attr(x, "on_violation"))
+    }
+  }
+  
+  return(x)
+}
+
+#' Modify a typed data frame using $
+#'
+#' @param x A typed data frame
+#' @param name The name of the column to modify or add
+#' @param value The new value to assign
+#' @return The modified typed data frame
+#' @export
+`$<-.typed_frame` <- function(x, name, value) {
+  # Check if adding new columns is allowed
+  if (attr(x, "freeze_n_cols") && !(name %in% names(x))) {
+    stop("Adding new columns is not allowed when freeze_n_cols is TRUE")
+  }
+  
+  # Perform the assignment
+  x <- NextMethod()
+  
+  # Re-validate the modified data
+  if (name %in% names(attr(x, "col_types"))) {
+    col_type <- attr(x, "col_types")[[name]]
+    
+    error <- validate_property(name, value, col_type)
+    if (!is.null(error)) {
+      handle_violation(error, attr(x, "on_violation"))
     }
   }
   
