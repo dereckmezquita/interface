@@ -19,17 +19,31 @@ interface <- function(..., validate_on_access = TRUE, extends = list()) {
     values <- list(...)
     obj <- new.env(parent = emptyenv())
     
+
+    errors <- character()
+
     for (name in names(all_properties)) {
       if (!name %in% names(values)) {
-        stop(sprintf("Missing required property: %s", name), call. = FALSE)
+        errors <- c(errors, sprintf("Missing required property: %s", name))
+        next
       }
       
       value <- values[[name]]
       validator <- all_properties[[name]]
       
-      validate_property(name, value, validator)
-      
-      obj[[name]] <- value
+      error <- validate_property(name, value, validator)
+      if (!is.null(error)) {
+        errors <- c(errors, error)
+      } else {
+        obj[[name]] <- value
+      }
+    }
+
+    if (length(errors) > 0) {
+      error_message <- paste("Errors occurred during interface creation:", 
+                             paste(errors, collapse = "\n  - "), 
+                             sep = "\n  - ")
+      stop(error_message, call. = FALSE)
     }
     
     structure(obj,
@@ -50,38 +64,49 @@ interface <- function(..., validate_on_access = TRUE, extends = list()) {
 #' @param name The name of the property
 #' @param value The value to validate
 #' @param validator The validator function or specification
+#' @return NULL if valid, otherwise a character string describing the error
 validate_property <- function(name, value, validator) {
   if (inherits(validator, "interface")) {
     if (!inherits(value, "interface_object") || !identical(attr(value, "properties"), attr(validator, "properties"))) {
-      stop(sprintf("Property '%s' must be an object implementing the specified interface", name), call. = FALSE)
+      return(sprintf("Property '%s' must be an object implementing the specified interface", name))
     }
   } else if (identical(validator, character) || identical(validator, "character")) {
-    if (!is.character(value) || length(value) != 1) {
-      stop(sprintf("Property '%s' must be a single character string", name), call. = FALSE)
+    if (!is.character(value)) {
+      return(sprintf("Property '%s' must be a character string", name))
     }
   } else if (identical(validator, numeric) || identical(validator, "numeric")) {
-    if (!is.numeric(value) || length(value) != 1) {
-      stop(sprintf("Property '%s' must be a single numeric value", name), call. = FALSE)
+    if (!is.numeric(value)) {
+      return(sprintf("Property '%s' must be a numeric value", name))
     }
   } else if (identical(validator, logical) || identical(validator, "logical")) {
     if (!is.logical(value)) {
-      stop(sprintf("Property '%s' must be a logical value", name), call. = FALSE)
+      return(sprintf("Property '%s' must be a logical value", name))
+    }
+  } else if (identical(validator, data.frame) || identical(validator, "data.frame")) {
+    if (!is.data.frame(value)) {
+      return(sprintf("Property '%s' must be a data.frame", name))
+    }
+  } else if (identical(validator, data.table::data.table) || identical(validator, "data.table")) {
+    if (!inherits(value, "data.table")) {
+      return(sprintf("Property '%s' must be a data.table", name))
+    }
+  } else if (identical(validator, matrix) || identical(validator, "matrix")) {
+    if (!is.matrix(value)) {
+      return(sprintf("Property '%s' must be a matrix", name))
     }
   } else if (is.function(validator)) {
-    tryCatch({
-      if (!validator(value)) {
-        stop(sprintf("Invalid value for property '%s'", name), call. = FALSE)
-      }
-    }, error = function(e) {
-      stop(sprintf("Error validating property '%s': %s", name, e$message), call. = FALSE)
-    })
+    if (!validator(value)) {
+      return(sprintf("Invalid value for property '%s'", name))
+    }
   } else if (is.character(validator)) {
     if (!inherits(value, validator)) {
-      stop(sprintf("Property '%s' must be of type %s, but got %s", name, validator, class(value)[1]), call. = FALSE)
+      return(sprintf("Property '%s' must be of type %s, but got %s", name, validator, class(value)[1]))
     }
   } else {
-    stop(sprintf("Invalid validator for property '%s'", name), call. = FALSE)
+    return(sprintf("Invalid validator for property '%s'", name))
   }
+  
+  return(NULL)
 }
 
 #' Get a property from an interface object
@@ -90,6 +115,7 @@ validate_property <- function(name, value, validator) {
 #' @param name The name of the property to get
 #' @export
 `$.interface_object` <- function(x, name) {
+  message("Getting prop; validating on access.")
   if (!(name %in% names(attributes(x)$properties))) {
     stop(sprintf("Property '%s' does not exist", name), call. = FALSE)
   }
@@ -113,9 +139,12 @@ validate_property <- function(name, value, validator) {
   if (!(name %in% names(attributes(x)$properties))) {
     stop(sprintf("Property '%s' does not exist", name), call. = FALSE)
   }
-  
-  validate_property(name, value, attributes(x)$properties[[name]])
-  
+
+  error <- validate_property(name, value, attributes(x)$properties[[name]])
+  if (!is.null(error)) {
+    stop(error, call. = FALSE)
+  }
+
   assign(name, value, envir = x)
   x
 }
