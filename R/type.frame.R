@@ -3,7 +3,7 @@
 #' @param frame The base data structure (e.g., data.frame, data.table)
 #' @param col_types A list of column types and validators
 #' @param freeze_n_cols Logical, whether to freeze the number of columns (default: TRUE)
-#' @param row_validator A function to validate each row (optional)
+#' @param row_callback A function to validate and process each row (optional)
 #' @param allow_na Logical, whether to allow NA values (default: TRUE)
 #' @param on_violation Action to take on violation: "error", "warning", or "silent" (default: "error")
 #' @return A function that creates typed data frames
@@ -15,25 +15,27 @@ type.frame <- function(frame, col_types, freeze_n_cols = TRUE,
   
   creator <- function(...) {
     df <- frame(...)
+    errors <- list()
     
     # Validate column types
     for (col_name in names(col_types)) {
       if (!(col_name %in% names(df))) {
-        stop(sprintf("Required column '%s' is missing", col_name))
-      }
-      
-      col_data <- df[[col_name]]
-      col_type <- col_types[[col_name]]
-      
-      error <- validate_property(col_name, col_data, col_type)
-      if (!is.null(error)) {
-        handle_violation(error, on_violation)
+        errors <- c(errors, sprintf("Required column '%s' is missing", col_name))
+      } else {
+        col_data <- df[[col_name]]
+        col_type <- col_types[[col_name]]
+        
+        error <- validate_property(col_name, col_data, col_type)
+        if (!is.null(error)) {
+          errors <- c(errors, error)
+        }
       }
     }
     
     # Check for NA values
     if (!allow_na && any(is.na(df))) {
-      handle_violation("NA values are not allowed", on_violation)
+      na_cols <- names(df)[apply(df, 2, function(x) any(is.na(x)))]
+      errors <- c(errors, sprintf("NA values found in column(s): %s", paste(na_cols, collapse = ", ")))
     }
     
     # Process rows with callback
@@ -43,12 +45,18 @@ type.frame <- function(frame, col_types, freeze_n_cols = TRUE,
         tryCatch({
           result <- row_callback(row)
           if (!isTRUE(result)) {
-            handle_violation(sprintf("Row %d failed validation: %s", i, as.character(result)), on_violation)
+            errors <- c(errors, sprintf("Row %d failed validation: %s", i, as.character(result)))
           }
         }, error = function(e) {
-          handle_violation(sprintf("Error processing row %d: %s", i, e$message), on_violation)
+          errors <- c(errors, sprintf("Error processing row %d: %s", i, e$message))
         })
       }
+    }
+    
+    # Handle all collected errors
+    if (length(errors) > 0) {
+      error_message <- paste("Validation errors:", paste(errors, collapse = "\n  "), sep = "\n  ")
+      handle_violation(error_message, on_violation)
     }
     
     # Create the typed data frame
