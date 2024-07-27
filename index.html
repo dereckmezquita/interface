@@ -90,30 +90,30 @@
 <span>    email <span class="op">=</span> <span class="st">"john@example.com"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&gt; Object implementing interface:</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;   name: John Doe</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;   age: 30</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;   email: john@example.com</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; Validation on access: Disabled</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># interfaces are lists</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&gt; [1] "John Doe"</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Modify the object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   name: John Doe</span></span>
+<span><span class="co">#&gt;   age: 30</span></span>
+<span><span class="co">#&gt;   email: john@example.com</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span>
+<span></span>
+<span><span class="co"># interfaces are lists</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">name</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "John Doe"</span></span>
+<span></span>
+<span><span class="co"># Modify the object</span></span>
 <span><span class="va">john</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">age</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&gt; [1] 10</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Invalid assignment (throws error)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;-</span> <span class="st">"thirty"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&gt; Error : Property 'age' must be of type numeric</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">age</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 10</span></span>
+<span></span>
+<span><span class="co"># Invalid assignment (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">john</span><span class="op">$</span><span class="va">age</span> <span class="op">&lt;-</span> <span class="st">"thirty"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error : Property 'age' must be of type numeric</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="extending-interfaces-and-nested-interfaces">Extending Interfaces and Nested Interfaces<a class="anchor" aria-label="anchor" href="#extending-interfaces-and-nested-interfaces"></a>
 </h3>
 <p>Create nested and extended interfaces:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define nested interfaces</span></span>
 <span><span class="va">Address</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span></span>
 <span>    street <span class="op">=</span> <span class="va">character</span>,</span>
@@ -153,27 +153,27 @@
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john_student</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#&gt; Object implementing interface:</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt;   student_id: 123456</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt;   scores: Math</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt;    scores: Science</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt;    scores: 95</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt;    scores: 88</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt;   scholarship: &lt;environment: 0x1320acea0&gt;</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt;   street: 123 Main St</span></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt;   city: Small town</span></span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt;   postal_code: 12345</span></span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt;   name: John Doe</span></span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt;   age: 30</span></span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt;   email: john@example.com</span></span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; Validation on access: Disabled</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">john_student</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   student_id: 123456</span></span>
+<span><span class="co">#&gt;   scores: Math</span></span>
+<span><span class="co">#&gt;    scores: Science</span></span>
+<span><span class="co">#&gt;    scores: 95</span></span>
+<span><span class="co">#&gt;    scores: 88</span></span>
+<span><span class="co">#&gt;   scholarship: &lt;environment: 0x1027ae180&gt;</span></span>
+<span><span class="co">#&gt;   street: 123 Main St</span></span>
+<span><span class="co">#&gt;   city: Small town</span></span>
+<span><span class="co">#&gt;   postal_code: 12345</span></span>
+<span><span class="co">#&gt;   name: John Doe</span></span>
+<span><span class="co">#&gt;   age: 30</span></span>
+<span><span class="co">#&gt;   email: john@example.com</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="custom-validation-functions">Custom Validation Functions<a class="anchor" aria-label="anchor" href="#custom-validation-functions"></a>
 </h3>
 <p>Interfaces can have custom validation functions:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">is_valid_email</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"[a-z|0-9]+\\@[a-z|0-9]+\\.[a-z|0-9]+"</span>, <span class="va">x</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -191,28 +191,28 @@
 <span>    age <span class="op">=</span> <span class="fl">25</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valid_user</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">#&gt; Object implementing interface:</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt;   username: john_doe</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;   email: john@example.com</span></span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;   age: 25</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; Validation on access: Disabled</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Invalid implementation (throws error)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valid_user</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   username: john_doe</span></span>
+<span><span class="co">#&gt;   email: john@example.com</span></span>
+<span><span class="co">#&gt;   age: 25</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span>
+<span></span>
+<span><span class="co"># Invalid implementation (throws error)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">UserProfile</span><span class="op">(</span></span>
 <span>    username <span class="op">=</span> <span class="st">"jane_doe"</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"not_an_email"</span>,</span>
 <span>    age <span class="op">=</span> <span class="st">"30"</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co">#&gt; Error : Errors occurred during interface creation:</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt;   - Invalid value(s) for property 'email' at index(es): 1</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt;   - Invalid value(s) for property 'age' at index(es): 1</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error : Errors occurred during interface creation:</span></span>
+<span><span class="co">#&gt;   - Invalid value(s) for property 'email' at index(es): 1</span></span>
+<span><span class="co">#&gt;   - Invalid value(s) for property 'age' at index(es): 1</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="typed-functions">Typed Functions<a class="anchor" aria-label="anchor" href="#typed-functions"></a>
 </h3>
 <p>Define functions with strict type constraints:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">typed_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fun.html">fun</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">numeric</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">numeric</span>,</span>
@@ -222,13 +222,12 @@
 <span>    <span class="op">}</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] 3</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">typed_fun</span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Invalid call</span></span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co">#&gt; Error : Property 'x' must be of type numeric</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] 3</span></span>
+<span><span class="co">#&gt; [1] 3</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">typed_fun</span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Invalid call</span></span>
+<span><span class="co">#&gt; Error : Property 'x' must be of type numeric</span></span></code></pre></div>
 <p>Functions with multiple possible return types:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">typed_fun2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fun.html">fun</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">numeric</span>, <span class="va">character</span><span class="op">)</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">numeric</span>,</span>
@@ -242,17 +241,16 @@
 <span>    <span class="op">}</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun2</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] 3</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun2</span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] "a 2"</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co">#&gt; [1] "a 2"</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun2</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] 3</span></span>
+<span><span class="co">#&gt; [1] 3</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun2</span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] "a 2"</span></span>
+<span><span class="co">#&gt; [1] "a 2"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="typed-data-frames-and-data-tables">Typed Data Frames and Data Tables<a class="anchor" aria-label="anchor" href="#typed-data-frames-and-data-tables"></a>
 </h3>
 <p>Create data frames with column type constraints and row validation:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
 <span>    frame <span class="op">=</span> <span class="va">data.frame</span>, </span>
 <span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -271,34 +269,34 @@
 <span>    is_student <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">persons</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co">#&gt; Typed data frame with the following properties:</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&gt; Number of rows: 3</span></span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co">#&gt; Number of columns: 4</span></span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&gt; Column types:</span></span>
-<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co">#&gt;   id: function (length = 0L) </span></span>
-<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
-<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="co">#&gt;   name: function (length = 0L) </span></span>
-<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
-<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="co">#&gt;   age: function (length = 0L) </span></span>
-<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
-<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
-<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
-<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a><span class="co">#&gt; Freeze columns: Yes</span></span>
-<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="co">#&gt; Allow NA: Yes</span></span>
-<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a><span class="co">#&gt; On violation: error</span></span>
-<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a><span class="co">#&gt; Data:</span></span>
-<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a><span class="co">#&gt;   id    name age is_student</span></span>
-<span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a><span class="co">#&gt; 1  1   Alice  25       TRUE</span></span>
-<span id="cb26-20"><a href="#cb26-20" tabindex="-1"></a><span class="co">#&gt; 2  2     Bob  30      FALSE</span></span>
-<span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a><span class="co">#&gt; 3  3 Charlie  35       TRUE</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Invalid modification (throws error)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co">#&gt; Error : Property 'id' must be of type integer</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">persons</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Typed data frame with the following properties:</span></span>
+<span><span class="co">#&gt; Number of rows: 3</span></span>
+<span><span class="co">#&gt; Number of columns: 4</span></span>
+<span><span class="co">#&gt; Column types:</span></span>
+<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
+<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
+<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
+<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
+<span><span class="co">#&gt; Freeze columns: Yes</span></span>
+<span><span class="co">#&gt; Allow NA: Yes</span></span>
+<span><span class="co">#&gt; On violation: error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Data:</span></span>
+<span><span class="co">#&gt;   id    name age is_student</span></span>
+<span><span class="co">#&gt; 1  1   Alice  25       TRUE</span></span>
+<span><span class="co">#&gt; 2  2     Bob  30      FALSE</span></span>
+<span><span class="co">#&gt; 3  3 Charlie  35       TRUE</span></span>
+<span></span>
+<span><span class="co"># Invalid modification (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error : Property 'id' must be of type integer</span></span></code></pre></div>
 <p>Additional options for data frame validation:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
 <span>    frame <span class="op">=</span> <span class="va">data.frame</span>,</span>
 <span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -330,64 +328,63 @@
 <span>    email <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alice@test.com"</span>, <span class="st">"bob_no_valid@test.com"</span>, <span class="st">"charlie@example.com"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co">#&gt; Typed data frame with the following properties:</span></span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="co">#&gt; Number of rows: 3</span></span>
-<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="co">#&gt; Number of columns: 5</span></span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="co">#&gt; Column types:</span></span>
-<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="co">#&gt;   id: function (length = 0L) </span></span>
-<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
-<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a><span class="co">#&gt;   name: function (length = 0L) </span></span>
-<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
-<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a><span class="co">#&gt;   age: function (length = 0L) </span></span>
-<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
-<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
-<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
-<span id="cb30-13"><a href="#cb30-13" tabindex="-1"></a><span class="co">#&gt;   email: function (x) </span></span>
-<span id="cb30-14"><a href="#cb30-14" tabindex="-1"></a><span class="co">#&gt;    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", </span></span>
-<span id="cb30-15"><a href="#cb30-15" tabindex="-1"></a><span class="co">#&gt;    email:     x))</span></span>
-<span id="cb30-16"><a href="#cb30-16" tabindex="-1"></a><span class="co">#&gt; Freeze columns: No</span></span>
-<span id="cb30-17"><a href="#cb30-17" tabindex="-1"></a><span class="co">#&gt; Allow NA: No</span></span>
-<span id="cb30-18"><a href="#cb30-18" tabindex="-1"></a><span class="co">#&gt; On violation: error</span></span>
-<span id="cb30-19"><a href="#cb30-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb30-20"><a href="#cb30-20" tabindex="-1"></a><span class="co">#&gt; Data:</span></span>
-<span id="cb30-21"><a href="#cb30-21" tabindex="-1"></a><span class="co">#&gt;   id    name age is_student                 email</span></span>
-<span id="cb30-22"><a href="#cb30-22" tabindex="-1"></a><span class="co">#&gt; 1  1   Alice  25       TRUE        alice@test.com</span></span>
-<span id="cb30-23"><a href="#cb30-23" tabindex="-1"></a><span class="co">#&gt; 2  2     Bob  35      FALSE bob_no_valid@test.com</span></span>
-<span id="cb30-24"><a href="#cb30-24" tabindex="-1"></a><span class="co">#&gt; 3  3 Charlie  35       TRUE   charlie@example.com</span></span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb32"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co">#&gt; Typed data frame summary:</span></span>
-<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="co">#&gt; Number of rows: 3</span></span>
-<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="co">#&gt; Number of columns: 5</span></span>
-<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co">#&gt; Column types:</span></span>
-<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="co">#&gt;   id: function (length = 0L) </span></span>
-<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
-<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="co">#&gt;   name: function (length = 0L) </span></span>
-<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
-<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a><span class="co">#&gt;   age: function (length = 0L) </span></span>
-<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
-<span id="cb32-11"><a href="#cb32-11" tabindex="-1"></a><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
-<span id="cb32-12"><a href="#cb32-12" tabindex="-1"></a><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
-<span id="cb32-13"><a href="#cb32-13" tabindex="-1"></a><span class="co">#&gt;   email: function (x) </span></span>
-<span id="cb32-14"><a href="#cb32-14" tabindex="-1"></a><span class="co">#&gt;    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", </span></span>
-<span id="cb32-15"><a href="#cb32-15" tabindex="-1"></a><span class="co">#&gt;    email:     x))</span></span>
-<span id="cb32-16"><a href="#cb32-16" tabindex="-1"></a><span class="co">#&gt; Freeze columns: No</span></span>
-<span id="cb32-17"><a href="#cb32-17" tabindex="-1"></a><span class="co">#&gt; Allow NA: No</span></span>
-<span id="cb32-18"><a href="#cb32-18" tabindex="-1"></a><span class="co">#&gt; On violation: error</span></span>
-<span id="cb32-19"><a href="#cb32-19" tabindex="-1"></a><span class="co">#&gt; Validation status:</span></span>
-<span id="cb32-20"><a href="#cb32-20" tabindex="-1"></a><span class="co">#&gt;   All rows passed validation.</span></span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Invalid row addition (throws error)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Typed data frame with the following properties:</span></span>
+<span><span class="co">#&gt; Number of rows: 3</span></span>
+<span><span class="co">#&gt; Number of columns: 5</span></span>
+<span><span class="co">#&gt; Column types:</span></span>
+<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
+<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
+<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
+<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
+<span><span class="co">#&gt;   email: function (x) </span></span>
+<span><span class="co">#&gt;    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", </span></span>
+<span><span class="co">#&gt;    email:     x))</span></span>
+<span><span class="co">#&gt; Freeze columns: No</span></span>
+<span><span class="co">#&gt; Allow NA: No</span></span>
+<span><span class="co">#&gt; On violation: error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Data:</span></span>
+<span><span class="co">#&gt;   id    name age is_student                 email</span></span>
+<span><span class="co">#&gt; 1  1   Alice  25       TRUE        alice@test.com</span></span>
+<span><span class="co">#&gt; 2  2     Bob  35      FALSE bob_no_valid@test.com</span></span>
+<span><span class="co">#&gt; 3  3 Charlie  35       TRUE   charlie@example.com</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Typed data frame summary:</span></span>
+<span><span class="co">#&gt; Number of rows: 3</span></span>
+<span><span class="co">#&gt; Number of columns: 5</span></span>
+<span><span class="co">#&gt; Column types:</span></span>
+<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
+<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
+<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
+<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
+<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
+<span><span class="co">#&gt;   email: function (x) </span></span>
+<span><span class="co">#&gt;    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", </span></span>
+<span><span class="co">#&gt;    email:     x))</span></span>
+<span><span class="co">#&gt; Freeze columns: No</span></span>
+<span><span class="co">#&gt; Allow NA: No</span></span>
+<span><span class="co">#&gt; On violation: error</span></span>
+<span><span class="co">#&gt; Validation status:</span></span>
+<span><span class="co">#&gt;   All rows passed validation.</span></span>
+<span></span>
+<span><span class="co"># Invalid row addition (throws error)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>    name <span class="op">=</span> <span class="st">"David"</span>,</span>
 <span>    age <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>    is_student <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"d@test.com"</span></span>
-<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb34"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co">#&gt; Error in rbind(deparse.level, ...) : </span></span>
-<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="co">#&gt;   Row 1 failed validation: Age must be less than 40 (got 50)</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in rbind(deparse.level, ...) : </span></span>
+<span><span class="co">#&gt;   Row 1 failed validation: Age must be less than 40 (got 50)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
