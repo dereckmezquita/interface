@@ -256,3 +256,43 @@ rbind.typed_frame <- function(..., deparse.level = 1) {
   
   return(result)
 }
+
+#' Summary method for typed data frames
+#'
+#' @param x A typed data frame
+#' @return Summary information of the typed data frame
+#' @export
+summary.typed_frame <- function(x) {
+  cat("Typed data frame summary:\n")
+  cat(sprintf("Number of rows: %d\n", nrow(x)))
+  cat(sprintf("Number of columns: %d\n", ncol(x)))
+  cat("Column types:\n")
+  for (name in names(attr(x, "col_types"))) {
+    cat(sprintf("  %s: %s\n", name, format(attr(x, "col_types")[[name]])))
+  }
+  cat(sprintf("Freeze columns: %s\n", ifelse(attr(x, "freeze_n_cols"), "Yes", "No")))
+  cat(sprintf("Allow NA: %s\n", ifelse(attr(x, "allow_na"), "Yes", "No")))
+  cat(sprintf("On violation: %s\n", attr(x, "on_violation")))
+
+  cat("Validation status:\n")
+  if (!is.null(attr(x, "row_callback"))) {
+    errors <- list()
+    for (i in seq_len(nrow(x))) {
+      row <- x[i, , drop = FALSE]
+      result <- attr(x, "row_callback")(row)
+      if (!isTRUE(result)) {
+        errors <- c(errors, sprintf("Row %d failed validation: %s", i, as.character(result)))
+      }
+    }
+    if (length(errors) > 0) {
+      cat("  Validation errors:\n")
+      for (error in errors) {
+        cat(sprintf("    %s\n", error))
+      }
+    } else {
+      cat("  All rows passed validation.\n")
+    }
+  } else {
+    cat("  No row callback defined for validation.\n")
+  }
+}
