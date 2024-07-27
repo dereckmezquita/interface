@@ -50,35 +50,25 @@ john <- Person(
 )
 
 print(john)
-```
+#> Object implementing interface:
+#>   name: John Doe
+#>   age: 30
+#>   email: john@example.com
+#> Validation on access: Disabled
 
-    #> Object implementing interface:
-    #>   name: John Doe
-    #>   age: 30
-    #>   email: john@example.com
-    #> Validation on access: Disabled
-
-``` r
 # interfaces are lists
 print(john$name)
-```
+#> [1] "John Doe"
 
-    #> [1] "John Doe"
-
-``` r
 # Modify the object
 john$age <- 10
 print(john$age)
-```
+#> [1] 10
 
-    #> [1] 10
-
-``` r
 # Invalid assignment (throws error)
 try(john$age <- "thirty")
+#> Error : Property 'age' must be of type numeric
 ```
-
-    #> Error : Property 'age' must be of type numeric
 
 ### Extending Interfaces and Nested Interfaces
 
@@ -125,22 +115,21 @@ john_student <- Student(
 )
 
 print(john_student)
+#> Object implementing interface:
+#>   student_id: 123456
+#>   scores: Math
+#>    scores: Science
+#>    scores: 95
+#>    scores: 88
+#>   scholarship: <environment: 0x1027ae180>
+#>   street: 123 Main St
+#>   city: Small town
+#>   postal_code: 12345
+#>   name: John Doe
+#>   age: 30
+#>   email: john@example.com
+#> Validation on access: Disabled
 ```
-
-    #> Object implementing interface:
-    #>   student_id: 123456
-    #>   scores: Math
-    #>    scores: Science
-    #>    scores: 95
-    #>    scores: 88
-    #>   scholarship: <environment: 0x1320acea0>
-    #>   street: 123 Main St
-    #>   city: Small town
-    #>   postal_code: 12345
-    #>   name: John Doe
-    #>   age: 30
-    #>   email: john@example.com
-    #> Validation on access: Disabled
 
 ### Custom Validation Functions
 
@@ -165,26 +154,22 @@ valid_user <- UserProfile(
 )
 
 print(valid_user)
-```
+#> Object implementing interface:
+#>   username: john_doe
+#>   email: john@example.com
+#>   age: 25
+#> Validation on access: Disabled
 
-    #> Object implementing interface:
-    #>   username: john_doe
-    #>   email: john@example.com
-    #>   age: 25
-    #> Validation on access: Disabled
-
-``` r
 # Invalid implementation (throws error)
 try(UserProfile(
     username = "jane_doe",
     email = "not_an_email",
     age = "30"
 ))
+#> Error : Errors occurred during interface creation:
+#>   - Invalid value(s) for property 'email' at index(es): 1
+#>   - Invalid value(s) for property 'age' at index(es): 1
 ```
-
-    #> Error : Errors occurred during interface creation:
-    #>   - Invalid value(s) for property 'email' at index(es): 1
-    #>   - Invalid value(s) for property 'age' at index(es): 1
 
 ### Typed Functions
 
@@ -201,15 +186,10 @@ typed_fun <- fun(
 )
 
 print(typed_fun(1, 2))  # [1] 3
-```
-
-    #> [1] 3
-
-``` r
+#> [1] 3
 try(typed_fun("a", 2))  # Invalid call
+#> Error : Property 'x' must be of type numeric
 ```
-
-    #> Error : Property 'x' must be of type numeric
 
 Functions with multiple possible return types:
 
@@ -228,15 +208,10 @@ typed_fun2 <- fun(
 )
 
 print(typed_fun2(1, 2))  # [1] 3
-```
-
-    #> [1] 3
-
-``` r
+#> [1] 3
 print(typed_fun2("a", 2))  # [1] "a 2"
+#> [1] "a 2"
 ```
-
-    #> [1] "a 2"
 
 ### Typed Data Frames and Data Tables
 
@@ -262,36 +237,32 @@ persons <- PersonFrame(
 )
 
 print(persons)
-```
+#> Typed data frame with the following properties:
+#> Number of rows: 3
+#> Number of columns: 4
+#> Column types:
+#>   id: function (length = 0L) 
+#>    id: .Internal(vector("integer", length))
+#>   name: function (length = 0L) 
+#>    name: .Internal(vector("character", length))
+#>   age: function (length = 0L) 
+#>    age: .Internal(vector("double", length))
+#>   is_student: function (length = 0L) 
+#>    is_student: .Internal(vector("logical", length))
+#> Freeze columns: Yes
+#> Allow NA: Yes
+#> On violation: error
+#> 
+#> Data:
+#>   id    name age is_student
+#> 1  1   Alice  25       TRUE
+#> 2  2     Bob  30      FALSE
+#> 3  3 Charlie  35       TRUE
 
-    #> Typed data frame with the following properties:
-    #> Number of rows: 3
-    #> Number of columns: 4
-    #> Column types:
-    #>   id: function (length = 0L) 
-    #>    id: .Internal(vector("integer", length))
-    #>   name: function (length = 0L) 
-    #>    name: .Internal(vector("character", length))
-    #>   age: function (length = 0L) 
-    #>    age: .Internal(vector("double", length))
-    #>   is_student: function (length = 0L) 
-    #>    is_student: .Internal(vector("logical", length))
-    #> Freeze columns: Yes
-    #> Allow NA: Yes
-    #> On violation: error
-    #> 
-    #> Data:
-    #>   id    name age is_student
-    #> 1  1   Alice  25       TRUE
-    #> 2  2     Bob  30      FALSE
-    #> 3  3 Charlie  35       TRUE
-
-``` r
 # Invalid modification (throws error)
 try(persons$id <- letters[1:3])
+#> Error : Property 'id' must be of type integer
 ```
-
-    #> Error : Property 'id' must be of type integer
 
 Additional options for data frame validation:
 
@@ -328,59 +299,52 @@ df <- PersonFrame(
 )
 
 print(df)
-```
-
-    #> Typed data frame with the following properties:
-    #> Number of rows: 3
-    #> Number of columns: 5
-    #> Column types:
-    #>   id: function (length = 0L) 
-    #>    id: .Internal(vector("integer", length))
-    #>   name: function (length = 0L) 
-    #>    name: .Internal(vector("character", length))
-    #>   age: function (length = 0L) 
-    #>    age: .Internal(vector("double", length))
-    #>   is_student: function (length = 0L) 
-    #>    is_student: .Internal(vector("logical", length))
-    #>   email: function (x) 
-    #>    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
-    #>    email:     x))
-    #> Freeze columns: No
-    #> Allow NA: No
-    #> On violation: error
-    #> 
-    #> Data:
-    #>   id    name age is_student                 email
-    #> 1  1   Alice  25       TRUE        alice@test.com
-    #> 2  2     Bob  35      FALSE bob_no_valid@test.com
-    #> 3  3 Charlie  35       TRUE   charlie@example.com
-
-``` r
+#> Typed data frame with the following properties:
+#> Number of rows: 3
+#> Number of columns: 5
+#> Column types:
+#>   id: function (length = 0L) 
+#>    id: .Internal(vector("integer", length))
+#>   name: function (length = 0L) 
+#>    name: .Internal(vector("character", length))
+#>   age: function (length = 0L) 
+#>    age: .Internal(vector("double", length))
+#>   is_student: function (length = 0L) 
+#>    is_student: .Internal(vector("logical", length))
+#>   email: function (x) 
+#>    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
+#>    email:     x))
+#> Freeze columns: No
+#> Allow NA: No
+#> On violation: error
+#> 
+#> Data:
+#>   id    name age is_student                 email
+#> 1  1   Alice  25       TRUE        alice@test.com
+#> 2  2     Bob  35      FALSE bob_no_valid@test.com
+#> 3  3 Charlie  35       TRUE   charlie@example.com
 summary(df)
-```
+#> Typed data frame summary:
+#> Number of rows: 3
+#> Number of columns: 5
+#> Column types:
+#>   id: function (length = 0L) 
+#>    id: .Internal(vector("integer", length))
+#>   name: function (length = 0L) 
+#>    name: .Internal(vector("character", length))
+#>   age: function (length = 0L) 
+#>    age: .Internal(vector("double", length))
+#>   is_student: function (length = 0L) 
+#>    is_student: .Internal(vector("logical", length))
+#>   email: function (x) 
+#>    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
+#>    email:     x))
+#> Freeze columns: No
+#> Allow NA: No
+#> On violation: error
+#> Validation status:
+#>   All rows passed validation.
 
-    #> Typed data frame summary:
-    #> Number of rows: 3
-    #> Number of columns: 5
-    #> Column types:
-    #>   id: function (length = 0L) 
-    #>    id: .Internal(vector("integer", length))
-    #>   name: function (length = 0L) 
-    #>    name: .Internal(vector("character", length))
-    #>   age: function (length = 0L) 
-    #>    age: .Internal(vector("double", length))
-    #>   is_student: function (length = 0L) 
-    #>    is_student: .Internal(vector("logical", length))
-    #>   email: function (x) 
-    #>    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
-    #>    email:     x))
-    #> Freeze columns: No
-    #> Allow NA: No
-    #> On violation: error
-    #> Validation status:
-    #>   All rows passed validation.
-
-``` r
 # Invalid row addition (throws error)
 try(rbind(df, data.frame(
     id = 4,
@@ -389,10 +353,9 @@ try(rbind(df, data.frame(
     is_student = TRUE,
     email = "d@test.com"
 )))
+#> Error in rbind(deparse.level, ...) : 
+#>   Row 1 failed validation: Age must be less than 40 (got 50)
 ```
-
-    #> Error in rbind(deparse.level, ...) : 
-    #>   Row 1 failed validation: Age must be less than 40 (got 50)
 
 ## Conclusion
 
