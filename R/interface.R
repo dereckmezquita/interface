@@ -115,13 +115,12 @@ validate_property <- function(name, value, validator) {
 #' @param name The name of the property to get
 #' @export
 `$.interface_object` <- function(x, name) {
-  message("Getting prop; validating on access.")
   if (!(name %in% names(attributes(x)$properties))) {
     stop(sprintf("Property '%s' does not exist", name), call. = FALSE)
   }
   
   value <- get(name, envir = x, inherits = FALSE)
-  
+
   if (attr(x, "validate_on_access")) {
     validate_property(name, value, attributes(x)$properties[[name]])
   }
