@@ -1,34 +1,25 @@
-# Define the S3 class constructor
-MyS3Class <- function(value) {
-  structure(list(value = value), class = "MyS3Class")
-}
-
-# Create an active binding function
-create_active_binding <- function(name, value) {
-  # Remove existing binding if it exists
-  if (exists(name, .GlobalEnv)) {
-    rm(list = name, envir = .GlobalEnv)
-  }
-  
+# Define the S3 class constructor with active binding built-in
+MyS3Class <- function(name, value) {
+  e <- new.env()
+  e$value <- value
   makeActiveBinding(
     name,
     function(v) {
       if (missing(v)) {
-        return(value$value)
+        return(e$value)
       } else {
         cat("hello\n")
-        value$value <<- v
+        if (v == 29) stop("Yeet")
+        e$value <<- v
       }
     },
     .GlobalEnv
   )
+  assign(name, e$value, envir = .GlobalEnv)
 }
 
 # Create an object of MyS3Class
-obj <- MyS3Class(10)
-
-# Create an active binding for the object
-create_active_binding("obj", obj)
+MyS3Class("obj", 10)
 
 # Access the value
 print(obj)  # Should print 10
