@@ -21,6 +21,12 @@ jobs:
         with:
           extra-packages: local::. # Necessary to avoid object usage linter errors.
 
+      - name: Restore renv environment
+        shell: Rscript {0}
+        run: |
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore()
+
       - name: R CMD check
         if: always()
         uses: r-lib/actions/check-r-package@v2
