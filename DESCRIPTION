@@ -22,4 +22,5 @@ Suggests:
     rmarkdown,
     box,
     rcmdcheck,
-    lintr
+    lintr,
+    data.table
