@@ -10,12 +10,12 @@ authors:
 navbar:
   structure:
     left: [home, reference, articles, donate]
-    right: [github, youtube, search, website]
+    right: [github, youtube, search, website, website2]
   components:
     articles:
       text: Articles
       menu:
-      - text: "Getting Started with interface"
+      - text: "Introduction to interface"
         href: articles/introduction.html
     donate:
       text: Donate
@@ -31,4 +31,8 @@ navbar:
     website:
       text: derecksprojects.com
       href: https://derecksprojects.com
+      target: _blank
+    website2:
+      text: derecksnotes.com
+      href: https://derecksnotes.com
       target: _blank

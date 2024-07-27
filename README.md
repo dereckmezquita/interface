@@ -121,7 +121,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x1027ae180>
+#>   scholarship: <environment: 0x11e6348d0>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345

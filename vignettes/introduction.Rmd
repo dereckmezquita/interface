@@ -2,7 +2,7 @@
 title: "Introduction to interface"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with interface}
+  %\VignetteIndexEntry{Introduction to interface}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
