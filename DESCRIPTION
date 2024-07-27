@@ -1,7 +1,7 @@
 Package: interface
 Type: Package
 Title: Typings and interfaces for data validation and safety in R
-Version: 0.0.2
+Version: 0.0.21
 Authors@R: 
     person(given = "Dereck",
            family = "Mezquita",
