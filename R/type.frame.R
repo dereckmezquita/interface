@@ -43,70 +43,75 @@
 #' # Adding a column (throws error if freeze_n_cols is TRUE)
 #' try(persons$yeet <- letters[1:3])
 #' @export
-type.frame <- function(frame, col_types, freeze_n_cols = TRUE, 
-                       row_callback = NULL, allow_na = TRUE, 
-                       on_violation = c("error", "warning", "silent")) {
-  on_violation <- match.arg(on_violation)
-  
-  creator <- function(...) {
-    df <- frame(...)
-    errors <- list()
-    
-    # Validate column types
-    for (col_name in names(col_types)) {
-      if (!(col_name %in% names(df))) {
-        errors <- c(errors, sprintf("Required column '%s' is missing", col_name))
-      } else {
-        col_data <- df[[col_name]]
-        col_type <- col_types[[col_name]]
-        
-        error <- validate_property(col_name, col_data, col_type)
-        if (!is.null(error)) {
-          errors <- c(errors, error)
+type.frame <- function(
+    frame,
+    col_types,
+    freeze_n_cols = TRUE,
+    row_callback = NULL,
+    allow_na = TRUE,
+    on_violation = c("error", "warning", "silent")
+) {
+    on_violation <- match.arg(on_violation)
+
+    creator <- function(...) {
+        df <- frame(...)
+        errors <- list()
+
+        # Validate column types
+        for (col_name in names(col_types)) {
+            if (!(col_name %in% names(df))) {
+                errors <- c(errors, sprintf("Required column '%s' is missing", col_name))
+            } else {
+                col_data <- df[[col_name]]
+                col_type <- col_types[[col_name]]
+
+                error <- validate_property(col_name, col_data, col_type)
+                if (!is.null(error)) {
+                    errors <- c(errors, error)
+                }
+            }
         }
-      }
+
+        # Check for NA values
+        if (!allow_na && any(is.na(df))) {
+            na_cols <- names(df)[apply(df, 2, function(x) any(is.na(x)))]
+            errors <- c(errors, sprintf("NA values found in column(s): %s", paste(na_cols, collapse = ", ")))
+        }
+
+        # Process rows with callback
+        if (!is.null(row_callback)) {
+            for (i in seq_len(nrow(df))) {
+                row <- df[i, , drop = FALSE]
+                tryCatch({
+                    result <- row_callback(row)
+                    if (!isTRUE(result)) {
+                        errors <- c(errors, sprintf("Row %d failed validation: %s", i, as.character(result)))
+                    }
+                }, error = function(e) {
+                    errors <- c(errors, sprintf("Error processing row %d: %s", i, e$message))
+                })
+            }
+        }
+
+        # Handle all collected errors
+        if (length(errors) > 0) {
+            error_message <- paste("Validation errors:", paste(errors, collapse = "\n  "), sep = "\n  ")
+            handle_violation(error_message, on_violation)
+        }
+
+        # Create the typed data frame
+        return(structure(
+            df,
+            class = c("typed_frame", class(df)),
+            col_types = col_types,
+            freeze_n_cols = freeze_n_cols,
+            row_callback = row_callback,
+            allow_na = allow_na,
+            on_violation = on_violation
+        ))
     }
-    
-    # Check for NA values
-    if (!allow_na && any(is.na(df))) {
-      na_cols <- names(df)[apply(df, 2, function(x) any(is.na(x)))]
-      errors <- c(errors, sprintf("NA values found in column(s): %s", paste(na_cols, collapse = ", ")))
-    }
-    
-    # Process rows with callback
-    if (!is.null(row_callback)) {
-      for (i in seq_len(nrow(df))) {
-        row <- df[i, , drop = FALSE]
-        tryCatch({
-          result <- row_callback(row)
-          if (!isTRUE(result)) {
-            errors <- c(errors, sprintf("Row %d failed validation: %s", i, as.character(result)))
-          }
-        }, error = function(e) {
-          errors <- c(errors, sprintf("Error processing row %d: %s", i, e$message))
-        })
-      }
-    }
-    
-    # Handle all collected errors
-    if (length(errors) > 0) {
-      error_message <- paste("Validation errors:", paste(errors, collapse = "\n  "), sep = "\n  ")
-      handle_violation(error_message, on_violation)
-    }
-    
-    # Create the typed data frame
-    typed_df <- structure(df,
-                          class = c("typed_frame", class(df)),
-                          col_types = col_types,
-                          freeze_n_cols = freeze_n_cols,
-                          row_callback = row_callback,
-                          allow_na = allow_na,
-                          on_violation = on_violation)
-    
-    return(typed_df)
-  }
-  
-  return(creator)
+
+    return(creator)
 }
 
 #' Handle violations based on the specified action
@@ -116,12 +121,12 @@ type.frame <- function(frame, col_types, freeze_n_cols = TRUE,
 #'
 #' @param message The error message to be handled.
 #' @param action The action to take: "error", "warning", or "silent".
-
 handle_violation <- function(message, action) {
-  switch(action,
-         "error" = stop(message, call. = FALSE),
-         "warning" = warning(message, call. = FALSE),
-         "silent" = invisible(NULL))
+    switch(action,
+        "error" = stop(message, call. = FALSE),
+        "warning" = warning(message, call. = FALSE),
+        "silent" = invisible(NULL)
+    )
 }
 
 #' Modify a typed data frame using [ ]
@@ -136,53 +141,53 @@ handle_violation <- function(message, action) {
 #' @return The modified typed data frame.
 #' @export
 `[<-.typed_frame` <- function(x, i, j, value) {
-  # Check if adding new columns is allowed
-  if (attr(x, "freeze_n_cols") && !all(j %in% names(x))) {
-    stop("Adding new columns is not allowed when freeze_n_cols is TRUE")
-  }
-  
-  # Perform the assignment
-  x <- NextMethod()
-  
-  # Re-validate the modified data
-  for (col_name in names(attr(x, "col_types"))) {
-    if (col_name %in% j) {
-      col_data <- x[[col_name]]
-      col_type <- attr(x, "col_types")[[col_name]]
-      
-      error <- validate_property(col_name, col_data, col_type)
-      if (!is.null(error)) {
-        handle_violation(error, attr(x, "on_violation"))
-      }
+    # Check if adding new columns is allowed
+    if (attr(x, "freeze_n_cols") && !all(j %in% names(x))) {
+        stop("Adding new columns is not allowed when freeze_n_cols is TRUE")
     }
-  }
-  
-  # Check for NA values
-  if (!attr(x, "allow_na") && any(is.na(x))) {
-    handle_violation("NA values are not allowed", attr(x, "on_violation"))
-  }
-  
-  # Validate rows
-  if (!is.null(attr(x, "row_validator"))) {
-    invalid_rows <- which(!apply(x, 1, attr(x, "row_validator")))
-    if (length(invalid_rows) > 0) {
-      handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), attr(x, "on_violation"))
-    }
-  }
 
-  # Process new or modified rows with callback
-  if (!is.null(attr(x, "row_callback"))) {
-    affected_rows <- unique(i)
-    for (row_index in affected_rows) {
-      row <- x[row_index, , drop = FALSE]
-      result <- attr(x, "row_callback")(row)
-      if (!isTRUE(result)) {
-        handle_violation(sprintf("Row %d failed validation: %s", row_index, as.character(result)), attr(x, "on_violation"))
-      }
+    # Perform the assignment
+    x <- NextMethod()
+
+    # Re-validate the modified data
+    for (col_name in names(attr(x, "col_types"))) {
+        if (col_name %in% j) {
+            col_data <- x[[col_name]]
+            col_type <- attr(x, "col_types")[[col_name]]
+
+            error <- validate_property(col_name, col_data, col_type)
+            if (!is.null(error)) {
+                handle_violation(error, attr(x, "on_violation"))
+            }
+        }
     }
-  }
-  
-  return(x)
+
+    # Check for NA values
+    if (!attr(x, "allow_na") && any(is.na(x))) {
+        handle_violation("NA values are not allowed", attr(x, "on_violation"))
+    }
+
+    # Validate rows
+    if (!is.null(attr(x, "row_validator"))) {
+        invalid_rows <- which(!apply(x, 1, attr(x, "row_validator")))
+        if (length(invalid_rows) > 0) {
+            handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), attr(x, "on_violation"))
+        }
+    }
+
+    # Process new or modified rows with callback
+    if (!is.null(attr(x, "row_callback"))) {
+        affected_rows <- unique(i)
+        for (row_index in affected_rows) {
+            row <- x[row_index, , drop = FALSE]
+            result <- attr(x, "row_callback")(row)
+            if (!isTRUE(result)) {
+                handle_violation(sprintf("Row %d failed validation: %s", row_index, as.character(result)), attr(x, "on_violation"))
+            }
+        }
+    }
+    
+    return(x)
 }
 
 #' Modify a typed data frame using $
@@ -196,49 +201,51 @@ handle_violation <- function(message, action) {
 #' @return The modified typed data frame.
 #' @export
 `$<-.typed_frame` <- function(x, name, value) {
-  # Check if adding new columns is allowed
-  if (attr(x, "freeze_n_cols") && !(name %in% names(x))) {
-    stop("Adding new columns is not allowed when freeze_n_cols is TRUE")
-  }
-  
-  # Perform the assignment
-  x <- NextMethod()
-  
-  # Re-validate the modified data
-  if (name %in% names(attr(x, "col_types"))) {
-    col_type <- attr(x, "col_types")[[name]]
-    
-    error <- validate_property(name, value, col_type)
-    if (!is.null(error)) {
-      handle_violation(error, attr(x, "on_violation"))
+    # Check if adding new columns is allowed
+    if (attr(x, "freeze_n_cols") && !(name %in% names(x))) {
+        stop("Adding new columns is not allowed when freeze_n_cols is TRUE")
     }
-  }
-  
-  # Check for NA values
-  if (!attr(x, "allow_na") && any(is.na(x))) {
-    handle_violation("NA values are not allowed", attr(x, "on_violation"))
-  }
-  
-  # Validate rows
-  if (!is.null(attr(x, "row_validator"))) {
-    invalid_rows <- which(!apply(x, 1, attr(x, "row_validator")))
-    if (length(invalid_rows) > 0) {
-      handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), attr(x, "on_violation"))
-    }
-  }
 
-  # Process all rows with callback if column modification occurs
-  if (!is.null(attr(x, "row_callback"))) {
-    for (i in seq_len(nrow(x))) {
-      row <- x[i, , drop = FALSE]
-      result <- attr(x, "row_callback")(row)
-      if (!isTRUE(result)) {
-        handle_violation(sprintf("Row %d failed validation after column modification: %s", i, as.character(result)), attr(x, "on_violation"))
-      }
+    # Perform the assignment
+    x <- NextMethod()
+
+    # Re-validate the modified data
+    if (name %in% names(attr(x, "col_types"))) {
+        col_type <- attr(x, "col_types")[[name]]
+
+        error <- validate_property(name, value, col_type)
+        if (!is.null(error)) {
+            handle_violation(error, attr(x, "on_violation"))
+        }
     }
-  }
-  
-  return(x)
+
+    # Check for NA values
+    if (!attr(x, "allow_na") && any(is.na(x))) {
+        handle_violation("NA values are not allowed", attr(x, "on_violation"))
+    }
+
+    # Validate rows
+    if (!is.null(attr(x, "row_validator"))) {
+        invalid_rows <- which(!apply(x, 1, attr(x, "row_validator")))
+        if (length(invalid_rows) > 0) {
+            handle_violation(sprintf("Invalid rows: %s", paste(invalid_rows, collapse = ", ")), attr(x, "on_violation"))
+        }
+    }
+
+    # Process all rows with callback if column modification occurs
+    if (!is.null(attr(x, "row_callback"))) {
+        for (i in seq_len(nrow(x))) {
+            row <- x[i, , drop = FALSE]
+            result <- attr(x, "row_callback")(row)
+            if (!isTRUE(result)) {
+                handle_violation(sprintf(
+                    "Row %d failed validation after column modification: %s", i, as.character(result)), attr(x, "on_violation"
+                ))
+            }
+        }
+    }
+
+    return(x)
 }
 
 #' Print method for typed data frames
@@ -250,18 +257,18 @@ handle_violation <- function(message, action) {
 #' @param ... Additional arguments passed to print.
 #' @export
 print.typed_frame <- function(x, ...) {
-  cat("Typed data frame with the following properties:\n")
-  cat(sprintf("Number of rows: %d\n", nrow(x)))
-  cat(sprintf("Number of columns: %d\n", ncol(x)))
-  cat("Column types:\n")
-  for (name in names(attr(x, "col_types"))) {
-    cat(sprintf("  %s: %s\n", name, format(attr(x, "col_types")[[name]])))
-  }
-  cat(sprintf("Freeze columns: %s\n", ifelse(attr(x, "freeze_n_cols"), "Yes", "No")))
-  cat(sprintf("Allow NA: %s\n", ifelse(attr(x, "allow_na"), "Yes", "No")))
-  cat(sprintf("On violation: %s\n", attr(x, "on_violation")))
-  cat("\nData:\n")
-  NextMethod()
+    cat("Typed data frame with the following properties:\n")
+    cat(sprintf("Number of rows: %d\n", nrow(x)))
+    cat(sprintf("Number of columns: %d\n", ncol(x)))
+    cat("Column types:\n")
+    for (name in names(attr(x, "col_types"))) {
+        cat(sprintf("  %s: %s\n", name, format(attr(x, "col_types")[[name]])))
+    }
+    cat(sprintf("Freeze columns: %s\n", ifelse(attr(x, "freeze_n_cols"), "Yes", "No")))
+    cat(sprintf("Allow NA: %s\n", ifelse(attr(x, "allow_na"), "Yes", "No")))
+    cat(sprintf("On violation: %s\n", attr(x, "on_violation")))
+    cat("\nData:\n")
+    NextMethod()
 }
 
 #' Combine typed data frames row-wise
@@ -279,44 +286,44 @@ print.typed_frame <- function(x, ...) {
 #'
 #' @export
 rbind.typed_frame <- function(..., deparse.level = 1) {
-  dfs <- list(...)
-  base_df <- dfs[[1]]
+    dfs <- list(...)
+    base_df <- dfs[[1]]
 
-  for (df in dfs[-1]) {
-    # Validate number of columns
-    if (ncol(df) != ncol(base_df)) {
-      stop("Number of columns must match")
-    }
-    
-    # Convert types to match base_df
-    for (col_name in names(attr(base_df, "col_types"))) {
-      col_type <- class(base_df[[col_name]])
-      df[[col_name]] <- as(df[[col_name]], col_type)
-    }
-    
-    # Validate rows with row_callback
-    row_callback <- attr(base_df, "row_callback")
-    if (!is.null(row_callback)) {
-      for (i in seq_len(nrow(df))) {
-        row <- df[i, , drop = FALSE]
-        result <- row_callback(row)
-        if (!isTRUE(result)) {
-          stop(sprintf("Row %d failed validation: %s", i, as.character(result)))
+    for (df in dfs[-1]) {
+        # Validate number of columns
+        if (ncol(df) != ncol(base_df)) {
+            stop("Number of columns must match")
         }
-      }
+
+        # Convert types to match base_df
+        for (col_name in names(attr(base_df, "col_types"))) {
+            col_type <- class(base_df[[col_name]])
+            df[[col_name]] <- as(df[[col_name]], col_type)
+        }
+
+        # Validate rows with row_callback
+        row_callback <- attr(base_df, "row_callback")
+        if (!is.null(row_callback)) {
+            for (i in seq_len(nrow(df))) {
+                row <- df[i, , drop = FALSE]
+                result <- row_callback(row)
+                if (!isTRUE(result)) {
+                    stop(sprintf("Row %d failed validation: %s", i, as.character(result)))
+                }
+            }
+        }
     }
-  }
-  
-  result <- do.call(base::rbind, c(dfs, deparse.level = deparse.level))
-  
-  class(result) <- class(base_df)
-  attr(result, "col_types") <- attr(base_df, "col_types")
-  attr(result, "freeze_n_cols") <- attr(base_df, "freeze_n_cols")
-  attr(result, "row_callback") <- attr(base_df, "row_callback")
-  attr(result, "allow_na") <- attr(base_df, "allow_na")
-  attr(result, "on_violation") <- attr(base_df, "on_violation")
-  
-  return(result)
+
+    result <- do.call(base::rbind, c(dfs, deparse.level = deparse.level))
+
+    class(result) <- class(base_df)
+    attr(result, "col_types") <- attr(base_df, "col_types")
+    attr(result, "freeze_n_cols") <- attr(base_df, "freeze_n_cols")
+    attr(result, "row_callback") <- attr(base_df, "row_callback")
+    attr(result, "allow_na") <- attr(base_df, "allow_na")
+    attr(result, "on_violation") <- attr(base_df, "on_violation")
+
+    return(result)
 }
 
 #' Summary method for typed data frames
@@ -328,36 +335,36 @@ rbind.typed_frame <- function(..., deparse.level = 1) {
 #' @return Summary information of the typed data frame.
 #' @export
 summary.typed_frame <- function(x) {
-  cat("Typed data frame summary:\n")
-  cat(sprintf("Number of rows: %d\n", nrow(x)))
-  cat(sprintf("Number of columns: %d\n", ncol(x)))
-  cat("Column types:\n")
-  for (name in names(attr(x, "col_types"))) {
-    cat(sprintf("  %s: %s\n", name, format(attr(x, "col_types")[[name]])))
-  }
-  cat(sprintf("Freeze columns: %s\n", ifelse(attr(x, "freeze_n_cols"), "Yes", "No")))
-  cat(sprintf("Allow NA: %s\n", ifelse(attr(x, "allow_na"), "Yes", "No")))
-  cat(sprintf("On violation: %s\n", attr(x, "on_violation")))
+    cat("Typed data frame summary:\n")
+    cat(sprintf("Number of rows: %d\n", nrow(x)))
+    cat(sprintf("Number of columns: %d\n", ncol(x)))
+    cat("Column types:\n")
+    for (name in names(attr(x, "col_types"))) {
+        cat(sprintf("  %s: %s\n", name, format(attr(x, "col_types")[[name]])))
+    }
+    cat(sprintf("Freeze columns: %s\n", ifelse(attr(x, "freeze_n_cols"), "Yes", "No")))
+    cat(sprintf("Allow NA: %s\n", ifelse(attr(x, "allow_na"), "Yes", "No")))
+    cat(sprintf("On violation: %s\n", attr(x, "on_violation")))
 
-  cat("Validation status:\n")
-  if (!is.null(attr(x, "row_callback"))) {
-    errors <- list()
-    for (i in seq_len(nrow(x))) {
-      row <- x[i, , drop = FALSE]
-      result <- attr(x, "row_callback")(row)
-      if (!isTRUE(result)) {
-        errors <- c(errors, sprintf("Row %d failed validation: %s", i, as.character(result)))
-      }
-    }
-    if (length(errors) > 0) {
-      cat("  Validation errors:\n")
-      for (error in errors) {
-        cat(sprintf("    %s\n", error))
-      }
+    cat("Validation status:\n")
+    if (!is.null(attr(x, "row_callback"))) {
+        errors <- list()
+        for (i in seq_len(nrow(x))) {
+            row <- x[i, , drop = FALSE]
+            result <- attr(x, "row_callback")(row)
+            if (!isTRUE(result)) {
+                errors <- c(errors, sprintf("Row %d failed validation: %s", i, as.character(result)))
+            }
+        }
+        if (length(errors) > 0) {
+            cat("  Validation errors:\n")
+            for (error in errors) {
+                cat(sprintf("    %s\n", error))
+            }
+        } else {
+            cat("  All rows passed validation.\n")
+        }
     } else {
-      cat("  All rows passed validation.\n")
+        cat("  No row callback defined for validation.\n")
     }
-  } else {
-    cat("  No row callback defined for validation.\n")
-  }
 }
