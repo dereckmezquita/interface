@@ -30,6 +30,7 @@ Interfaces in R can be beneficial for several reasons:
 1. **Interfaces**: Define and implement interfaces with type checking. Interfaces can be extended and nested.
 1. **Typed Functions**: Define functions with strict type constraints.
 1. **Typed Data Frames**: Create data frames with column type constraints and row validation. Data frames can have custom validation functions and row callbacks.
+1. **Enums**: Define and use enumerated types for stricter type safety.
 
 ## Installation
 
@@ -45,7 +46,7 @@ remotes::install_github("dereckmezquita/interface")
 Import the package functions.
 
 ```{r setup}
-box::use(interface[ interface, type.frame, fun ])
+box::use(interface[interface, type.frame, fun, enum])
 ```
 
 ### Interfaces
@@ -160,6 +161,91 @@ try(UserProfile(
     age = "30"
 ))
 ```
+
+### Enums
+
+Enums provide a way to define a set of named constants. They are useful for representing a fixed set of values and can be used in interfaces to ensure that a property only takes on one of a predefined set of values.
+
+#### Creating and Using Enums
+
+```{r}
+# Define an enum for days of the week
+DaysOfWeek <- enum("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+# Create an enum object
+today <- DaysOfWeek("Wednesday")
+print(today)
+
+# Valid assignment
+today$value <- "Friday"
+print(today)
+
+# Invalid assignment (throws error)
+try(today$value <- "NotADay")
+```
+
+#### Using Enums in Interfaces
+
+Enums can be used as property types in interfaces:
+
+```{r}
+# Define an interface using an enum
+Meeting <- interface(
+    title = character,
+    day = DaysOfWeek,
+    start_time = numeric,
+    duration = numeric
+)
+
+# Create a valid meeting object
+standup <- Meeting(
+    title = "Daily Standup",
+    day = "Monday",
+    start_time = 9.5,  # 9:30 AM
+    duration = 0.5  # 30 minutes
+)
+
+print(standup)
+
+# Invalid day (throws error)
+try(Meeting(
+    title = "Invalid Meeting",
+    day = "InvalidDay",
+    start_time = 10,
+    duration = 1
+))
+```
+
+#### In-place Enum Declaration in Interfaces
+
+You can also declare enums directly within an interface definition:
+
+```{r}
+# Define an interface with an in-place enum
+Task <- interface(
+    description = character,
+    priority = enum("Low", "Medium", "High"),
+    status = enum("Todo", "InProgress", "Done")
+)
+
+# Create a task object
+my_task <- Task(
+    description = "Complete project report",
+    priority = "High",
+    status = "InProgress"
+)
+
+print(my_task)
+
+# Update task status
+my_task$status$value <- "Done"
+print(my_task)
+
+# Invalid priority (throws error)
+try(my_task$priority$value <- "VeryHigh")
+```
+
+Enums provide an additional layer of type safety and clarity to your code. They ensure that certain properties can only take on a predefined set of values, reducing the chance of errors and making the code more self-documenting.
 
 ### Typed Functions
 
@@ -280,6 +366,6 @@ try(rbind(df, data.frame(
 
 ## Conclusion
 
-This package provides powerful tools for ensuring type safety and validation in R. By defining interfaces, typed functions, typed data frames, and enums, you can create robust and reliable data structures and functions with strict type constraints.
+This package provides powerful tools for ensuring type safety and validation in R. By defining interfaces, enums, typed functions, and typed data frames, you can create robust and reliable data structures and functions with strict type constraints.
 
 This vignette demonstrates the basic usage and capabilities of the package. For more details, refer to the package documentation and examples provided in the source code.
