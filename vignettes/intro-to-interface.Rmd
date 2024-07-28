@@ -255,7 +255,7 @@ Define functions with strict type constraints:
 typed_fun <- fun(
     x = numeric,
     y = numeric,
-    return_type = numeric,
+    return = numeric,
     impl = function(x, y) {
         return(x + y)
     }
