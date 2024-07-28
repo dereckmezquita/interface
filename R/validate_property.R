@@ -7,9 +7,6 @@
 #' @param value The value of the property.
 #' @param validator The expected type or a custom validation function.
 #' @return NULL if the validation passes, otherwise an error message.
-#' @details
-#' The `validate_property` function checks whether a property value adheres to the specified type or validation function. 
-#' If the property value does not meet the criteria, an error message is returned.
 #'
 validate_property <- function(name, value, validator) {
     if (is.list(validator) && !is.function(validator)) {
@@ -22,6 +19,10 @@ validate_property <- function(name, value, validator) {
     } else if (inherits(validator, "interface")) {
         if (!inherits(value, "interface_object") || !identical(attr(value, "properties"), attr(validator, "properties"))) {
             return(sprintf("Property '%s' must be an object implementing the specified interface", name))
+        }
+    } else if (inherits(validator, "enum_generator")) {
+        if (!inherits(value, "enum") || !value$value %in% attr(validator, "values")) {
+            return(sprintf("Property '%s' must be one of the enum values: %s", name, paste(attr(validator, "values"), collapse = ", ")))
         }
     } else if (is.function(validator)) {
         if (identical(validator, character)) {
@@ -54,10 +55,9 @@ validate_property <- function(name, value, validator) {
             }
         } else {
             # Custom validator function
-            validation_result <- vapply(value, validator, logical(1))
-            if (!all(validation_result)) {
-                invalid_indices <- which(!validation_result)
-                return(sprintf("Invalid value(s) for property '%s' at index(es): %s", name, paste(invalid_indices, collapse = ", ")))
+            validation_result <- validator(value)
+            if (!isTRUE(validation_result)) {
+                return(sprintf("Invalid value for property '%s': %s", name, as.character(validation_result)))
             }
         }
     } else if (is.character(validator)) {

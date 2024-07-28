@@ -18,13 +18,10 @@ enum <- function(...) {
     if (!value %in% values) {
       stop(sprintf("Invalid value. Must be one of: %s", paste(values, collapse = ", ")))
     }
-    value <- list(value = value)
-    class(value) <- "enum"
-    attr(value, "values") <- values
-    value
+    structure(list(value = value), class = "enum", values = values)
   }
   
-  class(new) <- "enum_generator"
+  class(new) <- c("enum_generator", "function")
   attr(new, "values") <- values
   new
 }

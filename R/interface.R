@@ -4,11 +4,11 @@
 #' An interface defines a structure with specified properties and their types or validation functions. 
 #' This is useful for ensuring that objects adhere to a particular format and type constraints.
 #'
-#' @param properties A named list where names are property names and values are their expected types or validation functions.
+#' @param ... Named arguments defining the properties and their types or validation functions.
+#' @param validate_on_access Logical, whether to validate properties on access (default: FALSE).
+#' @param extends A list of interfaces that this interface extends.
 #' @return A function to create objects that implement the defined interface.
-#' @details
-#' The `interface` function creates a blueprint for objects, specifying what properties they must have and what types those properties must be. 
-#' When an object is created using this interface, it ensures that the object adheres to these specifications.
+#' @export
 #'
 #' @examples
 #' # Define an interface for a person
@@ -25,17 +25,32 @@
 #'   email = "john@example.com"
 #' )
 #'
-#' # Access properties
-#' print(john$name)  # [1] "John Doe"
+#' # Using enum in an interface
+#' Colors <- enum("red", "green", "blue")
+#' ColoredShape <- interface(
+#'   shape = character,
+#'   color = Colors
+#' )
 #'
-#' # Valid assignment
-#' john$age <- c(10, 11)
+#' my_shape <- ColoredShape(shape = "circle", color = "red")
 #'
-#' # Invalid assignment (throws error)
-#' try(john$age <- "thirty")
-#' @export
+#' # In-place enum declaration
+#' Car <- interface(
+#'   make = character,
+#'   model = character,
+#'   color = enum("red", "green", "blue")
+#' )
+#'
+#' my_car <- Car(make = "Toyota", model = "Corolla", color = "red")
 interface <- function(..., validate_on_access = FALSE, extends = list()) {
     properties <- list(...)
+
+    # Process in-place enum declarations
+    for (name in names(properties)) {
+        if (inherits(properties[[name]], "enum_generator")) {
+            properties[[name]] <- properties[[name]]
+        }
+    }
 
     # Merge properties from extended interfaces
     all_properties <- properties
@@ -61,6 +76,15 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
 
             value <- values[[name]]
             validator <- all_properties[[name]]
+
+            if (inherits(validator, "enum_generator")) {
+                if (is.character(value)) {
+                    value <- validator(value)
+                } else if (!inherits(value, "enum")) {
+                    errors <- c(errors, sprintf("Property '%s' must be a string or an enum object", name))
+                    next
+                }
+            }
 
             error <- validate_property(name, value, validator)
             if (!is.null(error)) {
