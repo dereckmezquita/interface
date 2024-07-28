@@ -42,7 +42,7 @@ remotes::install_github("dereckmezquita/interface")
 Import the package functions.
 
 ```{r}
-box::use(interface[ interface, type.frame, fun ])
+box::use(interface[ interface, type.frame, fun, enum ])
 ```
 
 Define an interface and implement it:
@@ -266,6 +266,51 @@ try(rbind(df, data.frame(
     is_student = TRUE,
     email = "d@test.com"
 )))
+```
+
+### Enums
+
+Define enums for categorical variables; these are safe to use to protect a value from being modified to invalid options. The `enum` function creates a generator which is then used to create the enum object. This can be used standalone or as part of an interface.
+
+```{r enum}
+Colour <- enum("red", "green", "blue")
+
+# Create an enum object
+colour <- Colour("red")
+print(colour)
+
+colour$value <- "green"
+print(colour)
+
+# Invalid modification (throws error)
+try(colour$value <- "yellow")
+
+# Use in an interface
+Car <- interface(
+    make = enum("Toyota", "Ford", "Chevrolet"),
+    model = character,
+    colour = Colour
+)
+
+# Implement the interface
+car1 <- Car(
+    make = "Toyota",
+    model = "Corolla",
+    colour = "red"
+)
+
+print(car1)
+
+# Invalid implementation (throws error)
+try(Car(
+    make = "Honda",
+    model = "Civic",
+    colour = "yellow"
+))
+
+# Invalid modification (throws error)
+try(car1$colour$value <- "yellow")
+try(car1$make$value <- "Honda")
 ```
 
 ## Conclusion

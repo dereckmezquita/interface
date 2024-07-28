@@ -29,7 +29,7 @@ remotes::install_github("dereckmezquita/interface")
 Import the package functions.
 
 ``` r
-box::use(interface[ interface, type.frame, fun ])
+box::use(interface[ interface, type.frame, fun, enum ])
 ```
 
 Define an interface and implement it:
@@ -121,7 +121,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x11e6348d0>
+#>   scholarship: <environment: 0x130c09c00>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
@@ -167,8 +167,8 @@ try(UserProfile(
     age = "30"
 ))
 #> Error : Errors occurred during interface creation:
-#>   - Invalid value(s) for property 'email' at index(es): 1
-#>   - Invalid value(s) for property 'age' at index(es): 1
+#>   - Invalid value for property 'email': FALSE
+#>   - Invalid value for property 'age': FALSE
 ```
 
 ### Typed Functions
@@ -355,6 +355,69 @@ try(rbind(df, data.frame(
 )))
 #> Error in rbind(deparse.level, ...) : 
 #>   Row 1 failed validation: Age must be less than 40 (got 50)
+```
+
+### Enums
+
+Define enums for categorical variables; these are safe to use to protect
+a value from being modified to invalid options. The `enum` function
+creates a generator which is then used to create the enum object. This
+can be used standalone or as part of an interface.
+
+``` r
+Colour <- enum("red", "green", "blue")
+
+# Create an enum object
+colour <- Colour("red")
+print(colour)
+#> Enum: red
+
+colour$value <- "green"
+print(colour)
+#> Enum: green
+
+# Invalid modification (throws error)
+try(colour$value <- "yellow")
+#> Error in `$<-.enum`(`*tmp*`, value, value = "yellow") : 
+#>   Invalid value. Must be one of: red, green, blue
+
+# Use in an interface
+Car <- interface(
+    make = enum("Toyota", "Ford", "Chevrolet"),
+    model = character,
+    colour = Colour
+)
+
+# Implement the interface
+car1 <- Car(
+    make = "Toyota",
+    model = "Corolla",
+    colour = "red"
+)
+
+print(car1)
+#> Object implementing interface:
+#>   make: Toyota
+#>   model: Corolla
+#>   colour: red
+#> Validation on access: Disabled
+
+# Invalid implementation (throws error)
+try(Car(
+    make = "Honda",
+    model = "Civic",
+    colour = "yellow"
+))
+#> Error in validator(value) : 
+#>   Invalid value. Must be one of: Toyota, Ford, Chevrolet
+
+# Invalid modification (throws error)
+try(car1$colour$value <- "yellow")
+#> Error in `$<-.enum`(`*tmp*`, value, value = "yellow") : 
+#>   Invalid value. Must be one of: red, green, blue
+try(car1$make$value <- "Honda")
+#> Error in `$<-.enum`(`*tmp*`, value, value = "Honda") : 
+#>   Invalid value. Must be one of: Toyota, Ford, Chevrolet
 ```
 
 ## Conclusion
