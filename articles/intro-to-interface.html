@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">interface</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/introduction.html">Introduction to interface</a></li>
+<li><a class="dropdown-item" href="../articles/intro-to-interface.html">Introduction to interface</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../articles/donate.html">Donate</a></li>
@@ -62,8 +62,8 @@
       <h1>Introduction to interface</h1>
             
       
-
-      <div class="d-none name"><code>introduction.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/dereckmezquita/interface/blob/RPKG-2-enum/vignettes/intro-to-interface.Rmd" class="external-link"><code>vignettes/intro-to-interface.Rmd</code></a></small>
+      <div class="d-none name"><code>intro-to-interface.Rmd</code></div>
     </div>
 
     
@@ -102,6 +102,9 @@ constraints.</li>
 <strong>Typed Data Frames</strong>: Create data frames with column
 type constraints and row validation. Data frames can have custom
 validation functions and row callbacks.</li>
+<li>
+<strong>Enums</strong>: Define and use enumerated types for stricter
+type safety.</li>
 </ol>
 </div>
 <div class="section level2">
@@ -117,7 +120,7 @@ validation functions and row callbacks.</li>
 </h2>
 <p>Import the package functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">interface</span><span class="op">[</span> <span class="va">interface</span>, <span class="va">type.frame</span>, <span class="va">fun</span> <span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">interface</span><span class="op">[</span><span class="va">interface</span>, <span class="va">type.frame</span>, <span class="va">fun</span>, <span class="va">enum</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="interfaces">Interfaces<a class="anchor" aria-label="anchor" href="#interfaces"></a>
 </h3>
@@ -211,7 +214,7 @@ function:</p>
 <span><span class="co">#&gt;    scores: Science</span></span>
 <span><span class="co">#&gt;    scores: 95</span></span>
 <span><span class="co">#&gt;    scores: 88</span></span>
-<span><span class="co">#&gt;   scholarship: &lt;environment: 0x558da63e61e8&gt;</span></span>
+<span><span class="co">#&gt;   scholarship: &lt;environment: 0x55aaa58df838&gt;</span></span>
 <span><span class="co">#&gt;   street: 123 Main St</span></span>
 <span><span class="co">#&gt;   city: Small town</span></span>
 <span><span class="co">#&gt;   postal_code: 12345</span></span>
@@ -256,14 +259,128 @@ function:</p>
 <span>    age <span class="op">=</span> <span class="st">"30"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error : Errors occurred during interface creation:</span></span>
-<span><span class="co">#&gt;   - Invalid value(s) for property 'email' at index(es): 1</span></span>
-<span><span class="co">#&gt;   - Invalid value(s) for property 'age' at index(es): 1</span></span></code></pre></div>
+<span><span class="co">#&gt;   - Invalid value for property 'email': FALSE</span></span>
+<span><span class="co">#&gt;   - Invalid value for property 'age': FALSE</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="enums">Enums<a class="anchor" aria-label="anchor" href="#enums"></a>
+</h3>
+<p>Enums provide a way to define a set of named constants. They are
+useful for representing a fixed set of values and can be used in
+interfaces to ensure that a property only takes on one of a predefined
+set of values.</p>
+<div class="section level4">
+<h4 id="creating-and-using-enums">Creating and Using Enums<a class="anchor" aria-label="anchor" href="#creating-and-using-enums"></a>
+</h4>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define an enum for days of the week</span></span>
+<span><span class="va">DaysOfWeek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enum.html">enum</a></span><span class="op">(</span><span class="st">"Monday"</span>, <span class="st">"Tuesday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>, <span class="st">"Saturday"</span>, <span class="st">"Sunday"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create an enum object</span></span>
+<span><span class="va">today</span> <span class="op">&lt;-</span> <span class="fu">DaysOfWeek</span><span class="op">(</span><span class="st">"Wednesday"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">today</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Enum: Wednesday</span></span>
+<span></span>
+<span><span class="co"># Valid assignment</span></span>
+<span><span class="va">today</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"Friday"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">today</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Enum: Friday</span></span>
+<span></span>
+<span><span class="co"># Invalid assignment (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">today</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"NotADay"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `$&lt;-.enum`(`*tmp*`, value, value = "NotADay") : </span></span>
+<span><span class="co">#&gt;   Invalid value. Must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="using-enums-in-interfaces">Using Enums in Interfaces<a class="anchor" aria-label="anchor" href="#using-enums-in-interfaces"></a>
+</h4>
+<p>Enums can be used as property types in interfaces:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define an interface using an enum</span></span>
+<span><span class="va">Meeting</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interface.html">interface</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="va">character</span>,</span>
+<span>    day <span class="op">=</span> <span class="va">DaysOfWeek</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="va">numeric</span>,</span>
+<span>    duration <span class="op">=</span> <span class="va">numeric</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create a valid meeting object</span></span>
+<span><span class="va">standup</span> <span class="op">&lt;-</span> <span class="fu">Meeting</span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Daily Standup"</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"Monday"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">9.5</span>,  <span class="co"># 9:30 AM</span></span>
+<span>    duration <span class="op">=</span> <span class="fl">0.5</span>  <span class="co"># 30 minutes</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">standup</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   title: Daily Standup</span></span>
+<span><span class="co">#&gt;   day: Monday</span></span>
+<span><span class="co">#&gt;   start_time: 9.5</span></span>
+<span><span class="co">#&gt;   duration: 0.5</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span>
+<span></span>
+<span><span class="co"># Invalid day (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">Meeting</span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Invalid Meeting"</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"InvalidDay"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    duration <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in validator(value) : </span></span>
+<span><span class="co">#&gt;   Invalid value. Must be one of: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="in-place-enum-declaration-in-interfaces">In-place Enum Declaration in Interfaces<a class="anchor" aria-label="anchor" href="#in-place-enum-declaration-in-interfaces"></a>
+</h4>
+<p>You can also declare enums directly within an interface
+definition:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define an interface with an in-place enum</span></span>
+<span><span class="va">Task</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interface.html">interface</a></span><span class="op">(</span></span>
+<span>    description <span class="op">=</span> <span class="va">character</span>,</span>
+<span>    priority <span class="op">=</span> <span class="fu"><a href="../reference/enum.html">enum</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span><span class="op">)</span>,</span>
+<span>    status <span class="op">=</span> <span class="fu"><a href="../reference/enum.html">enum</a></span><span class="op">(</span><span class="st">"Todo"</span>, <span class="st">"InProgress"</span>, <span class="st">"Done"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create a task object</span></span>
+<span><span class="va">my_task</span> <span class="op">&lt;-</span> <span class="fu">Task</span><span class="op">(</span></span>
+<span>    description <span class="op">=</span> <span class="st">"Complete project report"</span>,</span>
+<span>    priority <span class="op">=</span> <span class="st">"High"</span>,</span>
+<span>    status <span class="op">=</span> <span class="st">"InProgress"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">my_task</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   description: Complete project report</span></span>
+<span><span class="co">#&gt;   priority: High</span></span>
+<span><span class="co">#&gt;   status: InProgress</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span>
+<span></span>
+<span><span class="co"># Update task status</span></span>
+<span><span class="va">my_task</span><span class="op">$</span><span class="va">status</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"Done"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">my_task</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   description: Complete project report</span></span>
+<span><span class="co">#&gt;   priority: High</span></span>
+<span><span class="co">#&gt;   status: Done</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span>
+<span></span>
+<span><span class="co"># Invalid priority (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">my_task</span><span class="op">$</span><span class="va">priority</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"VeryHigh"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `$&lt;-.enum`(`*tmp*`, value, value = "VeryHigh") : </span></span>
+<span><span class="co">#&gt;   Invalid value. Must be one of: Low, Medium, High</span></span></code></pre></div>
+<p>Enums provide an additional layer of type safety and clarity to your
+code. They ensure that certain properties can only take on a predefined
+set of values, reducing the chance of errors and making the code more
+self-documenting.</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="typed-functions">Typed Functions<a class="anchor" aria-label="anchor" href="#typed-functions"></a>
 </h3>
 <p>Define functions with strict type constraints:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">typed_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fun.html">fun</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">numeric</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">numeric</span>,</span>
@@ -283,7 +400,7 @@ function:</p>
 <div class="section level4">
 <h4 id="functions-with-multiple-possible-return-types">Functions with Multiple Possible Return Types<a class="anchor" aria-label="anchor" href="#functions-with-multiple-possible-return-types"></a>
 </h4>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">typed_fun2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fun.html">fun</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">numeric</span>, <span class="va">character</span><span class="op">)</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">numeric</span>,</span>
@@ -301,6 +418,7 @@ function:</p>
 <span><span class="co">#&gt; [1] 3</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">typed_fun2</span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># [1] "a 2"</span></span>
 <span><span class="co">#&gt; [1] "a 2"</span></span></code></pre></div>
+<!-- TODO: custom return functions for typed fun and enums -->
 </div>
 </div>
 <div class="section level3">
@@ -308,7 +426,7 @@ function:</p>
 </h3>
 <p>Create data frames with column type constraints and row
 validation:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
 <span>    frame <span class="op">=</span> <span class="va">data.frame</span>, </span>
 <span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -356,7 +474,7 @@ validation:</p>
 <div class="section level4">
 <h4 id="additional-options">Additional Options<a class="anchor" aria-label="anchor" href="#additional-options"></a>
 </h4>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
 <span>    frame <span class="op">=</span> <span class="va">data.frame</span>,</span>
 <span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -452,8 +570,8 @@ validation:</p>
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
 <p>This package provides powerful tools for ensuring type safety and
-validation in R. By defining interfaces, typed functions, typed data
-frames, and enums, you can create robust and reliable data structures
+validation in R. By defining interfaces, enums, typed functions, and
+typed data frames, you can create robust and reliable data structures
 and functions with strict type constraints.</p>
 <p>This vignette demonstrates the basic usage and capabilities of the
 package. For more details, refer to the package documentation and
