@@ -7,7 +7,11 @@
 interface(..., validate_on_access = FALSE, extends = list())
 }
 \arguments{
-\item{properties}{A named list where names are property names and values are their expected types or validation functions.}
+\item{...}{Named arguments defining the properties and their types or validation functions.}
+
+\item{validate_on_access}{Logical, whether to validate properties on access (default: FALSE).}
+
+\item{extends}{A list of interfaces that this interface extends.}
 }
 \value{
 A function to create objects that implement the defined interface.
@@ -15,10 +19,6 @@ A function to create objects that implement the defined interface.
 \description{
 An interface defines a structure with specified properties and their types or validation functions. 
 This is useful for ensuring that objects adhere to a particular format and type constraints.
-}
-\details{
-The `interface` function creates a blueprint for objects, specifying what properties they must have and what types those properties must be. 
-When an object is created using this interface, it ensures that the object adheres to these specifications.
 }
 \examples{
 # Define an interface for a person
@@ -35,12 +35,21 @@ john <- Person(
   email = "john@example.com"
 )
 
-# Access properties
-print(john$name)  # [1] "John Doe"
+# Using enum in an interface
+Colors <- enum("red", "green", "blue")
+ColoredShape <- interface(
+  shape = character,
+  color = Colors
+)
 
-# Valid assignment
-john$age <- c(10, 11)
+my_shape <- ColoredShape(shape = "circle", color = "red")
 
-# Invalid assignment (throws error)
-try(john$age <- "thirty")
+# In-place enum declaration
+Car <- interface(
+  make = character,
+  model = character,
+  color = enum("red", "green", "blue")
+)
+
+my_car <- Car(make = "Toyota", model = "Corolla", color = "red")
 }

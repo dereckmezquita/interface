@@ -6,7 +6,6 @@
 #'
 #' @param ... The possible values for the enumerated type. These should be unique character strings.
 #' @return A function (enum generator) that creates enum objects of the defined type.
-#' @export
 #'
 #' @examples
 #' # Create an enum type for colors
@@ -32,6 +31,7 @@
 #' try(my_shape$color$value <- "yellow")  # This will raise an error
 #'
 #' @seealso \code{\link{interface}} for using enums in interfaces
+#' @export
 enum <- function(...) {
     values <- c(...)
     
