@@ -33,18 +33,22 @@
 #'
 #' @seealso \code{\link{interface}} for using enums in interfaces
 enum <- function(...) {
-  values <- c(...)
-  
-  new <- function(value) {
-    if (!value %in% values) {
-      stop(sprintf("Invalid value. Must be one of: %s", paste(values, collapse = ", ")))
+    values <- c(...)
+    
+    new <- function(value) {
+        if (!value %in% values) {
+            stop(sprintf("Invalid value. Must be one of: %s", paste(values, collapse = ", ")))
+        }
+        return(structure(
+            list(value = value),
+            class = "enum",
+            values = values
+        ))
     }
-    structure(list(value = value), class = "enum", values = values)
-  }
-  
-  class(new) <- c("enum_generator", "function")
-  attr(new, "values") <- values
-  new
+    
+    class(new) <- c("enum_generator", "function")
+    attr(new, "values") <- values
+    return(new)
 }
 
 #' Print method for enum objects
@@ -61,7 +65,7 @@ enum <- function(...) {
 #' my_color <- Colors("red")
 #' print(my_color)  # Output: Enum: red
 print.enum <- function(x, ...) {
-  cat("Enum:", x$value, "\n")
+    cat("Enum:", x$value, "\n")
 }
 
 #' Equality comparison for enum objects
@@ -82,11 +86,11 @@ print.enum <- function(x, ...) {
 #' color1 == Colors("red")  # TRUE
 #' color1 == "red"  # TRUE
 `==.enum` <- function(e1, e2) {
-  if (inherits(e2, "enum")) {
-    e1$value == e2$value
-  } else {
-    e1$value == e2
-  }
+    if (inherits(e2, "enum")) {
+        e1$value == e2$value
+    } else {
+        e1$value == e2
+    }
 }
 
 #' Get value from enum object
@@ -104,11 +108,11 @@ print.enum <- function(x, ...) {
 #' my_color <- Colors("red")
 #' my_color$value  # "red"
 `$.enum` <- function(x, name) {
-  if (name == "value") {
-    x[["value"]]
-  } else {
-    stop("Invalid field for enum")
-  }
+    if (name == "value") {
+        x[["value"]]
+    } else {
+        stop("Invalid field for enum")
+    }
 }
 
 #' Set value of enum object
@@ -128,14 +132,14 @@ print.enum <- function(x, ...) {
 #' my_color$value <- "blue"  # Valid assignment
 #' try(my_color$value <- "yellow")  # This will raise an error
 `$<-.enum` <- function(x, name, value) {
-  if (name != "value") {
-    stop("Cannot add new fields to an enum")
-  }
-  if (!value %in% attr(x, "values")) {
-    stop(sprintf("Invalid value. Must be one of: %s", paste(attr(x, "values"), collapse = ", ")))
-  }
-  x[["value"]] <- value
-  x
+    if (name != "value") {
+        stop("Cannot add new fields to an enum")
+    }
+    if (!value %in% attr(x, "values")) {
+        stop(sprintf("Invalid value. Must be one of: %s", paste(attr(x, "values"), collapse = ", ")))
+    }
+    x[["value"]] <- value
+    return(x)
 }
 
 #' Print method for enum generators
@@ -151,5 +155,5 @@ print.enum <- function(x, ...) {
 #' Colors <- enum("red", "green", "blue")
 #' print(Colors)  # Output: Enum generator: red, green, blue
 print.enum_generator <- function(x, ...) {
-  cat("Enum generator:", paste(attr(x, "values"), collapse = ", "), "\n")
+    cat("Enum generator:", paste(attr(x, "values"), collapse = ", "), "\n")
 }
