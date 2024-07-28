@@ -74,7 +74,7 @@
 </h2>
 <p>Import the package functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">interface</span><span class="op">[</span> <span class="va">interface</span>, <span class="va">type.frame</span>, <span class="va">fun</span> <span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">interface</span><span class="op">[</span> <span class="va">interface</span>, <span class="va">type.frame</span>, <span class="va">fun</span>, <span class="va">enum</span> <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>Define an interface and implement it:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define an interface</span></span>
@@ -161,7 +161,7 @@
 <span><span class="co">#&gt;    scores: Science</span></span>
 <span><span class="co">#&gt;    scores: 95</span></span>
 <span><span class="co">#&gt;    scores: 88</span></span>
-<span><span class="co">#&gt;   scholarship: &lt;environment: 0x11e6348d0&gt;</span></span>
+<span><span class="co">#&gt;   scholarship: &lt;environment: 0x130c09c00&gt;</span></span>
 <span><span class="co">#&gt;   street: 123 Main St</span></span>
 <span><span class="co">#&gt;   city: Small town</span></span>
 <span><span class="co">#&gt;   postal_code: 12345</span></span>
@@ -206,8 +206,8 @@
 <span>    age <span class="op">=</span> <span class="st">"30"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error : Errors occurred during interface creation:</span></span>
-<span><span class="co">#&gt;   - Invalid value(s) for property 'email' at index(es): 1</span></span>
-<span><span class="co">#&gt;   - Invalid value(s) for property 'age' at index(es): 1</span></span></code></pre></div>
+<span><span class="co">#&gt;   - Invalid value for property 'email': FALSE</span></span>
+<span><span class="co">#&gt;   - Invalid value for property 'age': FALSE</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="typed-functions">Typed Functions<a class="anchor" aria-label="anchor" href="#typed-functions"></a>
@@ -386,6 +386,65 @@
 <span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in rbind(deparse.level, ...) : </span></span>
 <span><span class="co">#&gt;   Row 1 failed validation: Age must be less than 40 (got 50)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="enums">Enums<a class="anchor" aria-label="anchor" href="#enums"></a>
+</h3>
+<p>Define enums for categorical variables; these are safe to use to protect a value from being modified to invalid options. The <code>enum</code> function creates a generator which is then used to create the enum object. This can be used standalone or as part of an interface.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Colour</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/enum.html">enum</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create an enum object</span></span>
+<span><span class="va">colour</span> <span class="op">&lt;-</span> <span class="fu">Colour</span><span class="op">(</span><span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">colour</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Enum: red</span></span>
+<span></span>
+<span><span class="va">colour</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"green"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">colour</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Enum: green</span></span>
+<span></span>
+<span><span class="co"># Invalid modification (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">colour</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"yellow"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `$&lt;-.enum`(`*tmp*`, value, value = "yellow") : </span></span>
+<span><span class="co">#&gt;   Invalid value. Must be one of: red, green, blue</span></span>
+<span></span>
+<span><span class="co"># Use in an interface</span></span>
+<span><span class="va">Car</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span></span>
+<span>    make <span class="op">=</span> <span class="fu"><a href="reference/enum.html">enum</a></span><span class="op">(</span><span class="st">"Toyota"</span>, <span class="st">"Ford"</span>, <span class="st">"Chevrolet"</span><span class="op">)</span>,</span>
+<span>    model <span class="op">=</span> <span class="va">character</span>,</span>
+<span>    colour <span class="op">=</span> <span class="va">Colour</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Implement the interface</span></span>
+<span><span class="va">car1</span> <span class="op">&lt;-</span> <span class="fu">Car</span><span class="op">(</span></span>
+<span>    make <span class="op">=</span> <span class="st">"Toyota"</span>,</span>
+<span>    model <span class="op">=</span> <span class="st">"Corolla"</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"red"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">car1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object implementing interface:</span></span>
+<span><span class="co">#&gt;   make: Toyota</span></span>
+<span><span class="co">#&gt;   model: Corolla</span></span>
+<span><span class="co">#&gt;   colour: red</span></span>
+<span><span class="co">#&gt; Validation on access: Disabled</span></span>
+<span></span>
+<span><span class="co"># Invalid implementation (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">Car</span><span class="op">(</span></span>
+<span>    make <span class="op">=</span> <span class="st">"Honda"</span>,</span>
+<span>    model <span class="op">=</span> <span class="st">"Civic"</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"yellow"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in validator(value) : </span></span>
+<span><span class="co">#&gt;   Invalid value. Must be one of: Toyota, Ford, Chevrolet</span></span>
+<span></span>
+<span><span class="co"># Invalid modification (throws error)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">car1</span><span class="op">$</span><span class="va">colour</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"yellow"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `$&lt;-.enum`(`*tmp*`, value, value = "yellow") : </span></span>
+<span><span class="co">#&gt;   Invalid value. Must be one of: red, green, blue</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">car1</span><span class="op">$</span><span class="va">make</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"Honda"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in `$&lt;-.enum`(`*tmp*`, value, value = "Honda") : </span></span>
+<span><span class="co">#&gt;   Invalid value. Must be one of: Toyota, Ford, Chevrolet</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
