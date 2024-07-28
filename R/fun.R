@@ -46,13 +46,18 @@
 #' print(concat_or_add(1, 2))     # [1] 3
 #' print(concat_or_add("a", 2))   # [1] "a 2"
 #' @export
-fun <- function(..., return, impl) {
+fun <- function(...) {
     args <- list(...)
-    force(return)
-    force(impl)
+    return_type <- args$return
+    impl <- args$impl
+    
+    # Remove 'return' and 'impl' from args
+    args$return <- NULL
+    args$impl <- NULL
 
-    # Ensure that 'return' and 'impl' are not in the args list
-    args <- args[!names(args) %in% c("return", "impl")]
+    if (is.null(return_type) || is.null(impl)) {
+        stop("Both 'return' and 'impl' must be specified", call. = FALSE)
+    }
 
     typed_fun <- function(...) {
         call_args <- list(...)
@@ -85,19 +90,20 @@ fun <- function(..., return, impl) {
         result <- do.call(impl, call_args)
 
         # Validate return value
-        error <- validate_property("return", result, return)
+        error <- validate_property("return", result, return_type)
         if (!is.null(error)) {
             stop(error, call. = FALSE)
         }
 
-        return(result)
+        result
     }
 
+    # Create the structure explicitly
     return(structure(
         typed_fun,
         class = c("typed_function", "function"),
         args = args,
-        return = return,
+        return = return_type,
         impl = impl
     ))
 }

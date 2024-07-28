@@ -335,6 +335,53 @@ IntList <- type.list(
 
 # ----------------------------------------------
 # Enums
-Colour <- enum("red", "green", "blue")
-my_colour <- Colour("red")
-try(Colour("yellow")) # Error: 'yellow' is not a valid value for Colour
+# Load necessary files
+source("R/enum.R")
+source("R/interface.R")
+source("R/validate_property.R")
+
+# Create an enum
+Colors <- enum("red", "green", "blue")
+
+col1 <- Colors("red")
+
+col1$value <- "blue"
+
+# This will raise an error
+try(col1$value <- "yellow")
+
+# Use the enum in an interface
+ColoredShape <- interface(
+  shape = character,
+  color = Colors
+)
+
+# Create an object using the interface
+my_shape <- ColoredShape(shape = "circle", color = Colors("red"))
+
+# Access and modify properties
+print(my_shape$color)
+my_shape$color$value <- "blue"
+
+# This will raise an error
+try(my_shape$color$value <- "yellow")
+
+# in place enum
+Car <- interface(
+  make = character,
+  model = character,
+  color = enum("red", "green", "blue")
+)
+
+my_car <- Car(
+  make = "Toyota",
+  model = "Corolla",
+  color = "red"
+)
+
+print(my_car)
+
+my_car$color$value <- "blue"
+
+# This will raise an error
+try(my_car$color$value <- "yellow")

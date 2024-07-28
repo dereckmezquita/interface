@@ -4,7 +4,7 @@
 \alias{fun}
 \title{Create a typed function}
 \usage{
-fun(..., return, impl)
+fun(...)
 }
 \arguments{
 \item{...}{Named arguments defining the function parameters and their types.}

@@ -19,7 +19,3 @@ NULL if the validation passes, otherwise an error message.
 \description{
 Validates a property to ensure it matches the expected type or satisfies the given validation function.
 }
-\details{
-The `validate_property` function checks whether a property value adheres to the specified type or validation function. 
-If the property value does not meet the criteria, an error message is returned.
-}

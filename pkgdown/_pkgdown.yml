@@ -16,7 +16,7 @@ navbar:
       text: Articles
       menu:
       - text: "Introduction to interface"
-        href: articles/introduction.html
+        href: articles/intro-to-interface.html
     donate:
       text: Donate
       href: articles/donate.html
