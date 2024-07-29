@@ -60,7 +60,18 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The <code>interface</code> package provides a system for defining and implementing interfaces in R, with runtime type checking, bringing some of the benefits of statically-typed languages to R.</p>
+<p>The <code>interface</code> package provides a system for defining and implementing interfaces in R, with runtime type checking, bringing some of the benefits of statically-typed languages to R with zero dependencies.</p>
+<p><code>interface</code> provides:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Interfaces</strong>: Define and implement interfaces with type checking. Interfaces can be extended and nested.</li>
+<li>
+<strong>Typed Functions</strong>: Define functions with strict type constraints.</li>
+<li>
+<strong>Typed Frames</strong>: Choose between a <code>data.frame</code> or <code>data.table</code> with column type constraints and row validation.</li>
+<li>
+<strong>Enums</strong>: Define and use enumerated types for stricter type safety.</li>
+</ol>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -161,7 +172,7 @@
 <span><span class="co">#&gt;    scores: Science</span></span>
 <span><span class="co">#&gt;    scores: 95</span></span>
 <span><span class="co">#&gt;    scores: 88</span></span>
-<span><span class="co">#&gt;   scholarship: &lt;environment: 0x116831678&gt;</span></span>
+<span><span class="co">#&gt;   scholarship: &lt;environment: 0x1175a13b8&gt;</span></span>
 <span><span class="co">#&gt;   street: 123 Main St</span></span>
 <span><span class="co">#&gt;   city: Small town</span></span>
 <span><span class="co">#&gt;   postal_code: 12345</span></span>
