@@ -320,11 +320,11 @@ print.typed_frame <- function(x, ...) {
     # Determine the base frame type
     base_frame_type <- class(x)[2]  # The second class should be the base frame type
 
-    cat("\033[1mTyped Data Frame Summary:\033[0m\n")
+    cat("Typed Data Frame Summary:\n")
     cat(sprintf("Base Frame Type: %s\n", base_frame_type))
     cat(sprintf("Dimensions: %d rows x %d columns\n", nrow(x), ncol(x)))
 
-    cat("\n\033[1mColumn Specifications:\033[0m\n")
+    cat("\nColumn Specifications:\n")
     col_types <- attr(x, "col_types")
     max_name_length <- max(nchar(names(col_types)))
 
@@ -333,12 +333,12 @@ print.typed_frame <- function(x, ...) {
         cat(sprintf("  %-*s : %s\n", max_name_length, name, type_desc))
     }
 
-    cat("\n\033[1mFrame Properties:\033[0m\n")
+    cat("\nFrame Properties:\n")
     cat(sprintf("  Freeze columns : %s\n", ifelse(attr(x, "freeze_n_cols"), "Yes", "No")))
     cat(sprintf("  Allow NA       : %s\n", ifelse(attr(x, "allow_na"), "Yes", "No")))
     cat(sprintf("  On violation   : %s\n", attr(x, "on_violation")))
     
-    cat("\n\033[1mData Preview:\033[0m\n")
+    cat("\nData Preview:\n")
     print(as.data.frame(head(x, 5)))
 
     if (nrow(x) > 5) {
