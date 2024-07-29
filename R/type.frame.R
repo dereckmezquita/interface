@@ -53,11 +53,31 @@ type.frame <- function(
 ) {
     on_violation <- match.arg(on_violation)
 
+    # Process in-place enum declarations
+    for (name in names(col_types)) {
+        if (inherits(col_types[[name]], "enum_generator")) {
+            enum_generator <- col_types[[name]]
+            col_types[[name]] <- list(
+                type = "enum",
+                validator = function(x) {
+                    if (is.character(x)) {
+                        return(enum_generator(x))
+                    } else if (inherits(x, "enum")) {
+                        return(x)
+                    } else {
+                        stop(sprintf("Invalid value for enum '%s'. Must be a character or enum object.", name))
+                    }
+                },
+                values = attr(enum_generator, "values")
+            )
+        }
+    }
+
     creator <- function(...) {
         df <- frame(...)
         errors <- list()
 
-        # Validate column types
+        # Validate column types and convert enum values
         for (col_name in names(col_types)) {
             if (!(col_name %in% names(df))) {
                 errors <- c(errors, sprintf("Required column '%s' is missing", col_name))
@@ -65,9 +85,23 @@ type.frame <- function(
                 col_data <- df[[col_name]]
                 col_type <- col_types[[col_name]]
 
-                error <- validate_property(col_name, col_data, col_type)
-                if (!is.null(error)) {
-                    errors <- c(errors, error)
+                # Handle enum conversion
+                if (is.list(col_type) && col_type$type == "enum") {
+                    df[[col_name]] <- sapply(col_data, function(x) {
+                        tryCatch(
+                            col_type$validator(x),
+                            error = function(e) {
+                                errors <<- c(errors, sprintf("Invalid enum value for column '%s': %s", col_name, x))
+                                return(x)  # Return original value to allow further processing
+                            }
+                        )
+                    })
+                } else {
+                    # For non-enum columns, use the original type
+                    error <- validate_property(col_name, df[[col_name]], col_type)
+                    if (!is.null(error)) {
+                        errors <- c(errors, error)
+                    }
                 }
             }
         }

@@ -9,7 +9,20 @@
 #' @return NULL if the validation passes, otherwise an error message.
 #'
 validate_property <- function(name, value, validator) {
-    if (is.list(validator) && !is.function(validator)) {
+    if (is.list(validator) && validator$type == "enum") {
+        # Handle enum validation
+        if (inherits(value, "enum")) {
+            if (!value$value %in% validator$values) {
+                return(sprintf("Property '%s' must be one of the enum values: %s", name, paste(validator$values, collapse = ", ")))
+            }
+        } else if (is.character(value)) {
+            if (!value %in% validator$values) {
+                return(sprintf("Property '%s' must be one of the enum values: %s", name, paste(validator$values, collapse = ", ")))
+            }
+        } else {
+            return(sprintf("Property '%s' must be an enum object or a valid enum value", name))
+        }
+    } else if (is.list(validator) && !is.function(validator)) {
         # Multiple allowed types
         for (v in validator) {
             error <- validate_property(name, value, v)
@@ -19,10 +32,6 @@ validate_property <- function(name, value, validator) {
     } else if (inherits(validator, "interface")) {
         if (!inherits(value, "interface_object") || !identical(attr(value, "properties"), attr(validator, "properties"))) {
             return(sprintf("Property '%s' must be an object implementing the specified interface", name))
-        }
-    } else if (inherits(validator, "enum_generator")) {
-        if (!inherits(value, "enum") || !value$value %in% attr(validator, "values")) {
-            return(sprintf("Property '%s' must be one of the enum values: %s", name, paste(attr(validator, "values"), collapse = ", ")))
         }
     } else if (is.function(validator)) {
         if (identical(validator, character)) {
