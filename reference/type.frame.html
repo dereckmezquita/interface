@@ -119,23 +119,22 @@ When a data frame is created or modified using this blueprint, it ensures that a
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">persons</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Typed data frame with the following properties:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of rows: 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of columns: 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Column types:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id: function (length = 0L) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id: .Internal(vector("integer", length))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   name: function (length = 0L) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    name: .Internal(vector("character", length))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   age: function (length = 0L) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    age: .Internal(vector("double", length))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   is_student: function (length = 0L) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    is_student: .Internal(vector("logical", length))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Freeze columns: Yes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Allow NA: Yes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> On violation: error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Typed Data Frame Summary:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Base Frame Type: data.frame</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimensions: 3 rows x 4 columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Data:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Column Specifications:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id         : integer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name       : character</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   age        : numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   is_student : logical</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Frame Properties:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Freeze columns : Yes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Allow NA       : Yes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   On violation   : error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Data Preview:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id    name age is_student</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  1   Alice  25       TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  2     Bob  30      FALSE</span>
@@ -143,7 +142,8 @@ When a data frame is created or modified using this blueprint, it ensures that a
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Invalid modification (throws error)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error : Property 'id' must be of type integer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in `$&lt;-.typed_frame`(`*tmp*`, id, value = c("a", "b", "c")) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   object 'col_name' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Adding a column (throws error if freeze_n_cols is TRUE)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">yeet</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
