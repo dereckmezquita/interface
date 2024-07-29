@@ -214,7 +214,7 @@ function:</p>
 <span><span class="co">#&gt;    scores: Science</span></span>
 <span><span class="co">#&gt;    scores: 95</span></span>
 <span><span class="co">#&gt;    scores: 88</span></span>
-<span><span class="co">#&gt;   scholarship: &lt;environment: 0x5582316c42d8&gt;</span></span>
+<span><span class="co">#&gt;   scholarship: &lt;environment: 0x562d3abfdfe0&gt;</span></span>
 <span><span class="co">#&gt;   street: 123 Main St</span></span>
 <span><span class="co">#&gt;   city: Small town</span></span>
 <span><span class="co">#&gt;   postal_code: 12345</span></span>
@@ -482,6 +482,7 @@ validation:</p>
 <span>        name <span class="op">=</span> <span class="va">character</span>,</span>
 <span>        age <span class="op">=</span> <span class="va">numeric</span>,</span>
 <span>        is_student <span class="op">=</span> <span class="va">logical</span>,</span>
+<span>        gender <span class="op">=</span> <span class="fu"><a href="../reference/enum.html">enum</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>,</span>
 <span>        email <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="co"># functions are applied to whole column</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    freeze_n_cols <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -503,19 +504,21 @@ validation:</p>
 <span>    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span><span class="op">)</span>,</span>
 <span>    age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">35</span>, <span class="fl">35</span><span class="op">)</span>,</span>
 <span>    is_student <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span><span class="op">)</span>,</span>
 <span>    email <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alice@test.com"</span>, <span class="st">"bob_no_valid@test.com"</span>, <span class="st">"charlie@example.com"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Typed Data Frame Summary:</span></span></span>
 <span><span class="co">#&gt; Base Frame Type: data.frame</span></span>
-<span><span class="co">#&gt; Dimensions: 3 rows x 5 columns</span></span>
+<span><span class="co">#&gt; Dimensions: 3 rows x 6 columns</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Column Specifications:</span></span></span>
 <span><span class="co">#&gt;   id         : integer</span></span>
 <span><span class="co">#&gt;   name       : character</span></span>
 <span><span class="co">#&gt;   age        : numeric</span></span>
 <span><span class="co">#&gt;   is_student : logical</span></span>
+<span><span class="co">#&gt;   gender     : Enum(M, F)</span></span>
 <span><span class="co">#&gt;   email      : custom function</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Frame Properties:</span></span></span>
@@ -524,18 +527,25 @@ validation:</p>
 <span><span class="co">#&gt;   On violation   : error</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Data Preview:</span></span></span>
-<span><span class="co">#&gt;   id name age is_student email</span></span>
-<span><span class="co">#&gt; 1  1 TRUE   1       TRUE  TRUE</span></span>
-<span><span class="co">#&gt; 2  1 TRUE   1       TRUE  TRUE</span></span>
-<span><span class="co">#&gt; 3  1 TRUE   1       TRUE  TRUE</span></span>
+<span><span class="co">#&gt;   id name age is_student gender email</span></span>
+<span><span class="co">#&gt; 1  1 TRUE   1       TRUE   TRUE  TRUE</span></span>
+<span><span class="co">#&gt; 2  1 TRUE   1       TRUE   TRUE  TRUE</span></span>
+<span><span class="co">#&gt; 3  1 TRUE   1       TRUE   TRUE  TRUE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        id        name                age    is_student        email          </span></span>
-<span><span class="co">#&gt;  Min.   :1   Length:3           Min.   :1   Mode:logical   Length:3          </span></span>
-<span><span class="co">#&gt;  1st Qu.:1   Class :character   1st Qu.:1   TRUE:3         Class :character  </span></span>
-<span><span class="co">#&gt;  Median :1   Mode  :character   Median :1                  Mode  :character  </span></span>
-<span><span class="co">#&gt;  Mean   :1                      Mean   :1                                    </span></span>
-<span><span class="co">#&gt;  3rd Qu.:1                      3rd Qu.:1                                    </span></span>
-<span><span class="co">#&gt;  Max.   :1                      Max.   :1</span></span>
+<span><span class="co">#&gt;        id        name                age    is_student    </span></span>
+<span><span class="co">#&gt;  Min.   :1   Length:3           Min.   :1   Mode:logical  </span></span>
+<span><span class="co">#&gt;  1st Qu.:1   Class :character   1st Qu.:1   TRUE:3        </span></span>
+<span><span class="co">#&gt;  Median :1   Mode  :character   Median :1                 </span></span>
+<span><span class="co">#&gt;  Mean   :1                      Mean   :1                 </span></span>
+<span><span class="co">#&gt;  3rd Qu.:1                      3rd Qu.:1                 </span></span>
+<span><span class="co">#&gt;  Max.   :1                      Max.   :1                 </span></span>
+<span><span class="co">#&gt;  gender.Length  gender.Class  gender.Mode    email          </span></span>
+<span><span class="co">#&gt;  1        -none-   logical                Length:3          </span></span>
+<span><span class="co">#&gt;  1        -none-   logical                Class :character  </span></span>
+<span><span class="co">#&gt;  1        -none-   logical                Mode  :character  </span></span>
+<span><span class="co">#&gt;                                                             </span></span>
+<span><span class="co">#&gt;                                                             </span></span>
+<span><span class="co">#&gt; </span></span>
 <span></span>
 <span><span class="co"># Invalid row addition (throws error)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -545,8 +555,7 @@ validation:</p>
 <span>    is_student <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"d@test.com"</span></span>
 <span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in rbind(deparse.level, ...) : </span></span>
-<span><span class="co">#&gt;   All data frames must be typed_frame objects</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in rbind(deparse.level, ...) : Number of columns must match</span></span></code></pre></div>
 </div>
 </div>
 </div>
