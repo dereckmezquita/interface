@@ -329,6 +329,7 @@ PersonFrame <- type.frame(
         name = character,
         age = numeric,
         is_student = logical,
+        gender = enum("M", "F"),
         email = function(x) all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", x)) # functions are applied to whole column
     ),
     freeze_n_cols = FALSE,
@@ -350,6 +351,7 @@ df <- PersonFrame(
     name = c("Alice", "Bob", "Charlie"),
     age = c(25, 35, 35),
     is_student = c(TRUE, FALSE, TRUE),
+    gender = c("F", "M", "M"),
     email = c("alice@test.com", "bob_no_valid@test.com", "charlie@example.com")
 )
 
