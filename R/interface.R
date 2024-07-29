@@ -78,12 +78,23 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
             validator <- all_properties[[name]]
 
             if (inherits(validator, "enum_generator")) {
-                if (is.character(value)) {
-                    value <- validator(value)
-                } else if (!inherits(value, "enum")) {
-                    errors <- c(errors, sprintf("Property '%s' must be a string or an enum object", name))
+                tried <- tryCatch({
+                    new_value <- validator(value)
+                    list(success = TRUE, value = new_value)
+                }, error = function(e) {
+                    list(
+                        success = FALSE,
+                        value = NULL,
+                        error = sprintf("Invalid enum value for property '%s': %s", name, e$message)
+                    )
+                })
+
+                if (!tried$success) {
+                    errors <- c(errors, tried$error)
                     next
                 }
+
+                value <- tried$value
             }
 
             error <- validate_property(name, value, validator)

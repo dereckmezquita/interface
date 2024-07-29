@@ -9,20 +9,27 @@
 #' @return NULL if the validation passes, otherwise an error message.
 #'
 validate_property <- function(name, value, validator) {
-    if (is.list(validator) && !is.function(validator)) {
+    if (inherits(validator, "enum_generator")) {
+        # Enum validation is handled by the enum generator itself
+        return(NULL)
+    } else if (is.list(validator) && !is.function(validator)) {
         # Multiple allowed types
+        errors <- character(0)
         for (v in validator) {
             error <- validate_property(name, value, v)
-            if (is.null(error)) return(NULL)
+            if (!is.null(error)) {
+                errors <- c(errors, error)
+            } else {
+                return(NULL)
+            }
         }
-        return(sprintf("Property '%s' does not match any of the allowed types", name))
+
+        if (length(errors) > 0) {
+            return(sprintf("Property '%s' must be one of the following types:\n  - %s", name, paste(errors, collapse = "\n  - ")))
+        }
     } else if (inherits(validator, "interface")) {
         if (!inherits(value, "interface_object") || !identical(attr(value, "properties"), attr(validator, "properties"))) {
             return(sprintf("Property '%s' must be an object implementing the specified interface", name))
-        }
-    } else if (inherits(validator, "enum_generator")) {
-        if (!inherits(value, "enum") || !value$value %in% attr(validator, "values")) {
-            return(sprintf("Property '%s' must be one of the enum values: %s", name, paste(attr(validator, "values"), collapse = ", ")))
         }
     } else if (is.function(validator)) {
         if (identical(validator, character)) {
@@ -53,6 +60,10 @@ validate_property <- function(name, value, validator) {
             if (!data.table::is.data.table(value)) {
                 return(sprintf("Property '%s' must be a data.table", name))
             }
+        } else if (identical(validator, data.frame)) {
+            if (!is.data.frame(value)) {
+                return(sprintf("Property '%s' must be a data.frame", name))
+            }
         } else {
             # Custom validator function
             validation_result <- validator(value)
@@ -62,7 +73,7 @@ validate_property <- function(name, value, validator) {
         }
     } else if (is.character(validator)) {
         if (!inherits(value, validator)) {
-            return(sprintf("Property '%s' must be of type %s, but got %s", name, validator, class(value)[1]))
+            return(sprintf("Property '%s' must be of type %s, but got %s", name, validator, paste(class(value), collapse = ", ")))
         }
     } else {
         return(sprintf("Invalid validator for property '%s'", name))

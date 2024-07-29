@@ -1,7 +1,7 @@
 Package: interface
 Type: Package
-Title: Typings and interfaces for data validation and safety in R
-Version: 0.0.3
+Title: A runtime type system for R; interfaces, enums, typed data.frames/data.tables and functions
+Version: 0.0.4
 URL: https://github.com/dereckmezquita/interface
 Authors@R: 
     person(given = "Dereck",
@@ -10,7 +10,7 @@ Authors@R:
            email = "dereck@mezquita.io",
            comment = c(ORCID = "0000-0002-9307-6762"))
 Maintainer: Dereck Mezquita <dereck@mezquita.io>
-Description: A type system for defining and implementing interfaces in R, with optional runtime data validation and type checking.
+Description: A runtime type system for R, define and implement interfaces, enums, typed data.frames/data.tables, and typed functions with zero dependencies
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
