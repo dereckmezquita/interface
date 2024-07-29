@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">interface</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -161,7 +161,7 @@
 <span><span class="co">#&gt;    scores: Science</span></span>
 <span><span class="co">#&gt;    scores: 95</span></span>
 <span><span class="co">#&gt;    scores: 88</span></span>
-<span><span class="co">#&gt;   scholarship: &lt;environment: 0x130c09c00&gt;</span></span>
+<span><span class="co">#&gt;   scholarship: &lt;environment: 0x116831678&gt;</span></span>
 <span><span class="co">#&gt;   street: 123 Main St</span></span>
 <span><span class="co">#&gt;   city: Small town</span></span>
 <span><span class="co">#&gt;   postal_code: 12345</span></span>
@@ -271,23 +271,22 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">persons</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Typed data frame with the following properties:</span></span>
-<span><span class="co">#&gt; Number of rows: 3</span></span>
-<span><span class="co">#&gt; Number of columns: 4</span></span>
-<span><span class="co">#&gt; Column types:</span></span>
-<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
-<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
-<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
-<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
-<span><span class="co">#&gt; Freeze columns: Yes</span></span>
-<span><span class="co">#&gt; Allow NA: Yes</span></span>
-<span><span class="co">#&gt; On violation: error</span></span>
+<span><span class="co">#&gt; [1mTyped Data Frame Summary:[0m</span></span>
+<span><span class="co">#&gt; Base Frame Type: data.frame</span></span>
+<span><span class="co">#&gt; Dimensions: 3 rows x 4 columns</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data:</span></span>
+<span><span class="co">#&gt; [1mColumn Specifications:[0m</span></span>
+<span><span class="co">#&gt;   id         : integer</span></span>
+<span><span class="co">#&gt;   name       : character</span></span>
+<span><span class="co">#&gt;   age        : numeric</span></span>
+<span><span class="co">#&gt;   is_student : logical</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [1mFrame Properties:[0m</span></span>
+<span><span class="co">#&gt;   Freeze columns : Yes</span></span>
+<span><span class="co">#&gt;   Allow NA       : Yes</span></span>
+<span><span class="co">#&gt;   On violation   : error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [1mData Preview:[0m</span></span>
 <span><span class="co">#&gt;   id    name age is_student</span></span>
 <span><span class="co">#&gt; 1  1   Alice  25       TRUE</span></span>
 <span><span class="co">#&gt; 2  2     Bob  30      FALSE</span></span>
@@ -295,7 +294,8 @@
 <span></span>
 <span><span class="co"># Invalid modification (throws error)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error : Property 'id' must be of type integer</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in `$&lt;-.typed_frame`(`*tmp*`, id, value = c("a", "b", "c")) : </span></span>
+<span><span class="co">#&gt;   object 'col_name' not found</span></span></code></pre></div>
 <p>Additional options for data frame validation:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
@@ -305,6 +305,7 @@
 <span>        name <span class="op">=</span> <span class="va">character</span>,</span>
 <span>        age <span class="op">=</span> <span class="va">numeric</span>,</span>
 <span>        is_student <span class="op">=</span> <span class="va">logical</span>,</span>
+<span>        gender <span class="op">=</span> <span class="fu"><a href="reference/enum.html">enum</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>,</span>
 <span>        email <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    freeze_n_cols <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -326,55 +327,48 @@
 <span>    name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span><span class="op">)</span>,</span>
 <span>    age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">35</span>, <span class="fl">35</span><span class="op">)</span>,</span>
 <span>    is_student <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span>, <span class="st">"M"</span><span class="op">)</span>,</span>
 <span>    email <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alice@test.com"</span>, <span class="st">"bob_no_valid@test.com"</span>, <span class="st">"charlie@example.com"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Typed data frame with the following properties:</span></span>
-<span><span class="co">#&gt; Number of rows: 3</span></span>
-<span><span class="co">#&gt; Number of columns: 5</span></span>
-<span><span class="co">#&gt; Column types:</span></span>
-<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
-<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
-<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
-<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
-<span><span class="co">#&gt;   email: function (x) </span></span>
-<span><span class="co">#&gt;    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", </span></span>
-<span><span class="co">#&gt;    email:     x))</span></span>
-<span><span class="co">#&gt; Freeze columns: No</span></span>
-<span><span class="co">#&gt; Allow NA: No</span></span>
-<span><span class="co">#&gt; On violation: error</span></span>
+<span><span class="co">#&gt; [1mTyped Data Frame Summary:[0m</span></span>
+<span><span class="co">#&gt; Base Frame Type: data.frame</span></span>
+<span><span class="co">#&gt; Dimensions: 3 rows x 6 columns</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Data:</span></span>
-<span><span class="co">#&gt;   id    name age is_student                 email</span></span>
-<span><span class="co">#&gt; 1  1   Alice  25       TRUE        alice@test.com</span></span>
-<span><span class="co">#&gt; 2  2     Bob  35      FALSE bob_no_valid@test.com</span></span>
-<span><span class="co">#&gt; 3  3 Charlie  35       TRUE   charlie@example.com</span></span>
+<span><span class="co">#&gt; [1mColumn Specifications:[0m</span></span>
+<span><span class="co">#&gt;   id         : integer</span></span>
+<span><span class="co">#&gt;   name       : character</span></span>
+<span><span class="co">#&gt;   age        : numeric</span></span>
+<span><span class="co">#&gt;   is_student : logical</span></span>
+<span><span class="co">#&gt;   gender     : Enum(M, F)</span></span>
+<span><span class="co">#&gt;   email      : custom function</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [1mFrame Properties:[0m</span></span>
+<span><span class="co">#&gt;   Freeze columns : No</span></span>
+<span><span class="co">#&gt;   Allow NA       : No</span></span>
+<span><span class="co">#&gt;   On violation   : error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [1mData Preview:[0m</span></span>
+<span><span class="co">#&gt;   id name age is_student gender email</span></span>
+<span><span class="co">#&gt; 1  1 TRUE   1       TRUE   TRUE  TRUE</span></span>
+<span><span class="co">#&gt; 2  1 TRUE   1       TRUE   TRUE  TRUE</span></span>
+<span><span class="co">#&gt; 3  1 TRUE   1       TRUE   TRUE  TRUE</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Typed data frame summary:</span></span>
-<span><span class="co">#&gt; Number of rows: 3</span></span>
-<span><span class="co">#&gt; Number of columns: 5</span></span>
-<span><span class="co">#&gt; Column types:</span></span>
-<span><span class="co">#&gt;   id: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    id: .Internal(vector("integer", length))</span></span>
-<span><span class="co">#&gt;   name: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    name: .Internal(vector("character", length))</span></span>
-<span><span class="co">#&gt;   age: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    age: .Internal(vector("double", length))</span></span>
-<span><span class="co">#&gt;   is_student: function (length = 0L) </span></span>
-<span><span class="co">#&gt;    is_student: .Internal(vector("logical", length))</span></span>
-<span><span class="co">#&gt;   email: function (x) </span></span>
-<span><span class="co">#&gt;    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", </span></span>
-<span><span class="co">#&gt;    email:     x))</span></span>
-<span><span class="co">#&gt; Freeze columns: No</span></span>
-<span><span class="co">#&gt; Allow NA: No</span></span>
-<span><span class="co">#&gt; On violation: error</span></span>
-<span><span class="co">#&gt; Validation status:</span></span>
-<span><span class="co">#&gt;   All rows passed validation.</span></span>
+<span><span class="co">#&gt;        id        name                age    is_student    </span></span>
+<span><span class="co">#&gt;  Min.   :1   Length:3           Min.   :1   Mode:logical  </span></span>
+<span><span class="co">#&gt;  1st Qu.:1   Class :character   1st Qu.:1   TRUE:3        </span></span>
+<span><span class="co">#&gt;  Median :1   Mode  :character   Median :1                 </span></span>
+<span><span class="co">#&gt;  Mean   :1                      Mean   :1                 </span></span>
+<span><span class="co">#&gt;  3rd Qu.:1                      3rd Qu.:1                 </span></span>
+<span><span class="co">#&gt;  Max.   :1                      Max.   :1                 </span></span>
+<span><span class="co">#&gt;  gender.Length  gender.Class  gender.Mode    email          </span></span>
+<span><span class="co">#&gt;  1        -none-   logical                Length:3          </span></span>
+<span><span class="co">#&gt;  1        -none-   logical                Class :character  </span></span>
+<span><span class="co">#&gt;  1        -none-   logical                Mode  :character  </span></span>
+<span><span class="co">#&gt;                                                             </span></span>
+<span><span class="co">#&gt;                                                             </span></span>
+<span><span class="co">#&gt; </span></span>
 <span></span>
 <span><span class="co"># Invalid row addition (throws error)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -384,8 +378,7 @@
 <span>    is_student <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    email <span class="op">=</span> <span class="st">"d@test.com"</span></span>
 <span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in rbind(deparse.level, ...) : </span></span>
-<span><span class="co">#&gt;   Row 1 failed validation: Age must be less than 40 (got 50)</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in rbind(deparse.level, ...) : Number of columns must match</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="enums">Enums<a class="anchor" aria-label="anchor" href="#enums"></a>
@@ -435,8 +428,9 @@
 <span>    model <span class="op">=</span> <span class="st">"Civic"</span>,</span>
 <span>    colour <span class="op">=</span> <span class="st">"yellow"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in validator(value) : </span></span>
-<span><span class="co">#&gt;   Invalid value. Must be one of: Toyota, Ford, Chevrolet</span></span>
+<span><span class="co">#&gt; Error : Errors occurred during interface creation:</span></span>
+<span><span class="co">#&gt;   - Invalid enum value for property 'make': Invalid value. Must be one of: Toyota, Ford, Chevrolet</span></span>
+<span><span class="co">#&gt;   - Invalid enum value for property 'colour': Invalid value. Must be one of: red, green, blue</span></span>
 <span></span>
 <span><span class="co"># Invalid modification (throws error)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">car1</span><span class="op">$</span><span class="va">colour</span><span class="op">$</span><span class="va">value</span> <span class="op">&lt;-</span> <span class="st">"yellow"</span><span class="op">)</span></span>
