@@ -26,7 +26,14 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckmezquita/kucoin)
 <!-- badges: end -->
 
-The `interface` package provides a system for defining and implementing interfaces in R, with runtime type checking, bringing some of the benefits of statically-typed languages to R.
+The `interface` package provides a system for defining and implementing interfaces in R, with runtime type checking, bringing some of the benefits of statically-typed languages to R with zero dependencies.
+
+`interface` provides:
+
+1. **Interfaces**: Define and implement interfaces with type checking. Interfaces can be extended and nested.
+1. **Typed Functions**: Define functions with strict type constraints.
+1. **Typed Frames**: Choose between a `data.frame` or `data.table` with column type constraints and row validation.
+1. **Enums**: Define and use enumerated types for stricter type safety.
 
 ## Installation
 
