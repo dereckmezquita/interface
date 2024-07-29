@@ -121,7 +121,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x130c09c00>
+#>   scholarship: <environment: 0x116831678>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
@@ -237,23 +237,22 @@ persons <- PersonFrame(
 )
 
 print(persons)
-#> Typed data frame with the following properties:
-#> Number of rows: 3
-#> Number of columns: 4
-#> Column types:
-#>   id: function (length = 0L) 
-#>    id: .Internal(vector("integer", length))
-#>   name: function (length = 0L) 
-#>    name: .Internal(vector("character", length))
-#>   age: function (length = 0L) 
-#>    age: .Internal(vector("double", length))
-#>   is_student: function (length = 0L) 
-#>    is_student: .Internal(vector("logical", length))
-#> Freeze columns: Yes
-#> Allow NA: Yes
-#> On violation: error
+#> [1mTyped Data Frame Summary:[0m
+#> Base Frame Type: data.frame
+#> Dimensions: 3 rows x 4 columns
 #> 
-#> Data:
+#> [1mColumn Specifications:[0m
+#>   id         : integer
+#>   name       : character
+#>   age        : numeric
+#>   is_student : logical
+#> 
+#> [1mFrame Properties:[0m
+#>   Freeze columns : Yes
+#>   Allow NA       : Yes
+#>   On violation   : error
+#> 
+#> [1mData Preview:[0m
 #>   id    name age is_student
 #> 1  1   Alice  25       TRUE
 #> 2  2     Bob  30      FALSE
@@ -261,7 +260,8 @@ print(persons)
 
 # Invalid modification (throws error)
 try(persons$id <- letters[1:3])
-#> Error : Property 'id' must be of type integer
+#> Error in `$<-.typed_frame`(`*tmp*`, id, value = c("a", "b", "c")) : 
+#>   object 'col_name' not found
 ```
 
 Additional options for data frame validation:
@@ -274,6 +274,7 @@ PersonFrame <- type.frame(
         name = character,
         age = numeric,
         is_student = logical,
+        gender = enum("M", "F"),
         email = function(x) all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", x))
     ),
     freeze_n_cols = FALSE,
@@ -295,55 +296,48 @@ df <- PersonFrame(
     name = c("Alice", "Bob", "Charlie"),
     age = c(25, 35, 35),
     is_student = c(TRUE, FALSE, TRUE),
+    gender = c("F", "M", "M"),
     email = c("alice@test.com", "bob_no_valid@test.com", "charlie@example.com")
 )
 
 print(df)
-#> Typed data frame with the following properties:
-#> Number of rows: 3
-#> Number of columns: 5
-#> Column types:
-#>   id: function (length = 0L) 
-#>    id: .Internal(vector("integer", length))
-#>   name: function (length = 0L) 
-#>    name: .Internal(vector("character", length))
-#>   age: function (length = 0L) 
-#>    age: .Internal(vector("double", length))
-#>   is_student: function (length = 0L) 
-#>    is_student: .Internal(vector("logical", length))
-#>   email: function (x) 
-#>    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
-#>    email:     x))
-#> Freeze columns: No
-#> Allow NA: No
-#> On violation: error
+#> [1mTyped Data Frame Summary:[0m
+#> Base Frame Type: data.frame
+#> Dimensions: 3 rows x 6 columns
 #> 
-#> Data:
-#>   id    name age is_student                 email
-#> 1  1   Alice  25       TRUE        alice@test.com
-#> 2  2     Bob  35      FALSE bob_no_valid@test.com
-#> 3  3 Charlie  35       TRUE   charlie@example.com
+#> [1mColumn Specifications:[0m
+#>   id         : integer
+#>   name       : character
+#>   age        : numeric
+#>   is_student : logical
+#>   gender     : Enum(M, F)
+#>   email      : custom function
+#> 
+#> [1mFrame Properties:[0m
+#>   Freeze columns : No
+#>   Allow NA       : No
+#>   On violation   : error
+#> 
+#> [1mData Preview:[0m
+#>   id name age is_student gender email
+#> 1  1 TRUE   1       TRUE   TRUE  TRUE
+#> 2  1 TRUE   1       TRUE   TRUE  TRUE
+#> 3  1 TRUE   1       TRUE   TRUE  TRUE
 summary(df)
-#> Typed data frame summary:
-#> Number of rows: 3
-#> Number of columns: 5
-#> Column types:
-#>   id: function (length = 0L) 
-#>    id: .Internal(vector("integer", length))
-#>   name: function (length = 0L) 
-#>    name: .Internal(vector("character", length))
-#>   age: function (length = 0L) 
-#>    age: .Internal(vector("double", length))
-#>   is_student: function (length = 0L) 
-#>    is_student: .Internal(vector("logical", length))
-#>   email: function (x) 
-#>    email: all(grepl("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", 
-#>    email:     x))
-#> Freeze columns: No
-#> Allow NA: No
-#> On violation: error
-#> Validation status:
-#>   All rows passed validation.
+#>        id        name                age    is_student    
+#>  Min.   :1   Length:3           Min.   :1   Mode:logical  
+#>  1st Qu.:1   Class :character   1st Qu.:1   TRUE:3        
+#>  Median :1   Mode  :character   Median :1                 
+#>  Mean   :1                      Mean   :1                 
+#>  3rd Qu.:1                      3rd Qu.:1                 
+#>  Max.   :1                      Max.   :1                 
+#>  gender.Length  gender.Class  gender.Mode    email          
+#>  1        -none-   logical                Length:3          
+#>  1        -none-   logical                Class :character  
+#>  1        -none-   logical                Mode  :character  
+#>                                                             
+#>                                                             
+#> 
 
 # Invalid row addition (throws error)
 try(rbind(df, data.frame(
@@ -353,8 +347,7 @@ try(rbind(df, data.frame(
     is_student = TRUE,
     email = "d@test.com"
 )))
-#> Error in rbind(deparse.level, ...) : 
-#>   Row 1 failed validation: Age must be less than 40 (got 50)
+#> Error in rbind(deparse.level, ...) : Number of columns must match
 ```
 
 ### Enums
@@ -408,8 +401,9 @@ try(Car(
     model = "Civic",
     colour = "yellow"
 ))
-#> Error in validator(value) : 
-#>   Invalid value. Must be one of: Toyota, Ford, Chevrolet
+#> Error : Errors occurred during interface creation:
+#>   - Invalid enum value for property 'make': Invalid value. Must be one of: Toyota, Ford, Chevrolet
+#>   - Invalid enum value for property 'colour': Invalid value. Must be one of: red, green, blue
 
 # Invalid modification (throws error)
 try(car1$colour$value <- "yellow")
