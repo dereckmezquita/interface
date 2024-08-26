@@ -5,13 +5,17 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/dereckmezquita/interface/workflows/R-CMD-check/badge.svg)](https://github.com/dereckmezquita/interface/actions)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![R-CMD-check](https://github.com/dereckmezquita/interface/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dereckmezquita/interface/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/interface)](https://CRAN.R-project.org/package=interface)
+[![GitHub
+version](https://img.shields.io/github/r-package/v/dereckmezquita/interface?label=GitHub)](https://github.com/dereckmezquita/interface)
+[![R-CMD-check](https://github.com/dereckmezquita/interface/workflows/R-CMD-check/badge.svg)](https://github.com/dereckmezquita/interface/actions)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Downloads](https://cranlogs.r-pkg.org/badges/interface)](https://cran.r-project.org/package=interface)
 <!-- badges: end -->
 
 The `interface` package provides a system for defining and implementing
@@ -133,7 +137,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x129393e08>
+#>   scholarship: <environment: 0x1166d42c0>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
