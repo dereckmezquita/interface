@@ -51,7 +51,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install --cask basictex
-          eval "$(/usr/libexec/path_helper)"
+          export PATH="/Library/TeX/texbin:$PATH"
           sudo tlmgr update --self
           sudo tlmgr install inconsolata
 
@@ -60,6 +60,7 @@ jobs:
         run: |
           install.packages('tinytex')
           tinytex::install_tinytex()
+          tinytex::tlmgr_install('inconsolata')
         shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
