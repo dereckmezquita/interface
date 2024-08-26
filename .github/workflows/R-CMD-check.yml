@@ -22,12 +22,16 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.r-version }}
+      - name: Set up Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck", "renv"))
+          install.packages(c("remotes", "rcmdcheck", "renv", "knitr", "rmarkdown"))
           remotes::install_deps(dependencies = TRUE)
           renv::restore()
         shell: Rscript {0}
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
+        env:
+          _R_CHECK_CRAN_INCOMING_: false
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
