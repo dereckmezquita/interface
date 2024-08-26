@@ -130,7 +130,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x1202f3d50>
+#>   scholarship: <environment: 0x11a780720>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
@@ -430,3 +430,10 @@ and validation in R. By defining interfaces, typed functions, and typed
 data frames, you can create robust and reliable data structures and
 functions with strict type constraints. For more details, refer to the
 package documentation.
+
+## Citation
+
+If you use this package in your research or work, please cite it as:
+
+Mezquita, D. (2024). interface: A Runtime Type System for R. R package
+version 0.1.0. <https://github.com/dereckmezquita/interface>
