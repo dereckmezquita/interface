@@ -65,6 +65,11 @@ jobs:
           Sys.setenv(PATH = paste(Sys.getenv("PATH"), tinytex::tinytex_root(), sep=";"))
         shell: Rscript {0}
 
+      - name: Check if pdflatex is available
+        if: runner.os == 'Windows'
+        run: pdflatex --version
+        shell: bash
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
