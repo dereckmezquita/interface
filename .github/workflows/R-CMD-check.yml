@@ -56,11 +56,8 @@ jobs:
       - name: Install system dependencies (Windows)
         if: runner.os == 'Windows'
         run: |
-          choco install miktex
-          miktexsetup finish
-          initexmf --admin --update-fndb
-          initexmf --admin --mkmaps
-          initexmf --admin --mklinks
+          choco install miktex --params="/FileTypeAssociations=0" -y
+          refreshenv
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
