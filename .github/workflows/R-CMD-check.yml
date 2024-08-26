@@ -54,22 +54,16 @@ jobs:
           sudo /Library/TeX/texbin/tlmgr install inconsolata
           echo "/Library/TeX/texbin" >> $GITHUB_PATH
 
-      - name: Install system dependencies (Windows)
+      - name: Install TinyTeX and LaTeX packages on Windows
         if: runner.os == 'Windows'
         run: |
           install.packages('tinytex')
           tinytex::install_tinytex(force = TRUE)
           tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
           tinytex::tlmgr_update()
-          echo "::add-path::$(tinytex::tinytex_root())/bin/win32"
+          writeLines(sprintf('PATH="%s/bin/win32;%s"', tinytex::tinytex_root(), Sys.getenv('PATH')), "~/.Renviron")
+          source("~/.Renviron")
         shell: Rscript {0}
-
-      - name: Verify pdflatex installation
-        if: runner.os == 'Windows'
-        run: |
-          echo $PATH
-          pdflatex --version
-        shell: bash
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
