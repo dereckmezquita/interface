@@ -17,8 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'devel'}
           - {os: macOS-latest, r: 'release'}
           - {os: macOS-latest, r: 'devel'}
           - {os: ubuntu-latest, r: '4.1.0'}
@@ -38,18 +36,6 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
-
-      - name: Install TinyTeX on Windows
-        if: runner.os == 'Windows'
-        run: |
-          install.packages('tinytex')
-          tinytex::install_tinytex(force = TRUE)
-          tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
-        shell: Rscript {0}
-
-      - name: Add TinyTeX to PATH (Windows)
-        if: runner.os == 'Windows'
-        run: echo "C:\\Users\\runneradmin\\AppData\\Roaming\\TinyTeX\\bin\\win32" >> $GITHUB_PATH
 
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
