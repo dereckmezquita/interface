@@ -18,11 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '4.1.0'}
           - {os: windows-latest, r: 'release'}
           - {os: windows-latest, r: 'devel'}
           - {os: macOS-latest, r: '4.1.0'}
           - {os: macOS-latest, r: 'release'}
+          - {os: macOS-latest, r: 'devel'}
           - {os: ubuntu-latest, r: '4.1.0'}
           - {os: ubuntu-latest, r: 'release'}
           - {os: ubuntu-latest, r: 'devel'}
@@ -41,11 +41,26 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
 
-      - name: Install system dependencies
+      - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-fonts-extra
+
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install --cask basictex
+          eval "$(/usr/libexec/path_helper)"
+          sudo tlmgr update --self
+          sudo tlmgr install inconsolata
+
+      - name: Install system dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          install.packages('tinytex')
+          tinytex::install_tinytex()
+        shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
