@@ -263,13 +263,13 @@ wrap_fun_in_all <- function(user_fun) {
 #' Allows modifying a typed data frame using the $ operator, with validation checks.
 #'
 #' @param x A typed data frame.
-#' @param name The name of the column to modify or add.
+#' @param col_name The name of the column to modify or add.
 #' @param value The new value to assign.
 #' @return The modified typed data frame.
 #' @export
-`$<-.typed_frame` <- function(x, name, value) {
+`$<-.typed_frame` <- function(x, col_name, value) {
     # Check if adding new columns is allowed
-    if (attr(x, "freeze_n_cols") && !(name %in% names(x))) {
+    if (attr(x, "freeze_n_cols") && !(col_name %in% names(x))) {
         stop("Adding new columns is not allowed when freeze_n_cols is TRUE")
     }
 
@@ -287,8 +287,8 @@ wrap_fun_in_all <- function(user_fun) {
     }
 
     # Check for NA values
-    if (!attr(value, "allow_na") && any(is.na(value))) {
-        handle_violation("NA values are not allowed", attr(value, "on_violation"))
+    if (!attr(x, "allow_na") && any(is.na(value))) {
+        handle_violation("NA values are not allowed", attr(x, "on_violation"))
     }
 
     # TODO: really review if a row callback is useful at all
@@ -315,6 +315,7 @@ wrap_fun_in_all <- function(user_fun) {
 #'
 #' @param x A typed data frame.
 #' @param ... Additional arguments passed to print.
+#' @importFrom utils head
 #' @export
 print.typed_frame <- function(x, ...) {
     # Determine the base frame type
@@ -339,7 +340,7 @@ print.typed_frame <- function(x, ...) {
     cat(sprintf("  On violation   : %s\n", attr(x, "on_violation")))
     
     cat("\nData Preview:\n")
-    print(as.data.frame(head(x, 5)))
+    print(as.data.frame(utils::head(x, 5)))
 
     if (nrow(x) > 5) {
         cat(sprintf("\n... with %d more rows\n", nrow(x) - 5))
