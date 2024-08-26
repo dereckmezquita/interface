@@ -8,7 +8,7 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build
-status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckmezquita/kucoin)
+status](https://travis-ci.org/dereckmezquita/interface.svg?branch=master)](https://travis-ci.org/dereckmezquita/interface)
 <!-- badges: end -->
 
 The `interface` package provides a system for defining and implementing
