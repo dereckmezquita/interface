@@ -20,4 +20,3 @@ research/
 tests/
 ^doc$
 ^Meta$
-*.sh
