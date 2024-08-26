@@ -7,8 +7,11 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Travis build
-status](https://travis-ci.org/dereckmezquita/interface.svg?branch=master)](https://travis-ci.org/dereckmezquita/interface)
+[![R-CMD-check](https://github.com/dereckmezquita/interface/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dereckmezquita/interface/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/interface)](https://CRAN.R-project.org/package=interface)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 The `interface` package provides a system for defining and implementing
@@ -130,7 +133,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x11a780720>
+#>   scholarship: <environment: 0x129393e08>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
