@@ -49,15 +49,20 @@ jobs:
 
       - name: Add TinyTeX to PATH (Windows)
         if: runner.os == 'Windows'
-        run: |
-          echo "C:\\Users\\runneradmin\\AppData\\Roaming\\TinyTeX\\bin\\win32" >> $GITHUB_PATH
-          echo "TinyTeX path added to PATH"
-      
-      - name: Verify pdflatex installation
-        if: runner.os == 'Windows'
-        run: pdflatex --version
-        shell: bash
+        run: echo "C:\\Users\\runneradmin\\AppData\\Roaming\\TinyTeX\\bin\\win32" >> $GITHUB_PATH
 
+      - name: Install system dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-fonts-extra
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install --cask basictex
+          sudo /Library/TeX/texbin/tlmgr update --self
+          sudo /Library/TeX/texbin/tlmgr install inconsolata
+          echo "/Library/TeX/texbin" >> $GITHUB_PATH
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
@@ -66,7 +71,7 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-          args: '--as-cran'
+          args: c('--as-cran')
 
       - name: Show testthat output
         if: always()
