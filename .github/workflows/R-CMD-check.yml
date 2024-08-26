@@ -61,8 +61,15 @@ jobs:
           tinytex::install_tinytex(force = TRUE)
           tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
           tinytex::tlmgr_update()
-          Sys.setenv(PATH = paste(Sys.getenv("PATH"), tinytex::tinytex_root(), sep=";"))
+          echo "::add-path::$(tinytex::tinytex_root())/bin/win32"
         shell: Rscript {0}
+
+      - name: Verify pdflatex installation
+        if: runner.os == 'Windows'
+        run: |
+          echo $PATH
+          pdflatex --version
+        shell: bash
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
