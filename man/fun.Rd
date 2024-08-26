@@ -7,11 +7,7 @@
 fun(...)
 }
 \arguments{
-\item{...}{Named arguments defining the function parameters and their types.}
-
-\item{return}{The expected return type(s).}
-
-\item{impl}{The function implementation.}
+\item{...}{Named arguments defining the function parameters and their types, including 'return' for the expected return type(s) and 'impl' for the function implementation.}
 }
 \value{
 A typed function that enforces type constraints on its parameters and return value.
@@ -22,6 +18,7 @@ Defines a function with specified parameter types and return type. Ensures that 
 \details{
 The `fun` function allows you to define a function with strict type checking for its parameters and return value. 
 This ensures that the function receives arguments of the correct types and returns a value of the expected type.
+The 'return' and 'impl' arguments should be included in the ... parameter list.
 }
 \examples{
 # Define a typed function that adds two numbers

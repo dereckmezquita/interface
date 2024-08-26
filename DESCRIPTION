@@ -1,6 +1,6 @@
 Package: interface
 Type: Package
-Title: A runtime type system for R; interfaces, enums, typed data.frames/data.tables and functions
+Title: Runtime Type System for R
 Version: 0.1.0
 URL: https://github.com/dereckmezquita/interface
 Authors@R: 
@@ -10,7 +10,7 @@ Authors@R:
            email = "dereck@mezquita.io",
            comment = c(ORCID = "0000-0002-9307-6762"))
 Maintainer: Dereck Mezquita <dereck@mezquita.io>
-Description: A runtime type system for R, define and implement interfaces, enums, typed data.frames/data.tables, and typed functions with zero dependencies
+Description: Provides a runtime type system for R, allowing users to define and implement interfaces, enums, typed a data.frame/data.table, as well as typed functions. This package enables stricter type checking and validation, improving code structure, robustness and reliability in R programming.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -23,5 +23,4 @@ Suggests:
     rmarkdown,
     box,
     rcmdcheck,
-    lintr,
     data.table

@@ -3,13 +3,12 @@
 #' @description
 #' Defines a function with specified parameter types and return type. Ensures that the function's arguments and return value adhere to the specified types.
 #'
-#' @param ... Named arguments defining the function parameters and their types.
-#' @param return The expected return type(s).
-#' @param impl The function implementation.
+#' @param ... Named arguments defining the function parameters and their types, including 'return' for the expected return type(s) and 'impl' for the function implementation.
 #' @return A typed function that enforces type constraints on its parameters and return value.
 #' @details
 #' The `fun` function allows you to define a function with strict type checking for its parameters and return value. 
 #' This ensures that the function receives arguments of the correct types and returns a value of the expected type.
+#' The 'return' and 'impl' arguments should be included in the ... parameter list.
 #'
 #' @examples
 #' # Define a typed function that adds two numbers

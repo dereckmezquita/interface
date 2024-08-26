@@ -1,0 +1,16 @@
+citHeader("To cite interface in publications use:")
+
+citEntry(
+  entry    = "Manual",
+  title    = "interface: A Runtime Type System for R",
+  author   = "Dereck Mezquita",
+  year     = "2024",
+  note     = "R package version 0.1.0",
+  url      = "https://github.com/dereckmezquita/interface",
+  textVersion = paste(
+    "Mezquita, D. (2024).",
+    "interface: A Runtime Type System for R.",
+    "R package version 0.1.0.",
+    "https://github.com/dereckmezquita/interface"
+  )
+)

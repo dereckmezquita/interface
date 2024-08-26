@@ -12,6 +12,8 @@ navbar:
     left: [home, reference, articles, donate]
     right: [github, youtube, search, website, website2]
   components:
+    citation:
+      text: Citation
     articles:
       text: Articles
       menu:

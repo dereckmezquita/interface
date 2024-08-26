@@ -1,3 +1,7 @@
+^README\.html$
+^assets$
+^docs$
+^pkgdown$
 .github
 .lintr
 README.Rmd

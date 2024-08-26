@@ -4,12 +4,12 @@
 \alias{$<-.typed_frame}
 \title{Modify a typed data frame using $}
 \usage{
-\method{$}{typed_frame}(x, name) <- value
+\method{$}{typed_frame}(x, col_name) <- value
 }
 \arguments{
 \item{x}{A typed data frame.}
 
-\item{name}{The name of the column to modify or add.}
+\item{col_name}{The name of the column to modify or add.}
 
 \item{value}{The new value to assign.}
 }
