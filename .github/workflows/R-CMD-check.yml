@@ -58,10 +58,10 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           install.packages('tinytex')
-          tinytex::install_tinytex()
-          tinytex::tlmgr_install('inconsolata')
-          tinytex::tlmgr_install('pdftex')
-        shell: Rscript {0}
+          tinytex::install_tinytex(force = TRUE)
+          tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
+          Sys.setenv(PATH = paste(Sys.getenv("PATH"), tinytex::tinytex_root(), sep=";"))
+        shell: Rscript {0}        
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
