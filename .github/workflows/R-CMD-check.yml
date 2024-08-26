@@ -57,7 +57,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           choco install miktex --params="/FileTypeAssociations=0" -y
-          refreshenv
+          echo "C:\Program Files\MiKTeX\miktex\bin\x64" >> $env:GITHUB_PATH
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
