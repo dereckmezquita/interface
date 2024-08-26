@@ -11,6 +11,7 @@ on:
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
+
     name: ${{ matrix.config.os }} (R-${{ matrix.config.r }})
 
     strategy:
@@ -25,6 +26,10 @@ jobs:
           - {os: ubuntu-latest, r: 'release'}
           - {os: ubuntu-latest, r: 'devel'}
 
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -34,25 +39,24 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
-
+          
       - name: Install TinyTeX on Windows
         if: runner.os == 'Windows'
         run: |
           install.packages('tinytex')
-          tinytex::install_tinytex(force = TRUE)
+          tinytex::install_prebuilt()
           tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
         shell: Rscript {0}
 
       - name: Add TinyTeX to Windows PATH
         if: runner.os == 'Windows'
-        run: echo "C:\\Users\\runneradmin\\AppData\\Roaming\\TinyTeX\\bin\\win32" >> $GITHUB_PATH
+        run: echo "C:\Users\runneradmin\AppData\Roaming\TinyTeX\bin\win32" >> $GITHUB_PATH
 
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-fonts-extra
-
       - name: Install system dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
@@ -60,15 +64,15 @@ jobs:
           sudo /Library/TeX/texbin/tlmgr update --self
           sudo /Library/TeX/texbin/tlmgr install inconsolata
           echo "/Library/TeX/texbin" >> $GITHUB_PATH
-
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
+          needs: check
 
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-          args: '--as-cran'
+          args: c('--as-cran')
 
       - name: Show testthat output
         if: always()
