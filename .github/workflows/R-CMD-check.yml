@@ -51,9 +51,9 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install --cask basictex
-          export PATH="/Library/TeX/texbin:$PATH"
           sudo tlmgr update --self
           sudo tlmgr install inconsolata
+          echo "/Library/TeX/texbin" >> $GITHUB_PATH
 
       - name: Install system dependencies (Windows)
         if: runner.os == 'Windows'
