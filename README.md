@@ -12,7 +12,6 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/interface)](https://CRAN.R-project.org/package=interface)
 [![GitHub
 version](https://img.shields.io/github/r-package/v/dereckmezquita/interface?label=GitHub)](https://github.com/dereckmezquita/interface)
-[![R-CMD-check](https://github.com/dereckmezquita/interface/workflows/R-CMD-check/badge.svg)](https://github.com/dereckmezquita/interface/actions)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://cranlogs.r-pkg.org/badges/interface)](https://cran.r-project.org/package=interface)
@@ -137,7 +136,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x1166d42c0>
+#>   scholarship: <environment: 0x118885898>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
