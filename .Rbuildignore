@@ -21,3 +21,4 @@ tests/
 ^doc$
 ^Meta$
 .*\.sh$
+^BUILD\.sh$
