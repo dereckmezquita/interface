@@ -7,7 +7,7 @@
 
 [![R-CMD-check](https://github.com/dereckmezquita/interface/workflows/R-CMD-check/badge.svg)](https://github.com/dereckmezquita/interface/actions)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/interface)](https://CRAN.R-project.org/package=interface)
 [![GitHub
@@ -136,7 +136,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x124b55ce0>
+#>   scholarship: <environment: 0x11b9bccd0>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
