@@ -142,8 +142,7 @@ When a data frame is created or modified using this blueprint, it ensures that a
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Invalid modification (throws error)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in `$&lt;-.typed_frame`(`*tmp*`, id, value = c("a", "b", "c")) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   object 'col_name' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error : Property 'id' must be of type integer</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Adding a column (throws error if freeze_n_cols is TRUE)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">yeet</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
