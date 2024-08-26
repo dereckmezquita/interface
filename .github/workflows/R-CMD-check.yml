@@ -39,6 +39,18 @@ jobs:
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
+          
+      - name: Install TinyTeX on Windows
+        if: runner.os == 'Windows'
+        run: |
+          install.packages('tinytex')
+          tinytex::install_prebuilt()
+          tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
+        shell: Rscript {0}
+
+      - name: Add TinyTeX to Windows PATH
+        if: runner.os == 'Windows'
+        run: echo "C:\Users\runneradmin\AppData\Roaming\TinyTeX\bin\win32" >> $GITHUB_PATH
 
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
@@ -53,17 +65,6 @@ jobs:
           sudo /Library/TeX/texbin/tlmgr update --self
           sudo /Library/TeX/texbin/tlmgr install inconsolata
           echo "/Library/TeX/texbin" >> $GITHUB_PATH
-
-      - name: Install TinyTeX and LaTeX packages on Windows
-        if: runner.os == 'Windows'
-        run: |
-          install.packages('tinytex')
-          tinytex::install_tinytex(force = TRUE)
-          tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
-          tinytex::tlmgr_update()
-          writeLines(sprintf('PATH="%s/bin/win32;%s"', tinytex::tinytex_root(), Sys.getenv('PATH')), "~/.Renviron")
-          source("~/.Renviron")
-        shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
