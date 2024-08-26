@@ -136,7 +136,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x118885898>
+#>   scholarship: <environment: 0x124b55ce0>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
@@ -436,6 +436,10 @@ and validation in R. By defining interfaces, typed functions, and typed
 data frames, you can create robust and reliable data structures and
 functions with strict type constraints. For more details, refer to the
 package documentation.
+
+## License
+
+This package is licensed under the MIT License.
 
 ## Citation
 
