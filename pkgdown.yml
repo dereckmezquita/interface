@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   donate: donate.html
   intro-to-interface: intro-to-interface.html
-last_built: 2024-08-26T05:01Z
+last_built: 2024-08-26T05:05Z
 urls:
   reference: https://dereckmezquita.github.io/interface/reference
   article: https://dereckmezquita.github.io/interface/articles
