@@ -1,6 +1,7 @@
 # dev
 *.ignore
 assets/
+*.sh
 
 README.html
 
