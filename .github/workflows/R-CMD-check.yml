@@ -1,4 +1,4 @@
-name: R CMD check
+name: R-CMD-check
 
 on:
   push:
@@ -53,6 +53,7 @@ jobs:
           sudo /Library/TeX/texbin/tlmgr install inconsolata
           echo "/Library/TeX/texbin" >> $GITHUB_PATH
 
+      # EUREKA this windows set up worked!
       - name: Install system dependencies (Windows)
         if: runner.os == 'Windows'
         run: |
