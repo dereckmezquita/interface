@@ -12,8 +12,6 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (R-${{ matrix.config.r }})
-
     strategy:
       fail-fast: false
       matrix:
@@ -25,10 +23,6 @@ jobs:
           - {os: ubuntu-latest, r: '4.1.0'}
           - {os: ubuntu-latest, r: 'release'}
           - {os: ubuntu-latest, r: 'devel'}
-
-    env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v3
@@ -46,6 +40,7 @@ jobs:
           install.packages('tinytex')
           tinytex::install_tinytex(force = TRUE)
           tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
+          tlmgr path add
         shell: Rscript {0}
 
       - name: Add TinyTeX to Windows PATH
@@ -74,7 +69,7 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-          args: c('--as-cran')
+          args: '--as-cran'
 
       - name: Show testthat output
         if: always()
