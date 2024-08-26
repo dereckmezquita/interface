@@ -1,7 +1,7 @@
 Package: interface
 Type: Package
 Title: A runtime type system for R; interfaces, enums, typed data.frames/data.tables and functions
-Version: 0.0.41
+Version: 0.1.0
 URL: https://github.com/dereckmezquita/interface
 Authors@R: 
     person(given = "Dereck",
