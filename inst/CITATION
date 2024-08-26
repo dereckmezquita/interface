@@ -1,7 +1,5 @@
-citHeader("To cite interface in publications use:")
-
-citEntry(
-  entry    = "Manual",
+bibentry(
+  bibtype  = "Manual",
   title    = "interface: A Runtime Type System for R",
   author   = "Dereck Mezquita",
   year     = "2024",
