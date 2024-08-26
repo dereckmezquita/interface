@@ -61,7 +61,6 @@ jobs:
           tinytex::install_tinytex(force = TRUE)
           tinytex::tlmgr_install(c('inconsolata', 'pdftex', 'latex-bin', 'tools', 'amsmath', 'geometry', 'hyperref'))
           tinytex::tlmgr_update()
-          tinytex::reinstall_tlmgr()
           Sys.setenv(PATH = paste(Sys.getenv("PATH"), tinytex::tinytex_root(), sep=";"))
         shell: Rscript {0}
 
