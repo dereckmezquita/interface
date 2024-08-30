@@ -7,7 +7,9 @@
 #' @param ... Named arguments defining the properties and their types or validation functions.
 #' @param validate_on_access Logical, whether to validate properties on access (default: FALSE).
 #' @param extends A list of interfaces that this interface extends.
-#' @return A function to create objects that implement the defined interface.
+#' @return A function of class 'interface' that creates objects implementing the defined interface.
+#'         The returned function takes named arguments corresponding to the interface properties
+#'         and returns an object of class 'interface_object'.
 #' @export
 #'
 #' @examples
@@ -135,6 +137,8 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
 #'
 #' @param x An interface object
 #' @param name The name of the property to get
+#' @return The value of the specified property. The class of the returned value
+#'         depends on the property's type as defined in the interface.
 #' @export
 `$.interface_object` <- function(x, name) {
     if (!(name %in% names(attributes(x)$properties))) {
@@ -155,6 +159,7 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
 #' @param x An interface object
 #' @param name The name of the property to set
 #' @param value The new value for the property
+#' @return The modified interface object, invisibly.
 #' @export
 `$<-.interface_object` <- function(x, name, value) {
     if (!(name %in% names(attributes(x)$properties))) {
@@ -174,6 +179,8 @@ interface <- function(..., validate_on_access = FALSE, extends = list()) {
 #'
 #' @param x An object implementing an interface
 #' @param ... Additional arguments (not used)
+#' @return No return value, called for side effects.
+#'         Prints a human-readable representation of the interface object to the console.
 #' @export
 print.interface_object <- function(x, ...) {
     cat("Object implementing interface:\n")

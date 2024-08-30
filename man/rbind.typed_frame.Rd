@@ -12,7 +12,8 @@
 \item{deparse.level}{See \code{\link[base]{rbind}}.}
 }
 \value{
-The combined typed data frame.
+The combined typed data frame. The returned object is of class 'typed_frame'
+        and inherits all properties (column types, validation rules, etc.) from the first data frame in the list.
 }
 \description{
 This function combines multiple typed data frames row-wise, ensuring type consistency and applying row validation rules.

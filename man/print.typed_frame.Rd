@@ -11,6 +11,11 @@
 
 \item{...}{Additional arguments passed to print.}
 }
+\value{
+No return value, called for side effects.
+        Prints a summary of the typed data frame to the console, including its dimensions,
+        column specifications, frame properties, and a preview of the data.
+}
 \description{
 Provides a custom print method for typed data frames, displaying their properties and validation status.
 }

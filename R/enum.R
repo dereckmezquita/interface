@@ -5,7 +5,8 @@
 #' which can be used to create enum objects with values restricted to the specified set.
 #'
 #' @param ... The possible values for the enumerated type. These should be unique character strings.
-#' @return A function (enum generator) that creates enum objects of the defined type.
+#' @return A function (enum generator) of class 'enum_generator' that creates enum objects of the defined type.
+#'         The returned function takes a single argument and returns an object of class 'enum'.
 #'
 #' @examples
 #' # Create an enum type for colors
@@ -34,7 +35,7 @@
 #' @export
 enum <- function(...) {
     values <- c(...)
-    
+
     new <- function(value) {
         if (!value %in% values) {
             stop(sprintf("Invalid value. Must be one of: %s", paste(values, collapse = ", ")))
@@ -45,7 +46,7 @@ enum <- function(...) {
             values = values
         ))
     }
-    
+
     class(new) <- c("enum_generator", "function")
     attr(new, "values") <- values
     return(new)
@@ -58,6 +59,8 @@ enum <- function(...) {
 #'
 #' @param x An enum object
 #' @param ... Additional arguments (not used)
+#' @return No return value, called for side effects.
+#'         Prints a string representation of the enum object to the console.
 #' @export
 #'
 #' @examples
@@ -149,6 +152,8 @@ print.enum <- function(x, ...) {
 #'
 #' @param x An enum generator function
 #' @param ... Additional arguments (not used)
+#' @return No return value, called for side effects.
+#'         Prints a string representation of the enum generator to the console.
 #' @export
 #'
 #' @examples

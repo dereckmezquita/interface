@@ -14,7 +14,9 @@ interface(..., validate_on_access = FALSE, extends = list())
 \item{extends}{A list of interfaces that this interface extends.}
 }
 \value{
-A function to create objects that implement the defined interface.
+A function of class 'interface' that creates objects implementing the defined interface.
+        The returned function takes named arguments corresponding to the interface properties
+        and returns an object of class 'interface_object'.
 }
 \description{
 An interface defines a structure with specified properties and their types or validation functions. 

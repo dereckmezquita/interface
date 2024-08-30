@@ -27,7 +27,8 @@ type.frame(
 \item{on_violation}{Action to take on violation: "error", "warning", or "silent" (default: "error").}
 }
 \value{
-A function that creates typed data frames.
+A function that creates typed data frames. When called, this function returns
+        an object of class 'typed_frame' (which also inherits from the base frame class used, i.e. data.frame, data.table).
 }
 \description{
 Creates a data frame with specified column types and validation rules. 

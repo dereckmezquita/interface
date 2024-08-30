@@ -4,7 +4,8 @@
 #' Defines a function with specified parameter types and return type. Ensures that the function's arguments and return value adhere to the specified types.
 #'
 #' @param ... Named arguments defining the function parameters and their types, including 'return' for the expected return type(s) and 'impl' for the function implementation.
-#' @return A typed function that enforces type constraints on its parameters and return value.
+#' @return A function of class 'typed_function' that enforces type constraints on its parameters and return value.
+#'         The returned function has the same signature as the implementation function provided in the 'impl' argument.
 #' @details
 #' The `fun` function allows you to define a function with strict type checking for its parameters and return value. 
 #' This ensures that the function receives arguments of the correct types and returns a value of the expected type.
@@ -49,7 +50,7 @@ fun <- function(...) {
     args <- list(...)
     return_type <- args$return
     impl <- args$impl
-    
+
     # Remove 'return' and 'impl' from args
     args$return <- NULL
     args$impl <- NULL
@@ -114,6 +115,9 @@ fun <- function(...) {
 #'
 #' @param x A typed function.
 #' @param ... Additional arguments (not used).
+#' @return No return value, called for side effects.
+#'         Prints a human-readable representation of the typed function to the console,
+#'         showing the argument types and return type.
 #' @export
 #' @examples
 #' # Define a typed function

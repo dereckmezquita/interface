@@ -10,7 +10,8 @@
 #' @param row_callback A function to validate and process each row (optional).
 #' @param allow_na Logical, whether to allow NA values (default: TRUE).
 #' @param on_violation Action to take on violation: "error", "warning", or "silent" (default: "error").
-#' @return A function that creates typed data frames.
+#' @return A function that creates typed data frames. When called, this function returns
+#'         an object of class 'typed_frame' (which also inherits from the base frame class used, i.e. data.frame, data.table).
 #' @details
 #' The `type.frame` function defines a blueprint for a data frame, specifying the types of its columns and optional validation rules for its rows. 
 #' When a data frame is created or modified using this blueprint, it ensures that all data adheres to the specified rules.
@@ -315,6 +316,9 @@ wrap_fun_in_all <- function(user_fun) {
 #'
 #' @param x A typed data frame.
 #' @param ... Additional arguments passed to print.
+#' @return No return value, called for side effects.
+#'         Prints a summary of the typed data frame to the console, including its dimensions,
+#'         column specifications, frame properties, and a preview of the data.
 #' @importFrom utils head
 #' @export
 print.typed_frame <- function(x, ...) {
@@ -372,7 +376,8 @@ get_type_description <- function(col_type) {
 #'
 #' @param ... Typed data frames to combine.
 #' @param deparse.level See \code{\link[base]{rbind}}.
-#' @return The combined typed data frame.
+#' @return The combined typed data frame. The returned object is of class 'typed_frame'
+#'         and inherits all properties (column types, validation rules, etc.) from the first data frame in the list.
 #' @details
 #' This version of \code{rbind} for \code{typed_frame} performs extra type checking and row validation to ensure consistency and adherence to specified rules. 
 #' Refer to the base \code{rbind} documentation for additional details on combining data frames: \code{\link[base]{rbind}}.

@@ -6,8 +6,28 @@
 #' @param name The name of the property being validated.
 #' @param value The value of the property.
 #' @param validator The expected type or a custom validation function.
-#' @return NULL if the validation passes, otherwise an error message.
+#' @return Returns NULL if the validation passes, otherwise returns a character string
+#'         containing an error message describing why the validation failed.
+#' @details
+#' This function supports various types of validators:
+#' - Enum generators
+#' - Lists of multiple allowed types
+#' - Interface objects
+#' - Built-in R types (character, numeric, logical, integer, double, complex)
+#' - data.table and data.frame types
+#' - Custom validation functions
 #'
+#' @examples
+#' \dontrun{
+#' # Validate a numeric property
+#' validate_property("age", 30, numeric)  # Returns NULL
+#' validate_property("age", "thirty", numeric)  # Returns error message
+#'
+#' # Validate with a custom function
+#' is_even <- function(x) x %% 2 == 0
+#' validate_property("even_number", 4, is_even)  # Returns NULL
+#' validate_property("even_number", 3, is_even)  # Returns error message
+#' }
 validate_property <- function(name, value, validator) {
     if (inherits(validator, "enum_generator")) {
         # Enum validation is handled by the enum generator itself
