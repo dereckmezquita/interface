@@ -11,6 +11,10 @@
 
 \item{...}{Additional arguments (not used)}
 }
+\value{
+No return value, called for side effects.
+        Prints a human-readable representation of the interface object to the console.
+}
 \description{
 Print method for interface objects
 }

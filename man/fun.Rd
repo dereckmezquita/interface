@@ -10,7 +10,8 @@ fun(...)
 \item{...}{Named arguments defining the function parameters and their types, including 'return' for the expected return type(s) and 'impl' for the function implementation.}
 }
 \value{
-A typed function that enforces type constraints on its parameters and return value.
+A function of class 'typed_function' that enforces type constraints on its parameters and return value.
+        The returned function has the same signature as the implementation function provided in the 'impl' argument.
 }
 \description{
 Defines a function with specified parameter types and return type. Ensures that the function's arguments and return value adhere to the specified types.

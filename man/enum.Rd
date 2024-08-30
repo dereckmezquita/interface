@@ -10,7 +10,8 @@ enum(...)
 \item{...}{The possible values for the enumerated type. These should be unique character strings.}
 }
 \value{
-A function (enum generator) that creates enum objects of the defined type.
+A function (enum generator) of class 'enum_generator' that creates enum objects of the defined type.
+        The returned function takes a single argument and returns an object of class 'enum'.
 }
 \description{
 Creates an enumerated type with a fixed set of possible values. This function returns an enum generator,

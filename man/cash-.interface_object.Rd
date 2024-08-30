@@ -11,6 +11,10 @@
 
 \item{name}{The name of the property to get}
 }
+\value{
+The value of the specified property. The class of the returned value
+        depends on the property's type as defined in the interface.
+}
 \description{
 Get a property from an interface object
 }

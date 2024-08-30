@@ -14,8 +14,30 @@ validate_property(name, value, validator)
 \item{validator}{The expected type or a custom validation function.}
 }
 \value{
-NULL if the validation passes, otherwise an error message.
+Returns NULL if the validation passes, otherwise returns a character string
+        containing an error message describing why the validation failed.
 }
 \description{
 Validates a property to ensure it matches the expected type or satisfies the given validation function.
+}
+\details{
+This function supports various types of validators:
+- Enum generators
+- Lists of multiple allowed types
+- Interface objects
+- Built-in R types (character, numeric, logical, integer, double, complex)
+- data.table and data.frame types
+- Custom validation functions
+}
+\examples{
+\dontrun{
+# Validate a numeric property
+validate_property("age", 30, numeric)  # Returns NULL
+validate_property("age", "thirty", numeric)  # Returns error message
+
+# Validate with a custom function
+is_even <- function(x) x \%\% 2 == 0
+validate_property("even_number", 4, is_even)  # Returns NULL
+validate_property("even_number", 3, is_even)  # Returns error message
+}
 }

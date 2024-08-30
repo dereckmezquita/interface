@@ -336,4 +336,4 @@ This package is licensed under the MIT License.
 
 If you use this package in your research or work, please cite it as:
 
-Mezquita, D. (2024). interface: A Runtime Type System for R. R package version 0.1.0. https://github.com/dereckmezquita/interface
+Mezquita, D. (2024). interface: A Runtime Type System. R package version 0.1.0. https://github.com/dereckmezquita/interface

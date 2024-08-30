@@ -13,6 +13,9 @@
 
 \item{value}{The new value for the property}
 }
+\value{
+The modified interface object, invisibly.
+}
 \description{
 Set a property in an interface object
 }

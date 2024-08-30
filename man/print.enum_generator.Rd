@@ -11,6 +11,10 @@
 
 \item{...}{Additional arguments (not used)}
 }
+\value{
+No return value, called for side effects.
+        Prints a string representation of the enum generator to the console.
+}
 \description{
 Prints a human-readable representation of an enum generator, showing all possible values.
 }

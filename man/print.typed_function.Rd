@@ -11,6 +11,11 @@
 
 \item{...}{Additional arguments (not used).}
 }
+\value{
+No return value, called for side effects.
+        Prints a human-readable representation of the typed function to the console,
+        showing the argument types and return type.
+}
 \description{
 Provides a custom print method for typed functions, displaying their parameter types and return type.
 }
