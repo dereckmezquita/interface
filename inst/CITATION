@@ -1,13 +1,13 @@
 bibentry(
   bibtype  = "Manual",
-  title    = "interface: A Runtime Type System for R",
+  title    = "interface: A Runtime Type System",
   author   = "Dereck Mezquita",
   year     = "2024",
   note     = "R package version 0.1.0",
   url      = "https://github.com/dereckmezquita/interface",
   textVersion = paste(
     "Mezquita, D. (2024).",
-    "interface: A Runtime Type System for R.",
+    "interface: A Runtime Type System.",
     "R package version 0.1.0.",
     "https://github.com/dereckmezquita/interface"
   )
