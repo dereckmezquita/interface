@@ -69,30 +69,6 @@
         showing the argument types and return type.</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Define a typed function</span></span></span>
-<span class="r-in"><span><span class="va">multiply</span> <span class="op">&lt;-</span> <span class="fu"><a href="fun.html">fun</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  x <span class="op">=</span> <span class="va">numeric</span>,</span></span>
-<span class="r-in"><span>  y <span class="op">=</span> <span class="va">numeric</span>,</span></span>
-<span class="r-in"><span>  return <span class="op">=</span> <span class="va">numeric</span>,</span></span>
-<span class="r-in"><span>  impl <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span> <span class="op">*</span> <span class="va">y</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">}</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Print the typed function</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">multiply</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Typed function:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Arguments:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   x: function (length = 0L) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x: .Internal(vector("double", length))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   y: function (length = 0L) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    y: .Internal(vector("double", length))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Return type: function (length = 0L) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Return type: .Internal(vector("double", length))</span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
