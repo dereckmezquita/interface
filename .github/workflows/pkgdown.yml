@@ -1,8 +1,8 @@
 name: pkgdown
-on: push
-  # push:
-  #   branches: [main]
-  # workflow_dispatch:
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
