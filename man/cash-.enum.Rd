@@ -17,8 +17,3 @@ The value of the enum object
 \description{
 Retrieves the value of an enum object.
 }
-\examples{
-Colors <- enum("red", "green", "blue")
-my_color <- Colors("red")
-my_color$value  # "red"
-}

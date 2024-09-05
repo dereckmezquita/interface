@@ -10,8 +10,6 @@
 #' @return A function of class 'interface' that creates objects implementing the defined interface.
 #'         The returned function takes named arguments corresponding to the interface properties
 #'         and returns an object of class 'interface_object'.
-#' @export
-#'
 #' @examples
 #' # Define an interface for a person
 #' Person <- interface(
@@ -44,6 +42,7 @@
 #' )
 #'
 #' my_car <- Car(make = "Toyota", model = "Corolla", color = "red")
+#' @export
 interface <- function(..., validate_on_access = FALSE, extends = list()) {
     properties <- list(...)
 

@@ -17,11 +17,3 @@ Logical value indicating whether the two objects are equal
 \description{
 Compares two enum objects or an enum object with a character value.
 }
-\examples{
-Colors <- enum("red", "green", "blue")
-color1 <- Colors("red")
-color2 <- Colors("blue")
-color1 == color2  # FALSE
-color1 == Colors("red")  # TRUE
-color1 == "red"  # TRUE
-}

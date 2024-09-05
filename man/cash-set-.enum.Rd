@@ -19,9 +19,3 @@ The updated enum object
 \description{
 Sets the value of an enum object. The new value must be one of the valid enum values.
 }
-\examples{
-Colors <- enum("red", "green", "blue")
-my_color <- Colors("red")
-my_color$value <- "blue"  # Valid assignment
-try(my_color$value <- "yellow")  # This will raise an error
-}
