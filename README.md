@@ -136,7 +136,7 @@ print(john_student)
 #>    scores: Science
 #>    scores: 95
 #>    scores: 88
-#>   scholarship: <environment: 0x11b9bccd0>
+#>   scholarship: <environment: 0x12ad94c40>
 #>   street: 123 Main St
 #>   city: Small town
 #>   postal_code: 12345
@@ -252,22 +252,22 @@ persons <- PersonFrame(
 )
 
 print(persons)
-#> [1mTyped Data Frame Summary:[0m
+#> Typed Data Frame Summary:
 #> Base Frame Type: data.frame
 #> Dimensions: 3 rows x 4 columns
 #> 
-#> [1mColumn Specifications:[0m
+#> Column Specifications:
 #>   id         : integer
 #>   name       : character
 #>   age        : numeric
 #>   is_student : logical
 #> 
-#> [1mFrame Properties:[0m
+#> Frame Properties:
 #>   Freeze columns : Yes
 #>   Allow NA       : Yes
 #>   On violation   : error
 #> 
-#> [1mData Preview:[0m
+#> Data Preview:
 #>   id    name age is_student
 #> 1  1   Alice  25       TRUE
 #> 2  2     Bob  30      FALSE
@@ -275,8 +275,7 @@ print(persons)
 
 # Invalid modification (throws error)
 try(persons$id <- letters[1:3])
-#> Error in `$<-.typed_frame`(`*tmp*`, id, value = c("a", "b", "c")) : 
-#>   object 'col_name' not found
+#> Error : Property 'id' must be of type integer
 ```
 
 Additional options for data frame validation:
@@ -316,11 +315,11 @@ df <- PersonFrame(
 )
 
 print(df)
-#> [1mTyped Data Frame Summary:[0m
+#> Typed Data Frame Summary:
 #> Base Frame Type: data.frame
 #> Dimensions: 3 rows x 6 columns
 #> 
-#> [1mColumn Specifications:[0m
+#> Column Specifications:
 #>   id         : integer
 #>   name       : character
 #>   age        : numeric
@@ -328,12 +327,12 @@ print(df)
 #>   gender     : Enum(M, F)
 #>   email      : custom function
 #> 
-#> [1mFrame Properties:[0m
+#> Frame Properties:
 #>   Freeze columns : No
 #>   Allow NA       : No
 #>   On violation   : error
 #> 
-#> [1mData Preview:[0m
+#> Data Preview:
 #>   id name age is_student gender email
 #> 1  1 TRUE   1       TRUE   TRUE  TRUE
 #> 2  1 TRUE   1       TRUE   TRUE  TRUE
@@ -445,5 +444,5 @@ This package is licensed under the MIT License.
 
 If you use this package in your research or work, please cite it as:
 
-Mezquita, D. (2024). interface: A Runtime Type System for R. R package
-version 0.1.0. <https://github.com/dereckmezquita/interface>
+Mezquita, D. (2024). interface: A Runtime Type System. R package version
+0.1.2. <https://github.com/dereckmezquita/interface>
