@@ -18,7 +18,3 @@ No return value, called for side effects.
 \description{
 Prints a human-readable representation of an enum generator, showing all possible values.
 }
-\examples{
-Colors <- enum("red", "green", "blue")
-print(Colors)  # Output: Enum generator: red, green, blue
-}

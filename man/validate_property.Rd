@@ -29,15 +29,3 @@ This function supports various types of validators:
 - data.table and data.frame types
 - Custom validation functions
 }
-\examples{
-\dontrun{
-# Validate a numeric property
-validate_property("age", 30, numeric)  # Returns NULL
-validate_property("age", "thirty", numeric)  # Returns error message
-
-# Validate with a custom function
-is_even <- function(x) x \%\% 2 == 0
-validate_property("even_number", 4, is_even)  # Returns NULL
-validate_property("even_number", 3, is_even)  # Returns error message
-}
-}

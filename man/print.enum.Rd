@@ -18,8 +18,3 @@ No return value, called for side effects.
 \description{
 Prints a human-readable representation of an enum object.
 }
-\examples{
-Colors <- enum("red", "green", "blue")
-my_color <- Colors("red")
-print(my_color)  # Output: Enum: red
-}

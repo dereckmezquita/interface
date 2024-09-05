@@ -19,17 +19,3 @@ No return value, called for side effects.
 \description{
 Provides a custom print method for typed functions, displaying their parameter types and return type.
 }
-\examples{
-# Define a typed function
-multiply <- fun(
-  x = numeric,
-  y = numeric,
-  return = numeric,
-  impl = function(x, y) {
-    return(x * y)
-  }
-)
-
-# Print the typed function
-print(multiply)
-}

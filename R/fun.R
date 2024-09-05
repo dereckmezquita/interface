@@ -119,19 +119,6 @@ fun <- function(...) {
 #'         Prints a human-readable representation of the typed function to the console,
 #'         showing the argument types and return type.
 #' @export
-#' @examples
-#' # Define a typed function
-#' multiply <- fun(
-#'   x = numeric,
-#'   y = numeric,
-#'   return = numeric,
-#'   impl = function(x, y) {
-#'     return(x * y)
-#'   }
-#' )
-#'
-#' # Print the typed function
-#' print(multiply)
 print.typed_function <- function(x, ...) {
     cat("Typed function:\n")
     cat("Arguments:\n")
