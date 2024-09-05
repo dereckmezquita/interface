@@ -172,7 +172,7 @@
 <span><span class="co">#&gt;    scores: Science</span></span>
 <span><span class="co">#&gt;    scores: 95</span></span>
 <span><span class="co">#&gt;    scores: 88</span></span>
-<span><span class="co">#&gt;   scholarship: &lt;environment: 0x11b9bccd0&gt;</span></span>
+<span><span class="co">#&gt;   scholarship: &lt;environment: 0x12ad94c40&gt;</span></span>
 <span><span class="co">#&gt;   street: 123 Main St</span></span>
 <span><span class="co">#&gt;   city: Small town</span></span>
 <span><span class="co">#&gt;   postal_code: 12345</span></span>
@@ -282,22 +282,22 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">persons</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1mTyped Data Frame Summary:[0m</span></span>
+<span><span class="co">#&gt; Typed Data Frame Summary:</span></span>
 <span><span class="co">#&gt; Base Frame Type: data.frame</span></span>
 <span><span class="co">#&gt; Dimensions: 3 rows x 4 columns</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [1mColumn Specifications:[0m</span></span>
+<span><span class="co">#&gt; Column Specifications:</span></span>
 <span><span class="co">#&gt;   id         : integer</span></span>
 <span><span class="co">#&gt;   name       : character</span></span>
 <span><span class="co">#&gt;   age        : numeric</span></span>
 <span><span class="co">#&gt;   is_student : logical</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [1mFrame Properties:[0m</span></span>
+<span><span class="co">#&gt; Frame Properties:</span></span>
 <span><span class="co">#&gt;   Freeze columns : Yes</span></span>
 <span><span class="co">#&gt;   Allow NA       : Yes</span></span>
 <span><span class="co">#&gt;   On violation   : error</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [1mData Preview:[0m</span></span>
+<span><span class="co">#&gt; Data Preview:</span></span>
 <span><span class="co">#&gt;   id    name age is_student</span></span>
 <span><span class="co">#&gt; 1  1   Alice  25       TRUE</span></span>
 <span><span class="co">#&gt; 2  2     Bob  30      FALSE</span></span>
@@ -305,8 +305,7 @@
 <span></span>
 <span><span class="co"># Invalid modification (throws error)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `$&lt;-.typed_frame`(`*tmp*`, id, value = c("a", "b", "c")) : </span></span>
-<span><span class="co">#&gt;   object 'col_name' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; Error : Property 'id' must be of type integer</span></span></code></pre></div>
 <p>Additional options for data frame validation:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
@@ -343,11 +342,11 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1mTyped Data Frame Summary:[0m</span></span>
+<span><span class="co">#&gt; Typed Data Frame Summary:</span></span>
 <span><span class="co">#&gt; Base Frame Type: data.frame</span></span>
 <span><span class="co">#&gt; Dimensions: 3 rows x 6 columns</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [1mColumn Specifications:[0m</span></span>
+<span><span class="co">#&gt; Column Specifications:</span></span>
 <span><span class="co">#&gt;   id         : integer</span></span>
 <span><span class="co">#&gt;   name       : character</span></span>
 <span><span class="co">#&gt;   age        : numeric</span></span>
@@ -355,12 +354,12 @@
 <span><span class="co">#&gt;   gender     : Enum(M, F)</span></span>
 <span><span class="co">#&gt;   email      : custom function</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [1mFrame Properties:[0m</span></span>
+<span><span class="co">#&gt; Frame Properties:</span></span>
 <span><span class="co">#&gt;   Freeze columns : No</span></span>
 <span><span class="co">#&gt;   Allow NA       : No</span></span>
 <span><span class="co">#&gt;   On violation   : error</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [1mData Preview:[0m</span></span>
+<span><span class="co">#&gt; Data Preview:</span></span>
 <span><span class="co">#&gt;   id name age is_student gender email</span></span>
 <span><span class="co">#&gt; 1  1 TRUE   1       TRUE   TRUE  TRUE</span></span>
 <span><span class="co">#&gt; 2  1 TRUE   1       TRUE   TRUE  TRUE</span></span>
@@ -466,7 +465,7 @@
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If you use this package in your research or work, please cite it as:</p>
-<p>Mezquita, D. (2024). interface: A Runtime Type System for R. R package version 0.1.0. <a href="https://github.com/dereckmezquita/interface" class="external-link uri">https://github.com/dereckmezquita/interface</a></p>
+<p>Mezquita, D. (2024). interface: A Runtime Type System. R package version 0.1.2. <a href="https://github.com/dereckmezquita/interface" class="external-link uri">https://github.com/dereckmezquita/interface</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
