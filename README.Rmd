@@ -41,7 +41,13 @@ The `interface` package provides a system for defining and implementing interfac
 
 ## Installation
 
-To install the package, use the following command:
+Install the package from CRAN:
+
+```{r eval = FALSE}
+install.packages("interface")
+```
+
+Or install the latest development version from GitHub:
 
 ```{r eval = FALSE}
 # Install the package from the source
@@ -203,9 +209,9 @@ print(typed_fun2(1, 2))  # [1] 3
 print(typed_fun2("a", 2))  # [1] "a 2"
 ```
 
-### Typed Data Frames and Data Tables
+### Typed `data.frame`s and `data.table`s
 
-Create data frames with column type constraints and row validation:
+Create `data.frame`s with column type constraints and row validation:
 
 ```{r}
 PersonFrame <- type.frame(
@@ -232,7 +238,7 @@ print(persons)
 try(persons$id <- letters[1:3])
 ```
 
-Additional options for data frame validation:
+Additional options for `data.frame` validation:
 
 ```{r}
 PersonFrame <- type.frame(
@@ -328,7 +334,7 @@ try(car1$make$value <- "Honda")
 
 ## Conclusion
 
-The `interface` package provides powerful tools for ensuring type safety and validation in R. By defining interfaces, typed functions, and typed data frames, you can create robust and reliable data structures and functions with strict type constraints. For more details, refer to the package documentation.
+The `interface` package provides powerful tools for ensuring type safety and validation in R. By defining interfaces, typed functions, and typed `data.frame`s, you can create robust and reliable data structures and functions with strict type constraints. For more details, refer to the package documentation.
 
 ## License
 
@@ -338,4 +344,4 @@ This package is licensed under the MIT License.
 
 If you use this package in your research or work, please cite it as:
 
-Mezquita, D. (2024). interface: A Runtime Type System. R package version 0.1.0. https://github.com/dereckmezquita/interface
+Mezquita, D. (2024). interface: A Runtime Type System. R package version 0.1.2. https://github.com/dereckmezquita/interface
