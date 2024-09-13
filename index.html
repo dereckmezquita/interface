@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">interface</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,8 +75,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>To install the package, use the following command:</p>
+<p>Install the package from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"interface"</span><span class="op">)</span></span></code></pre></div>
+<p>Or install the latest development version from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install the package from the source</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dereckmezquita/interface"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -84,10 +87,10 @@
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
 <p>Import the package functions.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">interface</span><span class="op">[</span> <span class="va">interface</span>, <span class="va">type.frame</span>, <span class="va">fun</span>, <span class="va">enum</span> <span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>Define an interface and implement it:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define an interface</span></span>
 <span><span class="va">Person</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="va">character</span>,</span>
@@ -125,7 +128,7 @@
 <h3 id="extending-interfaces-and-nested-interfaces">Extending Interfaces and Nested Interfaces<a class="anchor" aria-label="anchor" href="#extending-interfaces-and-nested-interfaces"></a>
 </h3>
 <p>Create nested and extended interfaces:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define nested interfaces</span></span>
 <span><span class="va">Address</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/interface.html">interface</a></span><span class="op">(</span></span>
 <span>    street <span class="op">=</span> <span class="va">character</span>,</span>
@@ -185,7 +188,7 @@
 <h3 id="custom-validation-functions">Custom Validation Functions<a class="anchor" aria-label="anchor" href="#custom-validation-functions"></a>
 </h3>
 <p>Interfaces can have custom validation functions:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">is_valid_email</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"[a-z|0-9]+\\@[a-z|0-9]+\\.[a-z|0-9]+"</span>, <span class="va">x</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -224,7 +227,7 @@
 <h3 id="typed-functions">Typed Functions<a class="anchor" aria-label="anchor" href="#typed-functions"></a>
 </h3>
 <p>Define functions with strict type constraints:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">typed_fun</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fun.html">fun</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">numeric</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">numeric</span>,</span>
@@ -239,7 +242,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">typed_fun</span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Invalid call</span></span>
 <span><span class="co">#&gt; Error : Property 'x' must be of type numeric</span></span></code></pre></div>
 <p>Functions with multiple possible return types:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">typed_fun2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fun.html">fun</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">numeric</span>, <span class="va">character</span><span class="op">)</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">numeric</span>,</span>
@@ -259,10 +262,10 @@
 <span><span class="co">#&gt; [1] "a 2"</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="typed-data-frames-and-data-tables">Typed Data Frames and Data Tables<a class="anchor" aria-label="anchor" href="#typed-data-frames-and-data-tables"></a>
+<h3 id="typed-dataframes-and-datatables">Typed <code>data.frame</code>s and <code>data.table</code>s<a class="anchor" aria-label="anchor" href="#typed-dataframes-and-datatables"></a>
 </h3>
-<p>Create data frames with column type constraints and row validation:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>Create <code>data.frame</code>s with column type constraints and row validation:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
 <span>    frame <span class="op">=</span> <span class="va">data.frame</span>, </span>
 <span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -306,8 +309,8 @@
 <span><span class="co"># Invalid modification (throws error)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">persons</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error : Property 'id' must be of type integer</span></span></code></pre></div>
-<p>Additional options for data frame validation:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Additional options for <code>data.frame</code> validation:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PersonFrame</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/type.frame.html">type.frame</a></span><span class="op">(</span></span>
 <span>    frame <span class="op">=</span> <span class="va">data.frame</span>,</span>
 <span>    col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -394,7 +397,7 @@
 <h3 id="enums">Enums<a class="anchor" aria-label="anchor" href="#enums"></a>
 </h3>
 <p>Define enums for categorical variables; these are safe to use to protect a value from being modified to invalid options. The <code>enum</code> function creates a generator which is then used to create the enum object. This can be used standalone or as part of an interface.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Colour</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/enum.html">enum</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create an enum object</span></span>
@@ -454,7 +457,7 @@
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>The <code>interface</code> package provides powerful tools for ensuring type safety and validation in R. By defining interfaces, typed functions, and typed data frames, you can create robust and reliable data structures and functions with strict type constraints. For more details, refer to the package documentation.</p>
+<p>The <code>interface</code> package provides powerful tools for ensuring type safety and validation in R. By defining interfaces, typed functions, and typed <code>data.frame</code>s, you can create robust and reliable data structures and functions with strict type constraints. For more details, refer to the package documentation.</p>
 </div>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
@@ -471,6 +474,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=interface" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/dereckmezquita/interface/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
