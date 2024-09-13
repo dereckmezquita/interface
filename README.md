@@ -234,9 +234,9 @@ print(typed_fun2("a", 2))  # [1] "a 2"
 #> [1] "a 2"
 ```
 
-### Typed Data Frames and Data Tables
+### Typed `data.frame`s and `data.table`s
 
-Create data frames with column type constraints and row validation:
+Create `data.frame`s with column type constraints and row validation:
 
 ``` r
 PersonFrame <- type.frame(
@@ -284,7 +284,7 @@ try(persons$id <- letters[1:3])
 #> Error : Property 'id' must be of type integer
 ```
 
-Additional options for data frame validation:
+Additional options for `data.frame` validation:
 
 ``` r
 PersonFrame <- type.frame(
@@ -438,7 +438,7 @@ try(car1$make$value <- "Honda")
 
 The `interface` package provides powerful tools for ensuring type safety
 and validation in R. By defining interfaces, typed functions, and typed
-data frames, you can create robust and reliable data structures and
+`data.frame`s, you can create robust and reliable data structures and
 functions with strict type constraints. For more details, refer to the
 package documentation.
 
