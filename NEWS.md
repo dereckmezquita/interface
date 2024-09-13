@@ -1,4 +1,6 @@
-# interface [v0.1.0](https://github.com/dereckmezquita/interface/milestone/1) (in development)
+# interface [v0.2.0](https://github.com/dereckmezquita/interface/milestone/2) (in development)
+
+# interface [v0.1.0](https://github.com/dereckmezquita/interface/milestone/1) (10 September 2024)
 
 ## BREAKING CHANGES
 
