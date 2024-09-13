@@ -32,7 +32,13 @@ benefits of statically-typed languages to R with zero dependencies.
 
 ## Installation
 
-To install the package, use the following command:
+Install the package from CRAN:
+
+``` r
+install.packages("interface")
+```
+
+Or install the latest development version from GitHub:
 
 ``` r
 # Install the package from the source

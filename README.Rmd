@@ -41,7 +41,13 @@ The `interface` package provides a system for defining and implementing interfac
 
 ## Installation
 
-To install the package, use the following command:
+Install the package from CRAN:
+
+```{r eval = FALSE}
+install.packages("interface")
+```
+
+Or install the latest development version from GitHub:
 
 ```{r eval = FALSE}
 # Install the package from the source
@@ -338,4 +344,4 @@ This package is licensed under the MIT License.
 
 If you use this package in your research or work, please cite it as:
 
-Mezquita, D. (2024). interface: A Runtime Type System. R package version 0.1.0. https://github.com/dereckmezquita/interface
+Mezquita, D. (2024). interface: A Runtime Type System. R package version 0.1.2. https://github.com/dereckmezquita/interface
