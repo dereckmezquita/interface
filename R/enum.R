@@ -83,6 +83,23 @@ print.enum <- function(x, ...) {
     }
 }
 
+#' Non equality comparison for enum objects
+#'
+#' @description
+#' Compares two enum objects or an enum object with a character value and returns TRUE if they are different.
+#'
+#' @param e1 First enum object
+#' @param e2 Second enum object or a character value
+#' @return Logical value indicating whether the two objects are different
+#' @export
+`==.enum` <- function(e1, e2) {
+    if (inherits(e2, "enum")) {
+        e1$value != e2$value
+    } else {
+        e1$value != e2
+    }
+}
+
 #' Get value from enum object
 #'
 #' @description
